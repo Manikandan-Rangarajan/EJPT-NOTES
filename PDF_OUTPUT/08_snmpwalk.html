@@ -87,7 +87,16 @@
         a:hover {
             text-decoration: underline;
         }
-        .codehilite pre span { color: #000000 !important; }
+        /* Force all syntax highlighting spans to black */
+        .codehilite pre span,
+        .codehilite pre span.c, .codehilite pre span.c1, .codehilite pre span.ch,
+        .codehilite pre span.k, .codehilite pre span.kd, .codehilite pre span.kr,
+        .codehilite pre span.m, .codehilite pre span.mi,
+        .codehilite pre span.n, .codehilite pre span.nb, .codehilite pre span.nc, .codehilite pre span.nf, .codehilite pre span.nv,
+        .codehilite pre span.o,
+        .codehilite pre span.p, .codehilite pre span.py,
+        .codehilite pre span.s, .codehilite pre span.s1, .codehilite pre span.s2, .codehilite pre span.se,
+        .codehilite pre span.w { color: #000000 !important; }
         pre span { color: #000000 !important; }
         @media print {
             body { margin: 0; padding: 10px; }
