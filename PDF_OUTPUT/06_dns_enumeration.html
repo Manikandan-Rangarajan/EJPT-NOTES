@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>06_dns_enumeration.md</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            color: #2c3e50;
+            margin-top: 24px;
+            margin-bottom: 16px;
+        }
+        h1 { border-bottom: 2px solid #0066cc; padding-bottom: 10px; }
+        code {
+            background: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #c7254e;
+        }
+        pre {
+            background: #f5f5f5;
+            color: #333;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 13px;
+            font-family: 'Courier New', monospace;
+            line-height: 1.4;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        pre code {
+            background: transparent;
+            color: #333;
+            padding: 0;
+        }
+        .codehilite {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 0;
+            margin: 15px 0;
+        }
+        .codehilite pre {
+            margin: 0;
+            border: none;
+            background: #f5f5f5;
+            padding: 15px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        blockquote {
+            border-left: 4px solid #0066cc;
+            margin: 15px 0;
+            padding-left: 15px;
+            color: #666;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        @media print {
+            body { margin: 0; padding: 10px; }
+            pre { page-break-inside: avoid; }
+            table { page-break-inside: avoid; }
+        }
+    </style>
+    <!-- Anime Vibes CSS Framework -->
+    <link rel="stylesheet" href="anime-vibes.css">
+    </head>
+<body>
+    <h1 id="dns-enumeration-dig-nslookup">DNS ENUMERATION - DIG &amp; NSLOOKUP</h1>
+
+<h2 id="overview">Overview</h2>
+
+<p><strong>Dig</strong> (Domain Information Groper) and <strong>nslookup</strong> are command-line tools for querying DNS servers. They're essential for domain reconnaissance, uncovering subdomains, understanding DNS infrastructure, and finding MX records, NS records, and other DNS information.</p>
+
+<h3 id="why-its-critical-for-ejpt">Why It's Critical for eJPT:</h3>
+
+<ul>
+<li>Find subdomains of target domain</li>
+<li>Identify DNS infrastructure</li>
+<li>Discover mail servers (MX records)</li>
+<li>Find DNS servers (NS records)</li>
+<li>DNS zone transfer attempts (can leak entire DNS info)</li>
+<li>Identify IP ranges from DNS records</li>
+</ul>
+
+<h3 id="dig-vs-nslookup">Dig vs Nslookup</h3>
+
+<table>
+<thead>
+<tr>
+  <th>Feature</th>
+  <th>Dig</th>
+  <th>Nslookup</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Development</td>
+  <td>Modern (developed by ISC)</td>
+  <td>Legacy (older)</td>
+</tr>
+<tr>
+  <td>Output</td>
+  <td>Verbose, detailed</td>
+  <td>Simple, concise</td>
+</tr>
+<tr>
+  <td>Features</td>
+  <td>More options, scripting</td>
+  <td>Basic queries</td>
+</tr>
+<tr>
+  <td>Availability</td>
+  <td>Most Linux systems</td>
+  <td>Windows &amp; Linux</td>
+</tr>
+<tr>
+  <td>Preferred for eJPT</td>
+  <td>Yes</td>
+  <td>Yes (especially Windows)</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h2 id="installation-setup">Installation &amp; Setup</h2>
+
+<h3 id="cachyos-arch-linux">CachyOS (Arch Linux)</h3>
+
+<div class="codehilite">
+<pre><span></span><code>sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>bind-tools<span class="w">  </span><span class="c1"># Includes dig, nslookup, host</span>
+dig<span class="w"> </span>-v<span class="w">  </span><span class="c1"># Verify installation</span>
+which<span class="w"> </span>dig<span class="w"> </span>nslookup
+</code></pre>
+</div>
+
+<h3 id="windows">Windows</h3>
+
+<ul>
+<li>Built into Windows (nslookup)</li>
+<li>Or download: https://www.isc.org/bind/</li>
+</ul>
+
+<h3 id="verify-installation">Verify Installation</h3>
+
+<div class="codehilite">
+<pre><span></span><code>dig<span class="w"> </span>--version
+nslookup
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="core-dns-concepts">Core DNS Concepts</h2>
+
+<h3 id="dns-record-types">DNS Record Types</h3>
+
+<table>
+<thead>
+<tr>
+  <th>Record</th>
+  <th>Purpose</th>
+  <th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>A</strong></td>
+  <td>IPv4 address</td>
+  <td>example.com → 93.184.216.34</td>
+</tr>
+<tr>
+  <td><strong>AAAA</strong></td>
+  <td>IPv6 address</td>
+  <td>example.com → 2606:2800:220:1:248:1893:25c8:1946</td>
+</tr>
+<tr>
+  <td><strong>CNAME</strong></td>
+  <td>Alias</td>
+  <td>www.example.com → example.com</td>
+</tr>
+<tr>
+  <td><strong>MX</strong></td>
+  <td>Mail server</td>
+  <td>mail.example.com (priority 10)</td>
+</tr>
+<tr>
+  <td><strong>NS</strong></td>
+  <td>Name server</td>
+  <td>ns1.example.com</td>
+</tr>
+<tr>
+  <td><strong>TXT</strong></td>
+  <td>Text records</td>
+  <td>Verification, SPF, DKIM</td>
+</tr>
+<tr>
+  <td><strong>SOA</strong></td>
+  <td>Start of Authority</td>
+  <td>Admin info, serial number</td>
+</tr>
+<tr>
+  <td><strong>SRV</strong></td>
+  <td>Service records</td>
+  <td>_ldap._tcp.example.com</td>
+</tr>
+<tr>
+  <td><strong>PTR</strong></td>
+  <td>Reverse DNS</td>
+  <td>IP → domain name</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="dns-query-types">DNS Query Types</h3>
+
+<ul>
+<li><strong>Standard Query (@)</strong>: Regular DNS lookup</li>
+<li><strong>ANY Query</strong>: Get all records (often blocked now)</li>
+<li><strong>Zone Transfer (axfr)</strong>: Get entire DNS zone</li>
+<li><strong>Reverse Query (ptr)</strong>: Find domain from IP</li>
+</ul>
+
+<hr />
+
+<h2 id="common-use-cases-for-ejpt">Common Use Cases for eJPT</h2>
+
+<h3 id="dig-commands">DIG Commands</h3>
+
+<h3 id="1-basic-domain-lookup">1. <strong>Basic Domain Lookup</strong></h3>
+
+<p>Get A record (IP address) for a domain.</p>
+
+<div class="codehilite">
+<pre><span></span><code>dig<span class="w"> </span>example.com
+</code></pre>
+</div>
+
+<p><strong>Output:</strong></p>
+
+<pre><code>; &lt;&lt;&gt;&gt; DiG 9.16.1-Ubuntu &lt;&lt;&gt;&gt; example.com
+;; global options: +cmd
+;; Got answer:
+;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 12345
+
+;; QUESTION SECTION:
+;example.com.           IN  A
+
+;; ANSWER SECTION:
+example.com.        3599    IN  A   93.184.216.34
+
+;; Query time: 50 msec
+;; SERVER: 8.8.8.8#53(8.8.8.8)
+</code></pre>
+
+<p><strong>Key Info:</strong>
+- <code>A 93.184.216.34</code>: IPv4 address
+- Query time: DNS response time
+- SERVER: Which DNS server answered</p>
+
+<h3 id="2-query-specific-record-type">2. <strong>Query Specific Record Type</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Get A records (IPv4):</span>
+dig<span class="w"> </span>example.com<span class="w"> </span>A
+
+<span class="c1"># Get AAAA records (IPv6):</span>
+dig<span class="w"> </span>example.com<span class="w"> </span>AAAA
+
+<span class="c1"># Get MX records (Mail servers):</span>
+dig<span class="w"> </span>example.com<span class="w"> </span>MX
+
+<span class="c1"># Get NS records (Nameservers):</span>
+dig<span class="w"> </span>example.com<span class="w"> </span>NS
+
+<span class="c1"># Get TXT records (Text info):</span>
+dig<span class="w"> </span>example.com<span class="w"> </span>TXT
+
+<span class="c1"># Get SOA record (DNS zone info):</span>
+dig<span class="w"> </span>example.com<span class="w"> </span>SOA
+
+<span class="c1"># Get ALL records:</span>
+dig<span class="w"> </span>example.com<span class="w"> </span>ANY
+</code></pre>
+</div>
+
+<h3 id="3-short-output-format">3. <strong>Short Output Format</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Simple answer only (useful for scripts):</span>
+dig<span class="w"> </span>example.com<span class="w"> </span>+short
+
+<span class="c1"># Output:</span>
+<span class="c1"># 93.184.216.34</span>
+
+<span class="c1"># Or for mail servers:</span>
+dig<span class="w"> </span>example.com<span class="w"> </span>MX<span class="w"> </span>+short
+
+<span class="c1"># Output:</span>
+<span class="c1"># 10 mail.example.com.</span>
+</code></pre>
+</div>
+
+<h3 id="4-specify-dns-server">4. <strong>Specify DNS Server</strong></h3>
+
+<p>Query a specific DNS server.</p>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Query Google&#39;s DNS:</span>
+dig<span class="w"> </span>@8.8.8.8<span class="w"> </span>example.com
+
+<span class="c1"># Query target&#39;s nameserver:</span>
+dig<span class="w"> </span>@ns1.example.com<span class="w"> </span>example.com
+
+<span class="c1"># Query corporate DNS:</span>
+dig<span class="w"> </span>@192.168.1.1<span class="w"> </span>internal.local
+</code></pre>
+</div>
+
+<p><strong>Flag:</strong>
+- <code>@server</code>: Use specific DNS server</p>
+
+<h3 id="5-reverse-dns-lookup">5. <strong>Reverse DNS Lookup</strong></h3>
+
+<p>Find domain name from IP address.</p>
+
+<div class="codehilite">
+<pre><span></span><code>dig<span class="w"> </span>-x<span class="w"> </span><span class="m">93</span>.184.216.34
+dig<span class="w"> </span>-x<span class="w"> </span><span class="m">192</span>.168.1.100
+</code></pre>
+</div>
+
+<p><strong>Flag:</strong>
+- <code>-x</code>: Reverse DNS lookup</p>
+
+<h3 id="6-dns-zone-transfer">6. <strong>DNS Zone Transfer</strong></h3>
+
+<p>Attempt to get entire DNS zone (often blocked but worth trying).</p>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Try zone transfer (AXFR):</span>
+dig<span class="w"> </span>@ns1.example.com<span class="w"> </span>example.com<span class="w"> </span>AXFR
+
+<span class="c1"># Output might show all subdomains:</span>
+<span class="c1"># example.com         3600  IN SOA</span>
+<span class="c1"># www.example.com     3600  IN A</span>
+<span class="c1"># mail.example.com    3600  IN A</span>
+<span class="c1"># admin.example.com   3600  IN A</span>
+<span class="c1"># ...</span>
+</code></pre>
+</div>
+
+<p><strong>Flag:</strong>
+- <code>AXFR</code>: Zone transfer query</p>
+
+<h3 id="7-trace-dns-resolution">7. <strong>Trace DNS Resolution</strong></h3>
+
+<p>Follow complete DNS resolution path.</p>
+
+<div class="codehilite">
+<pre><span></span><code>dig<span class="w"> </span>+trace<span class="w"> </span>example.com
+</code></pre>
+</div>
+
+<p><strong>Output shows:</strong>
+1. Root nameservers
+2. TLD nameservers
+3. Authoritative nameservers
+4. Final answer</p>
+
+<h3 id="8-find-all-subdomains-via-mx-txt-etc">8. <strong>Find All Subdomains (via MX, TXT, etc.)</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Get mail servers (may list subdomains):</span>
+dig<span class="w"> </span>example.com<span class="w"> </span>MX
+
+<span class="c1"># Get text records (may contain subdomains):</span>
+dig<span class="w"> </span>example.com<span class="w"> </span>TXT
+
+<span class="c1"># Get service records:</span>
+dig<span class="w"> </span>_service._proto.example.com<span class="w"> </span>SRV
+</code></pre>
+</div>
+
+<h3 id="9-verbose-output">9. <strong>Verbose Output</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>dig<span class="w"> </span>example.com<span class="w"> </span>+comments
+dig<span class="w"> </span>example.com<span class="w"> </span>+stats
+dig<span class="w"> </span>example.com<span class="w"> </span>+noall<span class="w"> </span>+answer<span class="w">  </span><span class="c1"># Just the answer section</span>
+</code></pre>
+</div>
+
+<h3 id="10-bulk-dns-queries">10. <strong>Bulk DNS Queries</strong></h3>
+
+<p>Query multiple domains.</p>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Query file of domains:</span>
+dig<span class="w"> </span>-f<span class="w"> </span>domains.txt
+
+<span class="c1"># File format (domains.txt):</span>
+<span class="c1"># example1.com</span>
+<span class="c1"># example2.com</span>
+<span class="c1"># example3.com</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h3 id="nslookup-commands">NSLOOKUP Commands</h3>
+
+<h3 id="1-basic-lookup">1. <strong>Basic Lookup</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>nslookup<span class="w"> </span>example.com
+</code></pre>
+</div>
+
+<p><strong>Output:</strong></p>
+
+<pre><code>Server:         8.8.8.8
+Address:        8.8.8.8#53
+
+Non-authoritative answer:
+Name:   example.com
+Address: 93.184.216.34
+</code></pre>
+
+<h3 id="2-query-specific-record">2. <strong>Query Specific Record</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># A record:</span>
+nslookup<span class="w"> </span>example.com
+
+<span class="c1"># Mail servers:</span>
+nslookup<span class="w"> </span>-query<span class="o">=</span>MX<span class="w"> </span>example.com
+<span class="c1"># or</span>
+nslookup<span class="w"> </span>-type<span class="o">=</span>MX<span class="w"> </span>example.com
+
+<span class="c1"># Nameservers:</span>
+nslookup<span class="w"> </span>-query<span class="o">=</span>NS<span class="w"> </span>example.com
+
+<span class="c1"># Text records:</span>
+nslookup<span class="w"> </span>-query<span class="o">=</span>TXT<span class="w"> </span>example.com
+</code></pre>
+</div>
+
+<h3 id="3-use-specific-dns-server">3. <strong>Use Specific DNS Server</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>nslookup<span class="w"> </span>example.com<span class="w"> </span><span class="m">8</span>.8.8.8
+nslookup<span class="w"> </span>example.com<span class="w"> </span><span class="m">1</span>.1.1.1
+</code></pre>
+</div>
+
+<h3 id="4-reverse-dns">4. <strong>Reverse DNS</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>nslookup<span class="w"> </span><span class="m">93</span>.184.216.34
+</code></pre>
+</div>
+
+<h3 id="5-interactive-mode">5. <strong>Interactive Mode</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Enter nslookup prompt:</span>
+nslookup
+
+<span class="c1"># Then type queries:</span>
+&gt;<span class="w"> </span>example.com
+&gt;<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">type</span><span class="o">=</span>MX
+&gt;<span class="w"> </span>example.com
+&gt;<span class="w"> </span><span class="nb">set</span><span class="w"> </span>server<span class="w"> </span><span class="m">8</span>.8.8.8
+&gt;<span class="w"> </span>another.com
+&gt;<span class="w"> </span><span class="nb">exit</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="command-reference-dig-essential-flags">Command Reference - Dig Essential Flags</h2>
+
+<table>
+<thead>
+<tr>
+  <th>Flag</th>
+  <th>Purpose</th>
+  <th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>@server</code></td>
+  <td>DNS server</td>
+  <td><code>dig @8.8.8.8 example.com</code></td>
+</tr>
+<tr>
+  <td><code>-x</code></td>
+  <td>Reverse lookup</td>
+  <td><code>dig -x 192.168.1.100</code></td>
+</tr>
+<tr>
+  <td><code>+short</code></td>
+  <td>Short output</td>
+  <td>Show just answers</td>
+</tr>
+<tr>
+  <td><code>+trace</code></td>
+  <td>Trace path</td>
+  <td>Follow resolution chain</td>
+</tr>
+<tr>
+  <td><code>AXFR</code></td>
+  <td>Zone transfer</td>
+  <td><code>dig @ns1 example.com AXFR</code></td>
+</tr>
+<tr>
+  <td><code>ANY</code></td>
+  <td>All records</td>
+  <td><code>dig example.com ANY</code></td>
+</tr>
+<tr>
+  <td><code>MX</code></td>
+  <td>Mail servers</td>
+  <td><code>dig example.com MX</code></td>
+</tr>
+<tr>
+  <td><code>NS</code></td>
+  <td>Nameservers</td>
+  <td><code>dig example.com NS</code></td>
+</tr>
+<tr>
+  <td><code>TXT</code></td>
+  <td>Text records</td>
+  <td><code>dig example.com TXT</code></td>
+</tr>
+<tr>
+  <td><code>+noall +answer</code></td>
+  <td>Only answer</td>
+  <td>Clean output</td>
+</tr>
+<tr>
+  <td><code>-f</code></td>
+  <td>File input</td>
+  <td><code>dig -f domains.txt</code></td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h2 id="practical-ejpt-workflows">Practical eJPT Workflows</h2>
+
+<h3 id="domain-reconnaissance-workflow">Domain Reconnaissance Workflow</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Step 1: Get basic domain info:</span>
+dig<span class="w"> </span>example.com<span class="w"> </span>+short
+dig<span class="w"> </span>example.com<span class="w"> </span>NS<span class="w"> </span>+short
+dig<span class="w"> </span>example.com<span class="w"> </span>MX<span class="w"> </span>+short
+
+<span class="c1"># Step 2: Query nameserver directly:</span>
+<span class="nv">NAMESERVER</span><span class="o">=</span><span class="k">$(</span>dig<span class="w"> </span>example.com<span class="w"> </span>NS<span class="w"> </span>+short<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="k">)</span>
+dig<span class="w"> </span>@<span class="nv">$NAMESERVER</span><span class="w"> </span>example.com
+
+<span class="c1"># Step 3: Try zone transfer:</span>
+dig<span class="w"> </span>@<span class="nv">$NAMESERVER</span><span class="w"> </span>example.com<span class="w"> </span>AXFR
+
+<span class="c1"># Step 4: Reverse lookup on discovered IPs:</span>
+<span class="k">for</span><span class="w"> </span>ip<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>dig<span class="w"> </span>example.com<span class="w"> </span>+short<span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span>dig<span class="w"> </span>-x<span class="w"> </span><span class="nv">$ip</span><span class="w"> </span>+short
+<span class="k">done</span>
+
+<span class="c1"># Step 5: Find subdomains from various records:</span>
+dig<span class="w"> </span>example.com<span class="w"> </span>MX<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;mail&quot;</span>
+dig<span class="w"> </span>example.com<span class="w"> </span>TXT<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;@&quot;</span>
+</code></pre>
+</div>
+
+<h3 id="subdomain-discovery">Subdomain Discovery</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Find mail-related subdomains:</span>
+dig<span class="w"> </span>example.com<span class="w"> </span>MX<span class="w"> </span>+short<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $NF}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tr<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;.&#39;</span>
+
+<span class="c1"># Find all referenced domains in TXT:</span>
+dig<span class="w"> </span>example.com<span class="w"> </span>TXT<span class="w"> </span>+short<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-o<span class="w"> </span><span class="s1">&#39;[a-zA-Z0-9-]*\.example\.com&#39;</span>
+
+<span class="c1"># Query common subdomains:</span>
+<span class="k">for</span><span class="w"> </span>subdomain<span class="w"> </span><span class="k">in</span><span class="w"> </span>www<span class="w"> </span>mail<span class="w"> </span>ftp<span class="w"> </span>admin<span class="w"> </span>api<span class="w"> </span>staging<span class="w"> </span>dev<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;=== </span><span class="nv">$subdomain</span><span class="s2">.example.com ===&quot;</span>
+<span class="w">  </span>dig<span class="w"> </span><span class="nv">$subdomain</span>.example.com<span class="w"> </span>+short
+<span class="k">done</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="real-world-ejpt-examples">Real-World eJPT Examples</h2>
+
+<h3 id="example-1-complete-domain-information-gathering">Example 1: Complete Domain Information Gathering</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="ch">#!/bin/bash</span>
+<span class="c1"># domain_recon.sh - Complete DNS enumeration</span>
+
+<span class="nv">DOMAIN</span><span class="o">=</span><span class="nv">$1</span>
+
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;[*] Enumerating </span><span class="nv">$DOMAIN</span><span class="s2">&quot;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;=== A Records ===&quot;</span>
+dig<span class="w"> </span><span class="nv">$DOMAIN</span><span class="w"> </span>A<span class="w"> </span>+short
+
+<span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;\n=== AAAA Records (IPv6) ===&quot;</span>
+dig<span class="w"> </span><span class="nv">$DOMAIN</span><span class="w"> </span>AAAA<span class="w"> </span>+short
+
+<span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;\n=== MX Records (Mail) ===&quot;</span>
+dig<span class="w"> </span><span class="nv">$DOMAIN</span><span class="w"> </span>MX<span class="w"> </span>+short
+
+<span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;\n=== NS Records (Nameservers) ===&quot;</span>
+dig<span class="w"> </span><span class="nv">$DOMAIN</span><span class="w"> </span>NS<span class="w"> </span>+short
+
+<span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;\n=== TXT Records ===&quot;</span>
+dig<span class="w"> </span><span class="nv">$DOMAIN</span><span class="w"> </span>TXT<span class="w"> </span>+short
+
+<span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;\n=== SOA Record ===&quot;</span>
+dig<span class="w"> </span><span class="nv">$DOMAIN</span><span class="w"> </span>SOA<span class="w"> </span>+short
+
+<span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;\n=== Attempting Zone Transfer ===&quot;</span>
+<span class="k">for</span><span class="w"> </span>ns<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>dig<span class="w"> </span><span class="nv">$DOMAIN</span><span class="w"> </span>NS<span class="w"> </span>+short<span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Trying zone transfer on </span><span class="nv">$ns</span><span class="s2">:&quot;</span>
+<span class="w">  </span>dig<span class="w"> </span>@<span class="nv">$ns</span><span class="w"> </span><span class="nv">$DOMAIN</span><span class="w"> </span>AXFR<span class="w"> </span>+short
+<span class="k">done</span>
+
+<span class="c1"># Run:</span>
+<span class="c1"># ./domain_recon.sh example.com</span>
+</code></pre>
+</div>
+
+<h3 id="example-2-subdomain-enumeration-via-dns">Example 2: Subdomain Enumeration via DNS</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="ch">#!/bin/bash</span>
+<span class="c1"># subdomain_enum.sh</span>
+
+<span class="nv">DOMAIN</span><span class="o">=</span><span class="nv">$1</span>
+<span class="nv">WORDLIST</span><span class="o">=</span><span class="nv">$2</span>
+
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;[*] Enumerating subdomains for </span><span class="nv">$DOMAIN</span><span class="s2">&quot;</span>
+
+<span class="c1"># Simple wordlist method (doesn&#39;t always work, but try):</span>
+cat<span class="w"> </span><span class="nv">$WORDLIST</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="nb">read</span><span class="w"> </span>subdomain<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="nv">result</span><span class="o">=</span><span class="k">$(</span>dig<span class="w"> </span><span class="nv">$subdomain</span>.<span class="nv">$DOMAIN</span><span class="w"> </span>+short<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="k">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span>-z<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$result</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$subdomain</span><span class="s2">.</span><span class="nv">$DOMAIN</span><span class="s2">: </span><span class="nv">$result</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="k">fi</span>
+<span class="k">done</span>
+
+<span class="c1"># Better method: Use DNS records for hints</span>
+<span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;\n[*] Finding subdomains from DNS records:&quot;</span>
+dig<span class="w"> </span><span class="nv">$DOMAIN</span><span class="w"> </span>MX<span class="w"> </span>+short<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $NF}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span><span class="s1">&#39;s/\.$//&#39;</span>
+dig<span class="w"> </span><span class="nv">$DOMAIN</span><span class="w"> </span>NS<span class="w"> </span>+short
+
+<span class="c1"># Run:</span>
+<span class="c1"># ./subdomain_enum.sh example.com wordlist.txt</span>
+</code></pre>
+</div>
+
+<h3 id="example-3-finding-mail-servers">Example 3: Finding Mail Servers</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="nv">DOMAIN</span><span class="o">=</span><span class="s2">&quot;example.com&quot;</span>
+
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Mail servers for </span><span class="nv">$DOMAIN</span><span class="s2">:&quot;</span>
+dig<span class="w"> </span><span class="nv">$DOMAIN</span><span class="w"> </span>MX<span class="w"> </span>+short<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-n<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $NF}&#39;</span>
+
+<span class="c1"># Try reverse DNS on mail server IP:</span>
+<span class="nv">MAIL_IP</span><span class="o">=</span><span class="k">$(</span>dig<span class="w"> </span>mail.example.com<span class="w"> </span>+short<span class="k">)</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Mail server IP: </span><span class="nv">$MAIL_IP</span><span class="s2">&quot;</span>
+dig<span class="w"> </span>-x<span class="w"> </span><span class="nv">$MAIL_IP</span><span class="w"> </span>+short
+</code></pre>
+</div>
+
+<h3 id="example-4-zone-transfer-attempt">Example 4: Zone Transfer Attempt</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="nv">DOMAIN</span><span class="o">=</span><span class="s2">&quot;example.com&quot;</span>
+
+<span class="c1"># Get nameserver:</span>
+<span class="nv">NS</span><span class="o">=</span><span class="k">$(</span>dig<span class="w"> </span><span class="nv">$DOMAIN</span><span class="w"> </span>NS<span class="w"> </span>+short<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="k">)</span>
+
+<span class="c1"># Try zone transfer:</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;[*] Attempting zone transfer on </span><span class="nv">$NS</span><span class="s2"> for </span><span class="nv">$DOMAIN</span><span class="s2">&quot;</span>
+dig<span class="w"> </span>@<span class="nv">$NS</span><span class="w"> </span><span class="nv">$DOMAIN</span><span class="w"> </span>AXFR
+
+<span class="c1"># If successful, all subdomains/records revealed!</span>
+<span class="c1"># If failed, shows &quot;Transfer failed&quot; or similar</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="advanced-techniques">Advanced Techniques</h2>
+
+<h3 id="1-dns-brute-force-subdomains">1. <strong>DNS Brute Force Subdomains</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Using common subdomains:</span>
+<span class="k">for</span><span class="w"> </span>subdomain<span class="w"> </span><span class="k">in</span><span class="w"> </span>www<span class="w"> </span>mail<span class="w"> </span>ftp<span class="w"> </span>admin<span class="w"> </span>api<span class="w"> </span>staging<span class="w"> </span>dev<span class="w"> </span><span class="nb">test</span><span class="w"> </span>prod<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span>dig<span class="w"> </span><span class="nv">$subdomain</span>.example.com<span class="w"> </span>+short<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$subdomain</span><span class="s2">.example.com: FOUND&quot;</span>
+<span class="k">done</span>
+
+<span class="c1"># Using wordlist (with timeout):</span>
+cat<span class="w"> </span>subdomains.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="nb">read</span><span class="w"> </span>sub<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span>timeout<span class="w"> </span><span class="m">0</span>.5<span class="w"> </span>dig<span class="w"> </span><span class="nv">$sub</span>.example.com<span class="w"> </span>+short<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$sub</span><span class="s2">.example.com found&quot;</span>
+<span class="k">done</span>
+</code></pre>
+</div>
+
+<h3 id="2-dns-cache-snooping">2. <strong>DNS Cache Snooping</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Query for popular sites to check cache:</span>
+dig<span class="w"> </span>@target.com<span class="w"> </span>google.com
+<span class="c1"># If cached, faster response; if not cached, may reveal info</span>
+</code></pre>
+</div>
+
+<h3 id="3-dns-amplification-testing">3. <strong>DNS Amplification Testing</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Test DNS server for amplification (security check):</span>
+dig<span class="w"> </span>@target.com<span class="w"> </span>.<span class="w"> </span>ANY<span class="w"> </span>+stats
+
+<span class="c1"># Response larger than query = amplification possible</span>
+</code></pre>
+</div>
+
+<h3 id="4-dnssec-validation">4. <strong>DNSSEC Validation</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Check DNSSEC status:</span>
+dig<span class="w"> </span>example.com<span class="w"> </span>+dnssec
+
+<span class="c1"># If shows &quot;ad&quot; flag, DNSSEC is validated</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="tips-tricks-for-ejpt">Tips &amp; Tricks for eJPT</h2>
+
+<h3 id="quick-reference-one-liners">Quick Reference One-Liners</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Get just the IP:</span>
+dig<span class="w"> </span>example.com<span class="w"> </span>+short
+
+<span class="c1"># Get mail servers:</span>
+dig<span class="w"> </span>example.com<span class="w"> </span>MX<span class="w"> </span>+short
+
+<span class="c1"># Get nameservers:</span>
+dig<span class="w"> </span>example.com<span class="w"> </span>NS<span class="w"> </span>+short
+
+<span class="c1"># Reverse DNS on IP:</span>
+dig<span class="w"> </span>-x<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>+short
+
+<span class="c1"># Find all subdomains via MX:</span>
+dig<span class="w"> </span>example.com<span class="w"> </span>MX<span class="w"> </span>+short<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $NF}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tr<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;.&#39;</span>
+
+<span class="c1"># Try zone transfer:</span>
+dig<span class="w"> </span>@ns1.example.com<span class="w"> </span>example.com<span class="w"> </span>AXFR<span class="w"> </span>+short
+
+<span class="c1"># Trace DNS path:</span>
+dig<span class="w"> </span>example.com<span class="w"> </span>+trace<span class="w"> </span>+short
+
+<span class="c1"># Query multiple domains:</span>
+<span class="k">for</span><span class="w"> </span>domain<span class="w"> </span><span class="k">in</span><span class="w"> </span>site1.com<span class="w"> </span>site2.com<span class="w"> </span>site3.com<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$domain</span><span class="s2">: </span><span class="k">$(</span>dig<span class="w"> </span><span class="nv">$domain</span><span class="w"> </span>+short<span class="k">)</span><span class="s2">&quot;</span>
+<span class="k">done</span>
+
+<span class="c1"># Get all DNS records (if allowed):</span>
+dig<span class="w"> </span>example.com<span class="w"> </span>ANY<span class="w"> </span>+short
+
+<span class="c1"># Check multiple DNS servers:</span>
+<span class="k">for</span><span class="w"> </span>dns<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">8</span>.8.8.8<span class="w"> </span><span class="m">1</span>.1.1.1<span class="w"> </span><span class="m">208</span>.67.222.222<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;=== DNS Server </span><span class="nv">$dns</span><span class="s2"> ===&quot;</span>
+<span class="w">  </span>dig<span class="w"> </span>@<span class="nv">$dns</span><span class="w"> </span>example.com<span class="w"> </span>+short
+<span class="k">done</span>
+</code></pre>
+</div>
+
+<h3 id="common-findings">Common Findings</h3>
+
+<table>
+<thead>
+<tr>
+  <th>Finding</th>
+  <th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>MX Records</td>
+  <td>Mail servers (attack target)</td>
+</tr>
+<tr>
+  <td>NS Records</td>
+  <td>DNS servers (attack target)</td>
+</tr>
+<tr>
+  <td>TXT Records</td>
+  <td>SPF, DKIM, DMARC policies</td>
+</tr>
+<tr>
+  <td>CNAME</td>
+  <td>Alias hosts (more targets)</td>
+</tr>
+<tr>
+  <td>A/AAAA</td>
+  <td>IP addresses (reconnaissance)</td>
+</tr>
+<tr>
+  <td>SOA</td>
+  <td>DNS admin contact info</td>
+</tr>
+<tr>
+  <td>Zone Transfer Success</td>
+  <td>Complete DNS data leaked</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h2 id="combining-dns-enumeration-with-other-tools">Combining DNS Enumeration with Other Tools</h2>
+
+<h3 id="dig-nmap">Dig → Nmap</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Get DNS records, then scan those IPs:</span>
+dig<span class="w"> </span>example.com<span class="w"> </span>MX<span class="w"> </span>+short<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $NF}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="nb">read</span><span class="w"> </span>mailserver<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="nv">ip</span><span class="o">=</span><span class="k">$(</span>dig<span class="w"> </span><span class="nv">$mailserver</span><span class="w"> </span>+short<span class="k">)</span>
+<span class="w">  </span>nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">25</span>,110,143<span class="w"> </span><span class="nv">$ip</span>
+<span class="k">done</span>
+</code></pre>
+</div>
+
+<h3 id="dig-gobuster">Dig → Gobuster</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Find subdomains from DNS, then enumerate web:</span>
+dig<span class="w"> </span>example.com<span class="w"> </span>NS<span class="w"> </span>+short
+dig<span class="w"> </span>@ns1.example.com<span class="w"> </span>example.com<span class="w"> </span>AXFR<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-o<span class="w"> </span><span class="s1">&#39;[a-zA-Z0-9-]*\.example\.com&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="nb">read</span><span class="w"> </span>subdomain<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span>gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://<span class="nv">$subdomain</span><span class="w"> </span>-w<span class="w"> </span>common.txt
+<span class="k">done</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+
+<table>
+<thead>
+<tr>
+  <th>Problem</th>
+  <th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>"Query refused"</td>
+  <td>DNS server blocking queries</td>
+</tr>
+<tr>
+  <td>"NXDOMAIN"</td>
+  <td>Domain doesn't exist</td>
+</tr>
+<tr>
+  <td>"SERVFAIL"</td>
+  <td>DNS server error</td>
+</tr>
+<tr>
+  <td>"Zone transfer failed"</td>
+  <td>Server blocks zone transfers (secure)</td>
+</tr>
+<tr>
+  <td>"Timeout"</td>
+  <td>DNS server not responding</td>
+</tr>
+<tr>
+  <td>"no nameservers found"</td>
+  <td>Misconfigured DNS or network issue</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h2 id="official-documentation-resources">Official Documentation &amp; Resources</h2>
+
+<ul>
+<li><strong>Dig Manual</strong>: <code>man dig</code></li>
+<li><strong>Nslookup Manual</strong>: <code>man nslookup</code></li>
+<li><strong>BIND Documentation</strong>: https://www.isc.org/bind/</li>
+<li><strong>DNS Record Types</strong>: https://en.wikipedia.org/wiki/List<em>of</em>DNS<em>record</em>types</li>
+</ul>
+
+<hr />
+
+<h2 id="key-takeaways-for-ejpt">Key Takeaways for eJPT</h2>
+
+<ol>
+<li><strong>Basic lookup</strong>: <code>dig example.com</code></li>
+<li><strong>Get mail servers</strong>: <code>dig example.com MX +short</code></li>
+<li><strong>Get nameservers</strong>: <code>dig example.com NS +short</code></li>
+<li><strong>Reverse DNS</strong>: <code>dig -x 192.168.1.100</code></li>
+<li><strong>Try zone transfer</strong>: <code>dig @ns1 example.com AXFR</code></li>
+<li><strong>Query specific server</strong>: <code>dig @8.8.8.8 example.com</code></li>
+<li><strong>Short output</strong>: Add <code>+short</code> for clean results</li>
+<li><strong>Use nslookup on Windows</strong>: Alternative if dig unavailable</li>
+</ol>
+
+<hr />
+
+<p><strong>Next Steps</strong>: Use discovered IPs and subdomains for nmap scanning and further reconnaissance.</p>
+
+</body>
+</html>

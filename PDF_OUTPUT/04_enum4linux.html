@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>04_enum4linux.md</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            color: #2c3e50;
+            margin-top: 24px;
+            margin-bottom: 16px;
+        }
+        h1 { border-bottom: 2px solid #0066cc; padding-bottom: 10px; }
+        code {
+            background: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #c7254e;
+        }
+        pre {
+            background: #f5f5f5;
+            color: #333;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 13px;
+            font-family: 'Courier New', monospace;
+            line-height: 1.4;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        pre code {
+            background: transparent;
+            color: #333;
+            padding: 0;
+        }
+        .codehilite {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 0;
+            margin: 15px 0;
+        }
+        .codehilite pre {
+            margin: 0;
+            border: none;
+            background: #f5f5f5;
+            padding: 15px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        blockquote {
+            border-left: 4px solid #0066cc;
+            margin: 15px 0;
+            padding-left: 15px;
+            color: #666;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        @media print {
+            body { margin: 0; padding: 10px; }
+            pre { page-break-inside: avoid; }
+            table { page-break-inside: avoid; }
+        }
+    </style>
+    <!-- Anime Vibes CSS Framework -->
+    <link rel="stylesheet" href="anime-vibes.css">
+    </head>
+<body>
+    <h1 id="enum4linux-smbsamba-enumeration-tool">ENUM4LINUX - SMB/SAMBA Enumeration Tool</h1>
+
+<h2 id="overview">Overview</h2>
+
+<p><strong>Enum4linux</strong> is a tool specifically designed to enumerate SMB (Server Message Block) shares on target networks. It's a wrapper around the smbclient, rpcclient, and net commands that automates enumeration of Windows and Samba systems, extracting usernames, groups, shares, and other critical information.</p>
+
+<h3 id="why-its-critical-for-ejpt">Why It's Critical for eJPT:</h3>
+
+<ul>
+<li>SMB is a common protocol on Windows networks (essential for eJPT)</li>
+<li>Extracts usernames for credential attacks</li>
+<li>Discovers shared folders (may contain sensitive files)</li>
+<li>Identifies security policies and share permissions</li>
+<li>Much faster than manual enumeration</li>
+<li>Works on both Windows and Samba systems</li>
+</ul>
+
+<hr />
+
+<h2 id="installation-setup">Installation &amp; Setup</h2>
+
+<h3 id="cachyos-arch-linux">CachyOS (Arch Linux)</h3>
+
+<div class="codehilite">
+<pre><span></span><code>sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>samba-suite<span class="w"> </span>enum4linux
+enum4linux<span class="w"> </span>-h<span class="w">  </span><span class="c1"># Verify installation</span>
+</code></pre>
+</div>
+
+<h3 id="alternative-installation">Alternative Installation</h3>
+
+<div class="codehilite">
+<pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/cddmp/enum4linux.git
+<span class="nb">cd</span><span class="w"> </span>enum4linux
+chmod<span class="w"> </span>+x<span class="w"> </span>enum4linux.pl
+./enum4linux.pl<span class="w"> </span>-h
+</code></pre>
+</div>
+
+<h3 id="windows">Windows</h3>
+
+<ul>
+<li>Install via WSL or Cygwin</li>
+<li>Or use: https://github.com/cddmp/enum4linux</li>
+</ul>
+
+<h3 id="required-dependencies">Required Dependencies</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Ensure installed:</span>
+sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>samba<span class="w"> </span>perl-net-enum
+
+<span class="c1"># Verify:</span>
+which<span class="w"> </span>smbclient
+which<span class="w"> </span>rpcclient
+which<span class="w"> </span>net
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="core-concepts">Core Concepts</h2>
+
+<h3 id="what-enum4linux-extracts">What Enum4linux Extracts</h3>
+
+<ol>
+<li><strong>Users &amp; Groups</strong>: Usernames, group memberships, RID numbers</li>
+<li><strong>Shares</strong>: Shared folders, share types, access permissions</li>
+<li><strong>Policies</strong>: Password policies, security policies</li>
+<li><strong>Printers</strong>: Network printers</li>
+<li><strong>NETBIOS Info</strong>: Computer name, workgroup/domain</li>
+<li><strong>Session Information</strong>: Who's logged in, session details</li>
+<li><strong>OS Information</strong>: Windows version, service packs</li>
+</ol>
+
+<h3 id="smb-authentication-methods">SMB Authentication Methods</h3>
+
+<ul>
+<li><strong>Anonymous</strong>: No credentials (many shares allow this)</li>
+<li><strong>Guest</strong>: Guest credentials (often enabled)</li>
+<li><strong>Username/Password</strong>: Valid or invalid credentials for enumeration</li>
+<li><strong>Null Session</strong>: Empty username and password (often reveals info)</li>
+</ul>
+
+<h3 id="important-smb-concepts">Important SMB Concepts</h3>
+
+<ul>
+<li><strong>IPC$</strong>: Inter-Process Communication (usually hidden but enumerable)</li>
+<li><strong>Shares</strong>: Public folders accessible over network</li>
+<li><strong>NETBIOS</strong>: Legacy protocol for network discovery</li>
+<li><strong>RID</strong>: Relative Identifier (user/group numbers in Windows)</li>
+</ul>
+
+<hr />
+
+<h2 id="common-use-cases-for-ejpt">Common Use Cases for eJPT</h2>
+
+<h3 id="1-basic-smb-enumeration">1. <strong>Basic SMB Enumeration</strong></h3>
+
+<p>Quick scan to identify SMB target and extract basic info.</p>
+
+<div class="codehilite">
+<pre><span></span><code>enum4linux<span class="w"> </span><span class="m">192</span>.168.1.100
+</code></pre>
+</div>
+
+<p><strong>What this does:</strong>
+- Attempts null session connection
+- Extracts NETBIOS information
+- Lists shares
+- Attempts user enumeration
+- Lists groups</p>
+
+<p><strong>Sample Output:</strong></p>
+
+<pre><code>Starting enum4linux v0.8.9 on Mon Jan 10 10:30:00 2022
+|=====================================================|
+|    Shares on 192.168.1.100          |
+|=====================================================|
+[*] Enumerating shares on 192.168.1.100
+[E] Connection failed or share doesn't exist
+
+Use a different share name than 'adsm$'
+[*] Trying with share name 'IPC$'
+[+] \\192.168.1.100\IPC$    Mapping: OK, Listing: OK
+[*] Trying with share name 'admin$'
+[+] \\192.168.1.100\admin$  Mapping: OK, Listing: OK
+
+|=====================================================|
+|    Users on 192.168.1.100          |
+|=====================================================|
+[+] Enumerating users on 192.168.1.100
+Use of uninitialized value $global_workgroup in string at ./enum4linux.pl line 881 ...
+index: 0x3e8 RID: 0x3e8 acb: 0x00000010 Account: administrator  Name:   Desc: Built-in administrator
+index: 0x3ea RID: 0x3ea acb: 0x00000210 Account: guest  Name:   Desc: Built-in guest
+index: 0x3eb RID: 0x3eb acb: 0x00000210 Account: user1  Name: User One  Desc:
+index: 0x3ec RID: 0x3ec acb: 0x00000210 Account: user2  Name: User Two  Desc:
+</code></pre>
+
+<h3 id="2-enumeration-with-credentials">2. <strong>Enumeration with Credentials</strong></h3>
+
+<p>If you have credentials, get more detailed information.</p>
+
+<div class="codehilite">
+<pre><span></span><code>enum4linux<span class="w"> </span>-u<span class="w"> </span>administrator<span class="w"> </span>-p<span class="w"> </span>password<span class="w"> </span><span class="m">192</span>.168.1.100
+</code></pre>
+</div>
+
+<p><strong>Flags:</strong>
+- <code>-u</code>: Username
+- <code>-p</code>: Password</p>
+
+<h3 id="3-null-session-enumeration-most-common-for-ejpt">3. <strong>Null Session Enumeration (Most Common for eJPT)</strong></h3>
+
+<p>Enumerate without credentials (null session often works).</p>
+
+<div class="codehilite">
+<pre><span></span><code>enum4linux<span class="w"> </span>-n<span class="w"> </span><span class="m">192</span>.168.1.100
+</code></pre>
+</div>
+
+<p><strong>Flag:</strong>
+- <code>-n</code>: Attempt null session</p>
+
+<h3 id="4-guest-access-enumeration">4. <strong>Guest Access Enumeration</strong></h3>
+
+<p>Try to enumerate using guest credentials.</p>
+
+<div class="codehilite">
+<pre><span></span><code>enum4linux<span class="w"> </span>-u<span class="w"> </span>guest<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="m">192</span>.168.1.100
+<span class="c1"># or</span>
+enum4linux<span class="w"> </span>-G<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w">  </span><span class="c1"># Try with guest user</span>
+</code></pre>
+</div>
+
+<h3 id="5-extract-specific-information">5. <strong>Extract Specific Information</strong></h3>
+
+<p>Get only what you need (faster).</p>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Users only:</span>
+enum4linux<span class="w"> </span>-U<span class="w"> </span><span class="m">192</span>.168.1.100
+
+<span class="c1"># Shares only:</span>
+enum4linux<span class="w"> </span>-S<span class="w"> </span><span class="m">192</span>.168.1.100
+
+<span class="c1"># Groups only:</span>
+enum4linux<span class="w"> </span>-G<span class="w"> </span><span class="m">192</span>.168.1.100
+
+<span class="c1"># Password policies:</span>
+enum4linux<span class="w"> </span>-P<span class="w"> </span><span class="m">192</span>.168.1.100
+</code></pre>
+</div>
+
+<p><strong>Common flags:</strong>
+- <code>-U</code>: Users
+- <code>-S</code>: Shares
+- <code>-G</code>: Groups
+- <code>-P</code>: Password policies
+- <code>-r</code>: RID ranges
+- <code>-N</code>: NETBIOS names</p>
+
+<h3 id="6-quick-scan-all-default-checks">6. <strong>Quick Scan (All Default Checks)</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>enum4linux<span class="w"> </span>-A<span class="w"> </span><span class="m">192</span>.168.1.100
+</code></pre>
+</div>
+
+<p><strong>Flag:</strong>
+- <code>-A</code>: Do all checks (default is most of this already)</p>
+
+<h3 id="7-rid-cycling-find-more-users">7. <strong>RID Cycling (Find More Users)</strong></h3>
+
+<p>Extracts user accounts by cycling through RID (Relative Identifier) ranges.</p>
+
+<div class="codehilite">
+<pre><span></span><code>enum4linux<span class="w"> </span>-r<span class="w"> </span><span class="m">192</span>.168.1.100
+</code></pre>
+</div>
+
+<p><strong>Flag:</strong>
+- <code>-r</code>: RID cycling (finds users even if normal enumeration fails)</p>
+
+<h3 id="8-save-output-to-file">8. <strong>Save Output to File</strong></h3>
+
+<p>Export findings for documentation or further analysis.</p>
+
+<div class="codehilite">
+<pre><span></span><code>enum4linux<span class="w"> </span>-A<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>&gt;<span class="w"> </span>enum_results.txt
+enum4linux<span class="w"> </span>-A<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>enum_results.txt
+</code></pre>
+</div>
+
+<h3 id="9-dictionary-attack-on-smb">9. <strong>Dictionary Attack on SMB</strong></h3>
+
+<p>Try multiple passwords against found usernames.</p>
+
+<div class="codehilite">
+<pre><span></span><code>enum4linux<span class="w"> </span>-u<span class="w"> </span>administrator<span class="w"> </span>-w<span class="w"> </span>wordlist.txt<span class="w"> </span><span class="m">192</span>.168.1.100
+</code></pre>
+</div>
+
+<p><strong>Flag:</strong>
+- <code>-w</code>: Wordlist for password attempts</p>
+
+<h3 id="10-verbose-output-detailed">10. <strong>Verbose Output (Detailed)</strong></h3>
+
+<p>Get detailed information about each check.</p>
+
+<div class="codehilite">
+<pre><span></span><code>enum4linux<span class="w"> </span>-A<span class="w"> </span>-v<span class="w"> </span><span class="m">192</span>.168.1.100
+</code></pre>
+</div>
+
+<p><strong>Flag:</strong>
+- <code>-v</code>: Verbose output</p>
+
+<hr />
+
+<h2 id="command-reference-essential-flags">Command Reference - Essential Flags</h2>
+
+<table>
+<thead>
+<tr>
+  <th>Flag</th>
+  <th>Purpose</th>
+  <th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>-A</code></td>
+  <td>Do all checks</td>
+  <td>Default comprehensive scan</td>
+</tr>
+<tr>
+  <td><code>-U</code></td>
+  <td>List users</td>
+  <td>Enumerate user accounts</td>
+</tr>
+<tr>
+  <td><code>-G</code></td>
+  <td>List groups</td>
+  <td>Enumerate groups</td>
+</tr>
+<tr>
+  <td><code>-S</code></td>
+  <td>List shares</td>
+  <td>Enumerate shares</td>
+</tr>
+<tr>
+  <td><code>-P</code></td>
+  <td>Password policies</td>
+  <td>Get security policies</td>
+</tr>
+<tr>
+  <td><code>-r</code></td>
+  <td>RID cycling</td>
+  <td>Find more users via RID</td>
+</tr>
+<tr>
+  <td><code>-u</code></td>
+  <td>Username</td>
+  <td><code>-u administrator</code></td>
+</tr>
+<tr>
+  <td><code>-p</code></td>
+  <td>Password</td>
+  <td><code>-p password</code></td>
+</tr>
+<tr>
+  <td><code>-w</code></td>
+  <td>Wordlist</td>
+  <td><code>-w passwords.txt</code></td>
+</tr>
+<tr>
+  <td><code>-n</code></td>
+  <td>Null session</td>
+  <td>Try null session</td>
+</tr>
+<tr>
+  <td><code>-N</code></td>
+  <td>NETBIOS names</td>
+  <td>Extract NETBIOS info</td>
+</tr>
+<tr>
+  <td><code>-v</code></td>
+  <td>Verbose</td>
+  <td>Detailed output</td>
+</tr>
+<tr>
+  <td><code>-d</code></td>
+  <td>Domain</td>
+  <td><code>-d WORKGROUP</code></td>
+</tr>
+<tr>
+  <td><code>-o</code></td>
+  <td>Output file</td>
+  <td><code>-o results.txt</code></td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h2 id="practical-ejpt-workflow">Practical eJPT Workflow</h2>
+
+<h3 id="typical-smb-reconnaissance-workflow">Typical SMB Reconnaissance Workflow</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Step 1: Find SMB services with nmap</span>
+nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">139</span>,445<span class="w"> </span><span class="m">192</span>.168.1.0/24<span class="w"> </span>--open<span class="w"> </span>-oG<span class="w"> </span>smb_hosts.txt
+
+<span class="c1"># Step 2: Extract IPs with SMB open</span>
+grep<span class="w"> </span><span class="s2">&quot;139/open\|445/open&quot;</span><span class="w"> </span>smb_hosts.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $2}&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>smb_targets.txt
+
+<span class="c1"># Step 3: Enumerate each SMB host</span>
+<span class="k">for</span><span class="w"> </span>target<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>cat<span class="w"> </span>smb_targets.txt<span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;[*] Enumerating </span><span class="nv">$target</span><span class="s2">&quot;</span>
+<span class="w">  </span>enum4linux<span class="w"> </span>-A<span class="w"> </span><span class="nv">$target</span><span class="w"> </span>&gt;<span class="w"> </span>enum_<span class="nv">$target</span>.txt
+<span class="k">done</span>
+
+<span class="c1"># Step 4: Extract usernames from results</span>
+<span class="k">for</span><span class="w"> </span>file<span class="w"> </span><span class="k">in</span><span class="w"> </span>enum_*.txt<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;=== Usernames from </span><span class="nv">$file</span><span class="s2"> ===&quot;</span>
+<span class="w">  </span>grep<span class="w"> </span><span class="s2">&quot;Account:&quot;</span><span class="w"> </span><span class="nv">$file</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $NF}&#39;</span>
+<span class="k">done</span>
+
+<span class="c1"># Step 5: Try common credentials on each user</span>
+cat<span class="w"> </span>userlist.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="nb">read</span><span class="w"> </span>user<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;[*] Trying </span><span class="nv">$user</span><span class="s2">&quot;</span>
+<span class="w">  </span>enum4linux<span class="w"> </span>-u<span class="w"> </span><span class="nv">$user</span><span class="w"> </span>-p<span class="w"> </span>password<span class="w"> </span><span class="m">192</span>.168.1.100
+<span class="k">done</span>
+</code></pre>
+</div>
+
+<h3 id="quick-user-extraction">Quick User Extraction</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Extract all usernames found:</span>
+enum4linux<span class="w"> </span>-U<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;Account:&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $(NF-1)}&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>users.txt
+
+<span class="c1"># Then use for further attacks (hydra, password spraying, etc.):</span>
+cat<span class="w"> </span>users.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="nb">read</span><span class="w"> </span>user<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;User: </span><span class="nv">$user</span><span class="s2">&quot;</span>
+<span class="k">done</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="real-world-ejpt-examples">Real-World eJPT Examples</h2>
+
+<h3 id="example-1-basic-domain-enumeration">Example 1: Basic Domain Enumeration</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Scan domain-joined system:</span>
+enum4linux<span class="w"> </span>-A<span class="w"> </span><span class="m">192</span>.168.1.50
+
+<span class="c1"># Output shows:</span>
+<span class="c1"># Workgroup: DOMAIN</span>
+<span class="c1"># Users: administrator, domain_admin, user1, user2, guest</span>
+<span class="c1"># Groups: Domain Admins, Domain Users</span>
+<span class="c1"># Shares: C$, D$, admin$, IPC$, NETLOGON, SYSVOL</span>
+</code></pre>
+</div>
+
+<h3 id="example-2-find-shares-with-weak-permissions">Example 2: Find Shares with Weak Permissions</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Enum shares:</span>
+enum4linux<span class="w"> </span>-S<span class="w"> </span><span class="m">192</span>.168.1.50
+
+<span class="c1"># Output shows which shares are accessible without credentials</span>
+<span class="c1"># Next step: Mount and explore accessible shares</span>
+smbclient<span class="w"> </span>-L<span class="w"> </span><span class="m">192</span>.168.1.50<span class="w"> </span>-N<span class="w">  </span><span class="c1"># List shares (no auth)</span>
+smbclient<span class="w"> </span>//192.168.1.50/admin$<span class="w"> </span>-N<span class="w">  </span><span class="c1"># Access admin$ share</span>
+</code></pre>
+</div>
+
+<h3 id="example-3-extract-users-for-credential-attack">Example 3: Extract Users for Credential Attack</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Find users:</span>
+enum4linux<span class="w"> </span>-U<span class="w"> </span><span class="m">192</span>.168.1.50<span class="w"> </span>&gt;<span class="w"> </span>users.txt
+
+<span class="c1"># Extract usernames:</span>
+grep<span class="w"> </span><span class="s2">&quot;Account:&quot;</span><span class="w"> </span>users.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span>-F<span class="s1">&#39;Account: &#39;</span><span class="w"> </span><span class="s1">&#39;{print $2}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $1}&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>usernames.txt
+
+<span class="c1"># Use with hydra for password attack:</span>
+hydra<span class="w"> </span>-L<span class="w"> </span>usernames.txt<span class="w"> </span>-P<span class="w"> </span>/usr/share/wordlists/rockyou.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>smb://192.168.1.50<span class="w"> </span>-t<span class="w"> </span><span class="m">4</span>
+</code></pre>
+</div>
+
+<h3 id="example-4-password-policy-discovery">Example 4: Password Policy Discovery</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Get password policy:</span>
+enum4linux<span class="w"> </span>-P<span class="w"> </span><span class="m">192</span>.168.1.50
+
+<span class="c1"># Output might show:</span>
+<span class="c1"># Minimum password length: 8</span>
+<span class="c1"># Password history: 24 passwords</span>
+<span class="c1"># Maximum password age: 42 days</span>
+<span class="c1"># Account lockout threshold: 10 failed attempts</span>
+</code></pre>
+</div>
+
+<h3 id="example-5-full-enumeration-to-text-report">Example 5: Full Enumeration to Text Report</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Comprehensive scan saved to file:</span>
+enum4linux<span class="w"> </span>-A<span class="w"> </span><span class="m">192</span>.168.1.50<span class="w"> </span>&gt;<span class="w"> </span>report.txt
+
+<span class="c1"># Extract key information:</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;=== SMB ENUMERATION REPORT ===&quot;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Target: 192.168.1.50&quot;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Users Found:&quot;</span>
+grep<span class="w"> </span><span class="s2">&quot;Account:&quot;</span><span class="w"> </span>report.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $NF}&#39;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Groups Found:&quot;</span>
+grep<span class="w"> </span><span class="s2">&quot;Group:&quot;</span><span class="w"> </span>report.txt
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Shares Found:&quot;</span>
+grep<span class="w"> </span><span class="s2">&quot;Mapping: OK&quot;</span><span class="w"> </span>report.txt
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="advanced-techniques">Advanced Techniques</h2>
+
+<h3 id="1-rid-cycling-on-stubborn-targets">1. <strong>RID Cycling on Stubborn Targets</strong></h3>
+
+<p>Some systems hide users, but RID cycling finds them anyway.</p>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Aggressive RID cycling:</span>
+enum4linux<span class="w"> </span>-r<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="m">192</span>.168.1.100
+
+<span class="c1"># Range 3000-3100 (common user range):</span>
+enum4linux<span class="w"> </span>-r<span class="w"> </span>-R<span class="w"> </span><span class="m">3000</span>-3100<span class="w"> </span><span class="m">192</span>.168.1.100
+</code></pre>
+</div>
+
+<h3 id="2-null-session-testing">2. <strong>Null Session Testing</strong></h3>
+
+<p>Determine if target allows null session (very common).</p>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Direct test:</span>
+smbclient<span class="w"> </span>-L<span class="w"> </span>//192.168.1.100<span class="w"> </span>-N
+
+<span class="c1"># If it works, enum4linux can do full enumeration</span>
+enum4linux<span class="w"> </span>-n<span class="w"> </span><span class="m">192</span>.168.1.100
+</code></pre>
+</div>
+
+<h3 id="3-dictionary-attack-integration">3. <strong>Dictionary Attack Integration</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Create user and password lists:</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;administrator&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>users.txt
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;user1&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>users.txt
+
+<span class="c1"># Try all combinations:</span>
+enum4linux<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;administrator&quot;</span><span class="w"> </span>-w<span class="w"> </span>/usr/share/wordlists/rockyou.txt<span class="w"> </span><span class="m">192</span>.168.1.100
+</code></pre>
+</div>
+
+<h3 id="4-combining-with-other-tools">4. <strong>Combining with Other Tools</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Extract users and immediately test with crackmapexec (if installed):</span>
+enum4linux<span class="w"> </span>-U<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;Account:&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $NF}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="nb">read</span><span class="w"> </span>user<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Testing </span><span class="nv">$user</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="c1"># Use with other SMB tools</span>
+<span class="k">done</span>
+</code></pre>
+</div>
+
+<h3 id="5-policy-based-attacks">5. <strong>Policy-Based Attacks</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Get password policy:</span>
+enum4linux<span class="w"> </span>-P<span class="w"> </span><span class="m">192</span>.168.1.100
+
+<span class="c1"># Use policy info to craft targeted attacks:</span>
+<span class="c1"># If lockout threshold is 10, stop at 9 attempts per user</span>
+<span class="c1"># If minimum length is 8, adjust wordlist filters</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="tips-tricks-for-ejpt">Tips &amp; Tricks for eJPT</h2>
+
+<h3 id="quick-reference-one-liners">Quick Reference One-Liners</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Get just usernames:</span>
+enum4linux<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;Account:&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $(NF-1)}&#39;</span>
+
+<span class="c1"># Get just shares:</span>
+enum4linux<span class="w"> </span>-S<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;\\\\&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;IPC\|ADMIN\|C\$&quot;</span>
+
+<span class="c1"># Find accessible shares:</span>
+smbclient<span class="w"> </span>-L<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-N<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;Disk\|Printer&quot;</span>
+
+<span class="c1"># Test null session:</span>
+smbclient<span class="w"> </span>-L<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-N<span class="w">  </span><span class="c1"># If this works, enum4linux will succeed</span>
+
+<span class="c1"># Extract password policy:</span>
+enum4linux<span class="w"> </span>-P<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;policy&quot;</span>
+
+<span class="c1"># Combined with nmap for SMB network sweep:</span>
+nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">445</span><span class="w"> </span>--script<span class="w"> </span>smb-os-discovery<span class="w"> </span><span class="m">192</span>.168.1.0/24
+
+<span class="c1"># Find all SMB hosts then enum all:</span>
+<span class="k">for</span><span class="w"> </span>ip<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">445</span><span class="w"> </span>--open<span class="w"> </span><span class="m">192</span>.168.1.0/24<span class="w"> </span>-oG<span class="w"> </span>-<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;Up&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $2}&#39;</span><span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span>enum4linux<span class="w"> </span>-A<span class="w"> </span><span class="nv">$ip</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;User|Share|Group&quot;</span>
+<span class="k">done</span>
+</code></pre>
+</div>
+
+<h3 id="common-enum4linux-findings-exploitation">Common Enum4linux Findings &amp; Exploitation</h3>
+
+<table>
+<thead>
+<tr>
+  <th>Finding</th>
+  <th>Implication</th>
+  <th>Next Step</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Null session works</td>
+  <td>Can enumerate without auth</td>
+  <td>Full enumeration possible</td>
+</tr>
+<tr>
+  <td>Accessible admin$</td>
+  <td>System misconfig</td>
+  <td>May be able to access files/executables</td>
+</tr>
+<tr>
+  <td>Many users found</td>
+  <td>Social engineering possible</td>
+  <td>Use users in credential attacks</td>
+</tr>
+<tr>
+  <td>Guest enabled</td>
+  <td>Weak security</td>
+  <td>Try guest account access</td>
+</tr>
+<tr>
+  <td>Old OS (XP, Server 2003)</td>
+  <td>Legacy vulnerabilities</td>
+  <td>Check for EternalBlue (MS17-010)</td>
+</tr>
+<tr>
+  <td>Share permissions weak</td>
+  <td>File access possible</td>
+  <td>Mount share and explore</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="performance-tips">Performance Tips</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Fast basic enumeration:</span>
+enum4linux<span class="w"> </span>-U<span class="w"> </span>-S<span class="w"> </span>-G<span class="w"> </span><span class="m">192</span>.168.1.100
+
+<span class="c1"># Skip slow checks:</span>
+enum4linux<span class="w"> </span>-A<span class="w"> </span>-q<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w">  </span><span class="c1"># Quiet mode (faster)</span>
+
+<span class="c1"># Limit to specific checks:</span>
+enum4linux<span class="w"> </span>-U<span class="w"> </span>-G<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w">  </span><span class="c1"># Only users and groups (fast)</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="combining-enum4linux-with-other-tools">Combining Enum4linux with Other Tools</h2>
+
+<h3 id="enum4linux-smbclient">Enum4linux → SMBclient</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Enum4linux finds accessible shares</span>
+enum4linux<span class="w"> </span>-S<span class="w"> </span><span class="m">192</span>.168.1.100
+
+<span class="c1"># Then access with smbclient:</span>
+smbclient<span class="w"> </span>//192.168.1.100/accessible_share<span class="w"> </span>-N
+smbclient<span class="w"> </span>//192.168.1.100/admin$<span class="w"> </span>-u<span class="w"> </span>administrator<span class="w"> </span>-p<span class="w"> </span>password
+</code></pre>
+</div>
+
+<h3 id="enum4linux-hydra">Enum4linux → Hydra</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Extract usernames:</span>
+enum4linux<span class="w"> </span>-U<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;Account:&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $NF}&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>users.txt
+
+<span class="c1"># Brute force with hydra:</span>
+hydra<span class="w"> </span>-L<span class="w"> </span>users.txt<span class="w"> </span>-P<span class="w"> </span>/usr/share/wordlists/rockyou.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>smb://192.168.1.100<span class="w"> </span>-t<span class="w"> </span><span class="m">4</span><span class="w"> </span>-v
+</code></pre>
+</div>
+
+<h3 id="enum4linux-smbmap">Enum4linux → Smbmap</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Enum4linux finds users</span>
+<span class="c1"># Smbmap shows share permissions with those users:</span>
+
+enum4linux<span class="w"> </span>-U<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w">  </span><span class="c1"># Find users</span>
+smbmap<span class="w"> </span>-u<span class="w"> </span>user1<span class="w"> </span>-p<span class="w"> </span>password<span class="w"> </span>-d<span class="w"> </span>DOMAIN<span class="w"> </span>-H<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w">  </span><span class="c1"># Test permissions</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+
+<table>
+<thead>
+<tr>
+  <th>Problem</th>
+  <th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>"Connection refused"</td>
+  <td>Check SMB service is running, port 139/445 open</td>
+</tr>
+<tr>
+  <td>"No users enumerated"</td>
+  <td>Try <code>-r</code> for RID cycling, system may restrict enumeration</td>
+</tr>
+<tr>
+  <td>"Authentication failed"</td>
+  <td>Wrong credentials or null session disabled</td>
+</tr>
+<tr>
+  <td>"Timeout"</td>
+  <td>Network latency, try without <code>-v</code> for faster output</td>
+</tr>
+<tr>
+  <td>"Perl errors"</td>
+  <td>Ensure Perl installed: <code>sudo pacman -S perl</code></td>
+</tr>
+<tr>
+  <td>"Module not found"</td>
+  <td>Install: <code>sudo pacman -S perl-net-enum</code></td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h2 id="official-documentation-resources">Official Documentation &amp; Resources</h2>
+
+<ul>
+<li><strong>GitHub Repository</strong>: https://github.com/cddmp/enum4linux</li>
+<li><strong>SMB Protocol Info</strong>: https://wiki.wireshark.org/SMB</li>
+<li><strong>Windows RID Documentation</strong>: https://docs.microsoft.com/en-us/windows-server/identity/ad-ds/manage/understand-relative-id--rid--allocation</li>
+<li><strong>Samba Documentation</strong>: https://www.samba.org/</li>
+</ul>
+
+<hr />
+
+<h2 id="key-takeaways-for-ejpt">Key Takeaways for eJPT</h2>
+
+<ol>
+<li><strong>Basic enum</strong>: <code>enum4linux 192.168.1.100</code></li>
+<li><strong>Get users</strong>: <code>enum4linux -U 192.168.1.100</code></li>
+<li><strong>Get shares</strong>: <code>enum4linux -S 192.168.1.100</code></li>
+<li><strong>Try harder</strong>: Use <code>-r</code> for RID cycling</li>
+<li><strong>Use credentials</strong>: If available: <code>-u user -p pass</code></li>
+<li><strong>Combine with nmap</strong>: Find SMB first, then enum</li>
+<li><strong>Extract users</strong>: Use for hydra/credential attacks</li>
+<li><strong>Check null session</strong>: <code>smbclient -L target -N</code></li>
+</ol>
+
+<hr />
+
+<p><strong>Next Steps</strong>: Use extracted usernames for credential attacks with hydra, and accessible shares for file exfiltration or malware placement.</p>
+
+</body>
+</html>

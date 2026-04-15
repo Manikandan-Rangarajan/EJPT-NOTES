@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>03_nikto.md</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            color: #2c3e50;
+            margin-top: 24px;
+            margin-bottom: 16px;
+        }
+        h1 { border-bottom: 2px solid #0066cc; padding-bottom: 10px; }
+        code {
+            background: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #c7254e;
+        }
+        pre {
+            background: #f5f5f5;
+            color: #333;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 13px;
+            font-family: 'Courier New', monospace;
+            line-height: 1.4;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        pre code {
+            background: transparent;
+            color: #333;
+            padding: 0;
+        }
+        .codehilite {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 0;
+            margin: 15px 0;
+        }
+        .codehilite pre {
+            margin: 0;
+            border: none;
+            background: #f5f5f5;
+            padding: 15px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        blockquote {
+            border-left: 4px solid #0066cc;
+            margin: 15px 0;
+            padding-left: 15px;
+            color: #666;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        @media print {
+            body { margin: 0; padding: 10px; }
+            pre { page-break-inside: avoid; }
+            table { page-break-inside: avoid; }
+        }
+    </style>
+    <!-- Anime Vibes CSS Framework -->
+    <link rel="stylesheet" href="anime-vibes.css">
+    </head>
+<body>
+    <h1 id="nikto-web-server-scanner">NIKTO - Web Server Scanner</h1>
+
+<h2 id="overview">Overview</h2>
+
+<p><strong>Nikto</strong> is a free, open-source web server scanner that performs comprehensive tests for vulnerabilities, outdated versions, default configurations, and dangerous files. It's specifically designed to find security issues that could be exploited on web applications.</p>
+
+<h3 id="why-its-critical-for-ejpt">Why It's Critical for eJPT:</h3>
+
+<ul>
+<li>Quick identification of web server vulnerabilities</li>
+<li>Detects outdated software versions with known CVEs</li>
+<li>Finds dangerous files and misconfigurations</li>
+<li>Works on any web server (Apache, IIS, Nginx, etc.)</li>
+<li>Automated - no manual testing required</li>
+<li>Complements nmap and gobuster perfectly</li>
+</ul>
+
+<hr />
+
+<h2 id="installation-setup">Installation &amp; Setup</h2>
+
+<h3 id="cachyos-arch-linux">CachyOS (Arch Linux)</h3>
+
+<div class="codehilite">
+<pre><span></span><code>sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>nikto
+nikto<span class="w"> </span>-version<span class="w">  </span><span class="c1"># Verify installation</span>
+</code></pre>
+</div>
+
+<h3 id="install-from-source-if-not-in-repos">Install from Source (if not in repos)</h3>
+
+<div class="codehilite">
+<pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/sullo/nikto.git
+<span class="nb">cd</span><span class="w"> </span>nikto/program
+perl<span class="w"> </span>nikto.pl<span class="w"> </span>-version
+</code></pre>
+</div>
+
+<h3 id="windows">Windows</h3>
+
+<ul>
+<li>Download from: https://github.com/sullo/nikto/releases</li>
+<li>Extract and run with Perl: <code>perl nikto.pl</code></li>
+<li>Or use Windows binaries if available</li>
+</ul>
+
+<h3 id="database-updates">Database Updates</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Update vulnerability database:</span>
+sudo<span class="w"> </span>nikto<span class="w"> </span>-update
+
+<span class="c1"># On CachyOS, usually automatic with pacman -Syy</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="core-concepts">Core Concepts</h2>
+
+<h3 id="what-nikto-checks-for">What Nikto Checks For</h3>
+
+<ol>
+<li><strong>Outdated Software</strong>: Apache 1.3.26, IIS 5.0, etc.</li>
+<li><strong>Dangerous Files</strong>: backup files, config files, admin panels</li>
+<li><strong>Misconfigurations</strong>: Directory listing enabled, weak SSL/TLS</li>
+<li><strong>CGI Scripts</strong>: Vulnerable scripts in common locations</li>
+<li><strong>HTTPS Issues</strong>: Self-signed certificates, expired certs</li>
+<li><strong>HTTP Headers</strong>: Missing security headers</li>
+<li><strong>Plugins</strong>: Vulnerable server plugins/modules</li>
+<li><strong>XSS/Injection</strong>: Basic checks for common vulnerabilities</li>
+</ol>
+
+<h3 id="how-nikto-works">How Nikto Works</h3>
+
+<ul>
+<li>Sends specific HTTP requests to the target</li>
+<li>Compares responses against vulnerability database</li>
+<li>Reports any matches with severity levels</li>
+<li>Can use proxy for filtered environments</li>
+<li>Can authenticate if needed</li>
+</ul>
+
+<h3 id="severity-levels">Severity Levels</h3>
+
+<ul>
+<li><strong>CRITICAL</strong>: Immediate security risk</li>
+<li><strong>HIGH</strong>: Serious vulnerability</li>
+<li><strong>MEDIUM</strong>: Should be addressed</li>
+<li><strong>LOW</strong>: Minor issue</li>
+<li><strong>INFO</strong>: Informational only</li>
+</ul>
+
+<hr />
+
+<h2 id="common-use-cases-for-ejpt">Common Use Cases for eJPT</h2>
+
+<h3 id="1-basic-web-server-scan">1. <strong>Basic Web Server Scan</strong></h3>
+
+<p>Quick vulnerability check on a web server.</p>
+
+<div class="codehilite">
+<pre><span></span><code>nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50
+</code></pre>
+</div>
+
+<p><strong>What this does:</strong>
+- Scans the target web server
+- Checks for outdated software, dangerous files, misconfigurations
+- Prints results to console</p>
+
+<p><strong>Sample Output:</strong></p>
+
+<pre><code>- Nikto v2.1.6
+---------------------------------------------------------------------------
++ Target IP:          192.168.1.50
++ Target Hostname:    192.168.1.50
++ Target Port:        80
++ Start Time:         Mon Jan 10 10:30:00 2022 (GMT0)
+---------------------------------------------------------------------------
++ Server: Apache/2.4.41 (Ubuntu)
++ Retrieved x-powered-by header: PHP/7.4.3
++ The anti-clickjacking X-Frame-Options header is missing
++ Server may leak inodes via ETags
++ Retrieved x-ua-compatible header: IE=edge
++ Uncommon header 'x-content-type-options' found, with value: nosniff
++ OSVDB-3268: /icons/: Directory indexing found.
++ OSVDB-3092: /admin/: This might be interesting
++ OSVDB-3268: /uploads/: Directory indexing found.
++ OSVDB-3233: /phpmyadmin/: phpMyAdmin found
+---------------------------------------------------------------------------
+</code></pre>
+
+<h3 id="2-scan-with-https">2. <strong>Scan with HTTPS</strong></h3>
+
+<p>For secure web applications.</p>
+
+<div class="codehilite">
+<pre><span></span><code>nikto<span class="w"> </span>-h<span class="w"> </span>https://192.168.1.50<span class="w"> </span>-ssl
+</code></pre>
+</div>
+
+<p><strong>Flag:</strong>
+- <code>-ssl</code>: Force HTTPS and skip certificate verification</p>
+
+<h3 id="3-specify-non-default-port">3. <strong>Specify Non-Default Port</strong></h3>
+
+<p>Web servers often run on non-standard ports.</p>
+
+<div class="codehilite">
+<pre><span></span><code>nikto<span class="w"> </span>-h<span class="w"> </span><span class="m">192</span>.168.1.50<span class="w"> </span>-p<span class="w"> </span><span class="m">8080</span>
+nikto<span class="w"> </span>-h<span class="w"> </span><span class="m">192</span>.168.1.50<span class="w"> </span>-p<span class="w"> </span><span class="m">8443</span><span class="w"> </span>-ssl
+</code></pre>
+</div>
+
+<p><strong>Flags:</strong>
+- <code>-p</code>: Port number</p>
+
+<h3 id="4-save-results-to-file">4. <strong>Save Results to File</strong></h3>
+
+<p>Export findings for reporting.</p>
+
+<div class="codehilite">
+<pre><span></span><code>nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span>-o<span class="w"> </span>results.txt
+nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span>-o<span class="w"> </span>results.html<span class="w"> </span>-F<span class="w"> </span>htm<span class="w">  </span><span class="c1"># HTML report</span>
+nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span>-o<span class="w"> </span>results.xml<span class="w"> </span>-F<span class="w"> </span>xml<span class="w">   </span><span class="c1"># XML report</span>
+</code></pre>
+</div>
+
+<p><strong>Flags:</strong>
+- <code>-o</code>: Output file
+- <code>-F</code>: Output format (txt, html, xml, csv, json)</p>
+
+<h3 id="5-aggressive-scanning">5. <strong>Aggressive Scanning</strong></h3>
+
+<p>More thorough but slower scan.</p>
+
+<div class="codehilite">
+<pre><span></span><code>nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span>-Display<span class="w"> </span>V
+</code></pre>
+</div>
+
+<p><strong>Flag:</strong>
+- <code>-Display V</code>: Verbose output (shows all requests)</p>
+
+<h3 id="6-using-proxies">6. <strong>Using Proxies</strong></h3>
+
+<p>Route scan through proxy (useful in corporate networks).</p>
+
+<div class="codehilite">
+<pre><span></span><code>nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span>-p<span class="w"> </span>http://proxy:8080
+</code></pre>
+</div>
+
+<p><strong>Flag:</strong>
+- <code>-p</code>: Proxy settings</p>
+
+<h3 id="7-authentication">7. <strong>Authentication</strong></h3>
+
+<p>If the web server requires authentication.</p>
+
+<div class="codehilite">
+<pre><span></span><code>nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span>-id<span class="w"> </span>username:password
+</code></pre>
+</div>
+
+<p><strong>Flag:</strong>
+- <code>-id</code>: Username:password for basic auth</p>
+
+<h3 id="8-specific-plugins">8. <strong>Specific Plugins</strong></h3>
+
+<p>Run only specific vulnerability checks.</p>
+
+<div class="codehilite">
+<pre><span></span><code>nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span>-Plugins<span class="w"> </span>single_server_banner
+nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span>-Plugins<span class="w"> </span><span class="s2">&quot;single_server_banner,outdated&quot;</span><span class="w"> </span>-v
+</code></pre>
+</div>
+
+<p><strong>Flag:</strong>
+- <code>-Plugins</code>: Specific plugin(s) to run</p>
+
+<h3 id="9-exclude-plugins">9. <strong>Exclude Plugins</strong></h3>
+
+<p>Skip certain checks.</p>
+
+<div class="codehilite">
+<pre><span></span><code>nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span>-noSSL
+nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span>-nolookups<span class="w">  </span><span class="c1"># Skip DNS lookups</span>
+</code></pre>
+</div>
+
+<h3 id="10-multiple-hosts">10. <strong>Multiple Hosts</strong></h3>
+
+<p>Scan a list of targets.</p>
+
+<div class="codehilite">
+<pre><span></span><code>nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.<span class="o">{</span><span class="m">50</span>..60<span class="o">}</span>:80/<span class="w">  </span><span class="c1"># Scan range</span>
+nikto<span class="w"> </span>-h<span class="w"> </span>hosts.txt<span class="w">  </span><span class="c1"># Scan from file (one per line)</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="command-reference-essential-flags">Command Reference - Essential Flags</h2>
+
+<table>
+<thead>
+<tr>
+  <th>Flag</th>
+  <th>Purpose</th>
+  <th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>-h</code></td>
+  <td>Target host/URL</td>
+  <td><code>-h http://target.com</code></td>
+</tr>
+<tr>
+  <td><code>-p</code></td>
+  <td>Target port</td>
+  <td><code>-p 8080</code> or <code>-p 8443</code></td>
+</tr>
+<tr>
+  <td><code>-ssl</code></td>
+  <td>Use HTTPS</td>
+  <td>For SSL/TLS connections</td>
+</tr>
+<tr>
+  <td><code>-o</code></td>
+  <td>Output file</td>
+  <td><code>-o results.txt</code></td>
+</tr>
+<tr>
+  <td><code>-F</code></td>
+  <td>Output format</td>
+  <td><code>-F htm</code>, <code>-F xml</code>, <code>-F json</code></td>
+</tr>
+<tr>
+  <td><code>-id</code></td>
+  <td>Authentication</td>
+  <td><code>-id user:pass</code></td>
+</tr>
+<tr>
+  <td><code>-Plugins</code></td>
+  <td>Specific plugins</td>
+  <td><code>-Plugins "plugin1,plugin2"</code></td>
+</tr>
+<tr>
+  <td><code>-Display</code></td>
+  <td>Display level</td>
+  <td><code>-Display V</code> (verbose)</td>
+</tr>
+<tr>
+  <td><code>-noSSL</code></td>
+  <td>Skip SSL checks</td>
+  <td>Useful when SSL is misconfigured</td>
+</tr>
+<tr>
+  <td><code>-nolookups</code></td>
+  <td>Skip DNS</td>
+  <td>Faster scanning</td>
+</tr>
+<tr>
+  <td><code>-update</code></td>
+  <td>Update database</td>
+  <td>Keep vulnerability database current</td>
+</tr>
+<tr>
+  <td><code>-config</code></td>
+  <td>Config file</td>
+  <td><code>-config /path/to/config</code></td>
+</tr>
+<tr>
+  <td><code>-user-agent</code></td>
+  <td>Custom User-Agent</td>
+  <td><code>-user-agent "Custom UA"</code></td>
+</tr>
+<tr>
+  <td><code>-timeout</code></td>
+  <td>Request timeout</td>
+  <td><code>-timeout 10</code> (seconds)</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h2 id="practical-ejpt-workflow">Practical eJPT Workflow</h2>
+
+<h3 id="basic-web-reconnaissance-workflow">Basic Web Reconnaissance Workflow</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Step 1: Quick scan with nmap to find web servers</span>
+nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">80</span>,443,8080,8443<span class="w"> </span><span class="m">192</span>.168.1.0/24<span class="w"> </span>--open<span class="w"> </span>-oG<span class="w"> </span>web_servers.txt
+
+<span class="c1"># Step 2: Extract IPs and scan each with nikto</span>
+grep<span class="w"> </span><span class="s2">&quot;Up&quot;</span><span class="w"> </span>web_servers.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $2}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="nb">read</span><span class="w"> </span>ip<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;[*] Scanning </span><span class="nv">$ip</span><span class="s2">&quot;</span>
+<span class="w">  </span>nikto<span class="w"> </span>-h<span class="w"> </span>http://<span class="nv">$ip</span><span class="w"> </span>-o<span class="w"> </span>results_<span class="nv">$ip</span>.txt
+<span class="k">done</span>
+
+<span class="c1"># Step 3: Review results</span>
+<span class="k">for</span><span class="w"> </span>file<span class="w"> </span><span class="k">in</span><span class="w"> </span>results_*.txt<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;=== </span><span class="nv">$file</span><span class="s2"> ===&quot;</span>
+<span class="w">  </span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;OSVDB\|interesting\|dangerous&quot;</span><span class="w"> </span><span class="nv">$file</span>
+<span class="k">done</span>
+</code></pre>
+</div>
+
+<h3 id="detailed-scanning-approach">Detailed Scanning Approach</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Step 1: Initial scan (fast)</span>
+nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span>-o<span class="w"> </span>initial.txt
+
+<span class="c1"># Step 2: If interesting findings, do deeper scan</span>
+nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span>-Display<span class="w"> </span>V<span class="w"> </span>-o<span class="w"> </span>detailed.txt
+
+<span class="c1"># Step 3: Run in HTML for easier review</span>
+nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span>-o<span class="w"> </span>report.html<span class="w"> </span>-F<span class="w"> </span>htm
+
+<span class="c1"># Step 4: Investigate interesting findings manually</span>
+<span class="c1"># Use curl or Burp Suite to test findings</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="real-world-ejpt-examples">Real-World eJPT Examples</h2>
+
+<h3 id="example-1-quick-scan-of-known-vulnerable-app">Example 1: Quick Scan of Known Vulnerable App</h3>
+
+<div class="codehilite">
+<pre><span></span><code>nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span>-p<span class="w"> </span><span class="m">80</span>
+
+<span class="c1"># Output shows:</span>
+<span class="c1"># + Server: Apache/2.4.1 (Vulnerable!)</span>
+<span class="c1"># + OSVDB-3092: /admin/: Admin panel found</span>
+<span class="c1"># + Retrieved directory listing</span>
+<span class="c1"># → Next: Use gobuster to find files in /admin/</span>
+</code></pre>
+</div>
+
+<h3 id="example-2-comprehensive-security-assessment">Example 2: Comprehensive Security Assessment</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Scan with all information:</span>
+nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-o<span class="w"> </span>report.html<span class="w"> </span>-F<span class="w"> </span>htm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-Display<span class="w"> </span>V<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-Plugins<span class="w"> </span><span class="s2">&quot;default&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>&gt;<span class="w"> </span>verbose_output.txt
+
+<span class="c1"># Creates detailed HTML report for client/documentation</span>
+</code></pre>
+</div>
+
+<h3 id="example-3-https-website-with-certificate-issues">Example 3: HTTPS Website with Certificate Issues</h3>
+
+<div class="codehilite">
+<pre><span></span><code>nikto<span class="w"> </span>-h<span class="w"> </span>https://192.168.1.50<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-ssl<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-p<span class="w"> </span><span class="m">443</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-o<span class="w"> </span>secure_scan.txt
+
+<span class="c1"># -ssl flag handles self-signed/invalid certificates</span>
+</code></pre>
+</div>
+
+<h3 id="example-4-multi-target-scanning">Example 4: Multi-Target Scanning</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Create file with targets:</span>
+cat<span class="w"> </span>&gt;<span class="w"> </span>targets.txt<span class="w"> </span><span class="s">&lt;&lt; EOF</span>
+<span class="s">192.168.1.50:80</span>
+<span class="s">192.168.1.51:8080</span>
+<span class="s">192.168.1.52:443</span>
+<span class="s">EOF</span>
+
+<span class="c1"># Scan all:</span>
+<span class="k">for</span><span class="w"> </span>target<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>cat<span class="w"> </span>targets.txt<span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span>nikto<span class="w"> </span>-h<span class="w"> </span>http://<span class="nv">$target</span><span class="w"> </span>-o<span class="w"> </span>results_<span class="nv">$target</span>.txt<span class="w"> </span><span class="p">&amp;</span>
+<span class="k">done</span>
+<span class="nb">wait</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="advanced-techniques">Advanced Techniques</h2>
+
+<h3 id="1-custom-vulnerability-database">1. <strong>Custom Vulnerability Database</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Update before scanning for latest vulnerabilities:</span>
+nikto<span class="w"> </span>-update
+
+<span class="c1"># Then run scan:</span>
+nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com
+</code></pre>
+</div>
+
+<h3 id="2-targeted-plugin-scanning">2. <strong>Targeted Plugin Scanning</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Find available plugins:</span>
+ls<span class="w"> </span>/usr/local/nikto/plugins/<span class="w">  </span><span class="c1"># or similar path</span>
+
+<span class="c1"># Run specific plugin:</span>
+nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com<span class="w"> </span>-Plugins<span class="w"> </span>outdated
+
+<span class="c1"># Combine multiple plugins:</span>
+nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com<span class="w"> </span>-Plugins<span class="w"> </span><span class="s2">&quot;outdated,ssl,headers&quot;</span>
+</code></pre>
+</div>
+
+<h3 id="3-integration-with-other-tools">3. <strong>Integration with Other Tools</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Pipe nmap results to nikto:</span>
+nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">80</span>,443<span class="w"> </span>--open<span class="w"> </span><span class="m">192</span>.168.1.0/24<span class="w"> </span>-oG<span class="w"> </span>-<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;Up&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print &quot;http://&quot; $2}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="nb">read</span><span class="w"> </span>target<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span>nikto<span class="w"> </span>-h<span class="w"> </span><span class="nv">$target</span><span class="w"> </span>-o<span class="w"> </span>results_<span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="nv">$target</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tr<span class="w"> </span><span class="s1">&#39;/&#39;</span><span class="w"> </span><span class="s1">&#39;_&#39;</span><span class="k">)</span>.txt
+<span class="k">done</span>
+
+<span class="c1"># Parse nikto output for high-severity issues:</span>
+grep<span class="w"> </span><span class="s2">&quot;OSVDB&quot;</span><span class="w"> </span>results.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-u
+grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;critical\|high&quot;</span><span class="w"> </span>results.txt
+</code></pre>
+</div>
+
+<h3 id="4-timing-control">4. <strong>Timing Control</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Slow scan (stealthy):</span>
+nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com<span class="w"> </span>-Plugins<span class="w"> </span><span class="s2">&quot;default&quot;</span><span class="w"> </span>-timeout<span class="w"> </span><span class="m">10</span>
+
+<span class="c1"># Fast scan (may miss some issues):</span>
+nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com<span class="w"> </span>-nolookups
+</code></pre>
+</div>
+
+<h3 id="5-output-parsing">5. <strong>Output Parsing</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Extract dangerous files:</span>
+grep<span class="w"> </span><span class="s2">&quot;OSVDB&quot;</span><span class="w"> </span>results.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;file\|directory&quot;</span>
+
+<span class="c1"># Find SSL/TLS issues:</span>
+grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;ssl\|certificate\|tls&quot;</span><span class="w"> </span>results.txt
+
+<span class="c1"># Find outdated software:</span>
+grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;Apache\|IIS\|Nginx&quot;</span><span class="w"> </span>results.txt
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="tips-tricks-for-ejpt">Tips &amp; Tricks for eJPT</h2>
+
+<h3 id="quick-reference-commands">Quick Reference Commands</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Fastest basic scan:</span>
+nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com<span class="w"> </span>-nolookups
+
+<span class="c1"># Most thorough:</span>
+nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com<span class="w"> </span>-Display<span class="w"> </span>V<span class="w"> </span>-o<span class="w"> </span>report.html<span class="w"> </span>-F<span class="w"> </span>htm
+
+<span class="c1"># HTTPS with verbose output:</span>
+nikto<span class="w"> </span>-h<span class="w"> </span>https://target.com<span class="w"> </span>-ssl<span class="w"> </span>-Display<span class="w"> </span>V
+
+<span class="c1"># Scan and immediately grep for interesting findings:</span>
+nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;OSVDB\|interesting\|dangerous&quot;</span>
+
+<span class="c1"># Scan multiple ports at once:</span>
+nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com:80<span class="w"> </span>-o<span class="w"> </span>port80.txt<span class="w"> </span><span class="p">&amp;</span><span class="w"> </span><span class="se">\</span>
+nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com:8080<span class="w"> </span>-o<span class="w"> </span>port8080.txt<span class="w"> </span><span class="p">&amp;</span><span class="w"> </span><span class="se">\</span>
+nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com:8443<span class="w"> </span>-ssl<span class="w"> </span>-o<span class="w"> </span>port8443.txt<span class="w"> </span><span class="p">&amp;</span><span class="w"> </span><span class="se">\</span>
+<span class="nb">wait</span>
+</code></pre>
+</div>
+
+<h3 id="common-findings-what-they-mean">Common Findings &amp; What They Mean</h3>
+
+<table>
+<thead>
+<tr>
+  <th>Finding</th>
+  <th>Implication</th>
+  <th>Next Step</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Outdated Apache/IIS</td>
+  <td>Known exploits available</td>
+  <td>searchsploit version number</td>
+</tr>
+<tr>
+  <td>Directory listing enabled</td>
+  <td>Files may be accessible</td>
+  <td>Use gobuster to find more</td>
+</tr>
+<tr>
+  <td>phpMyAdmin found</td>
+  <td>Database admin interface</td>
+  <td>Try default credentials</td>
+</tr>
+<tr>
+  <td>Admin panel found</td>
+  <td>Login opportunity</td>
+  <td>Use hydra for brute force</td>
+</tr>
+<tr>
+  <td>Backup files (.bak, .old)</td>
+  <td>May contain source code</td>
+  <td>Download and analyze</td>
+</tr>
+<tr>
+  <td>Missing security headers</td>
+  <td>Potential XSS/Clickjacking</td>
+  <td>Manual testing with Burp</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="performance-optimization">Performance Optimization</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Scan only specific checks (faster):</span>
+nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com<span class="w"> </span>-Plugins<span class="w"> </span><span class="s2">&quot;outdated&quot;</span>
+
+<span class="c1"># Skip slow components:</span>
+nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com<span class="w"> </span>-nolookups
+
+<span class="c1"># Use reasonable timeout:</span>
+nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com<span class="w"> </span>-timeout<span class="w"> </span><span class="m">5</span>
+
+<span class="c1"># Parallel scanning of multiple targets:</span>
+<span class="k">for</span><span class="w"> </span>target<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">192</span>.168.1.<span class="o">{</span><span class="m">50</span>..60<span class="o">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span>nikto<span class="w"> </span>-h<span class="w"> </span>http://<span class="nv">$target</span><span class="w"> </span>-nolookups<span class="w"> </span><span class="p">&amp;</span>
+<span class="k">done</span>
+<span class="nb">wait</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="nikto-vs-other-tools">Nikto vs Other Tools</h2>
+
+<table>
+<thead>
+<tr>
+  <th>Aspect</th>
+  <th>Nikto</th>
+  <th>Nessus</th>
+  <th>Burp Suite</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Cost</td>
+  <td>Free</td>
+  <td>Paid</td>
+  <td>Freemium</td>
+</tr>
+<tr>
+  <td>Speed</td>
+  <td>Fast</td>
+  <td>Medium</td>
+  <td>Varies</td>
+</tr>
+<tr>
+  <td>Web-specific</td>
+  <td>Yes</td>
+  <td>No</td>
+  <td>Yes</td>
+</tr>
+<tr>
+  <td>Ease of use</td>
+  <td>Very easy</td>
+  <td>Medium</td>
+  <td>Complex</td>
+</tr>
+<tr>
+  <td>Database</td>
+  <td>Community</td>
+  <td>Commercial</td>
+  <td>Built-in</td>
+</tr>
+<tr>
+  <td>For eJPT</td>
+  <td>Excellent</td>
+  <td>N/A</td>
+  <td>Excellent (Burp Community)</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+
+<table>
+<thead>
+<tr>
+  <th>Problem</th>
+  <th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>"Connection refused"</td>
+  <td>Check URL and port, ensure web server is running</td>
+</tr>
+<tr>
+  <td>"SSL certificate error"</td>
+  <td>Use <code>-ssl</code> flag to skip verification</td>
+</tr>
+<tr>
+  <td>"No results found"</td>
+  <td>Try <code>-Display V</code> for verbose, check connectivity</td>
+</tr>
+<tr>
+  <td>"Very slow scan"</td>
+  <td>Use <code>-nolookups</code>, limit plugins, increase timeout</td>
+</tr>
+<tr>
+  <td>"Database out of date"</td>
+  <td>Run <code>nikto -update</code></td>
+</tr>
+<tr>
+  <td>"Plugin not found"</td>
+  <td>Update nikto: <code>sudo pacman -Syy nikto</code></td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h2 id="combining-nikto-with-other-tools">Combining Nikto with Other Tools</h2>
+
+<h3 id="nikto-gobuster">Nikto → Gobuster</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Nikto finds interesting directories</span>
+<span class="c1"># Gobuster goes deeper on those directories</span>
+
+nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;OSVDB&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>nikto_findings.txt
+
+<span class="c1"># Then scan interesting paths with gobuster:</span>
+gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://target.com/admin<span class="w"> </span>-w<span class="w"> </span>common.txt
+</code></pre>
+</div>
+
+<h3 id="nikto-manual-testing-burp-suite">Nikto → Manual Testing (Burp Suite)</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Nikto finds vulnerability, you test it manually:</span>
+
+nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com<span class="w">  </span><span class="c1"># Identifies XSS vulnerability</span>
+<span class="c1"># Then open Burp Suite and manually test the payload</span>
+</code></pre>
+</div>
+
+<h3 id="nikto-sqlmap">Nikto → SQLmap</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Nikto finds SQL injection point</span>
+nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com<span class="w"> </span>-Display<span class="w"> </span>V<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;sql&quot;</span>
+
+<span class="c1"># Then test with SQLmap:</span>
+sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com/page?id=1&quot;</span><span class="w"> </span>--dbs
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="official-documentation-resources">Official Documentation &amp; Resources</h2>
+
+<ul>
+<li><strong>GitHub Repository</strong>: https://github.com/sullo/nikto</li>
+<li><strong>Plugin Documentation</strong>: https://github.com/sullo/nikto/wiki/Plugins</li>
+<li><strong>Database Info</strong>: https://github.com/sullo/nikto/wiki/Database</li>
+<li><strong>Configuration</strong>: https://github.com/sullo/nikto/wiki/nikto.conf</li>
+</ul>
+
+<hr />
+
+<h2 id="key-takeaways-for-ejpt">Key Takeaways for eJPT</h2>
+
+<ol>
+<li><strong>Basic scan</strong>: <code>nikto -h http://target.com</code></li>
+<li><strong>Always save output</strong>: <code>-o results.txt</code> or <code>-o report.html -F htm</code></li>
+<li><strong>HTTPS requires</strong>: <code>-ssl</code> flag</li>
+<li><strong>Non-standard ports</strong>: <code>-p 8080</code></li>
+<li><strong>Get detailed info</strong>: <code>-Display V</code> (verbose)</li>
+<li><strong>Vulnerable software</strong>: Check results for version numbers</li>
+<li><strong>Combine with nmap</strong>: Find web servers with nmap, scan with nikto</li>
+<li><strong>Act on findings</strong>: Each vulnerability has actionable next steps</li>
+</ol>
+
+<hr />
+
+<p><strong>Next Steps</strong>: Use nikto findings to inform exploitation strategy. Vulnerable software versions can be searched in searchsploit or ExploitDB.</p>
+
+</body>
+</html>

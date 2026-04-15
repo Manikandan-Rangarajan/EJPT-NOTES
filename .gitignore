@@ -1,0 +1,105 @@
+# OS Files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Editor / IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.atom/
+.project
+.classpath
+*.c9/
+*.pyc
+
+# Dependencies & Build
+node_modules/
+dist/
+build/
+*.egg-info/
+__pycache__/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Temporary Files
+*.tmp
+*.temp
+*.log
+*.pid
+
+# OS specific
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# Backups
+*.bak
+*.backup
+*~
+
+# System files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Node/NPM
+package-lock.json
+yarn.lock
+
+# Python
+*.pyc
+*.pyo
+*.egg
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# IDE
+.vscode/settings.json
+.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+
+# Compiled files
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+
+# MacOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Build artifacts
+*.exe
+*.msi
+*.zip
+dist/
+build/
+*.egg-info/

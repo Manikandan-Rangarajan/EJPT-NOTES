@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>README.md</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            color: #2c3e50;
+            margin-top: 24px;
+            margin-bottom: 16px;
+        }
+        h1 { border-bottom: 2px solid #0066cc; padding-bottom: 10px; }
+        code {
+            background: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #c7254e;
+        }
+        pre {
+            background: #f5f5f5;
+            color: #333;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 13px;
+            font-family: 'Courier New', monospace;
+            line-height: 1.4;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        pre code {
+            background: transparent;
+            color: #333;
+            padding: 0;
+        }
+        .codehilite {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 0;
+            margin: 15px 0;
+        }
+        .codehilite pre {
+            margin: 0;
+            border: none;
+            background: #f5f5f5;
+            padding: 15px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        blockquote {
+            border-left: 4px solid #0066cc;
+            margin: 15px 0;
+            padding-left: 15px;
+            color: #666;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        @media print {
+            body { margin: 0; padding: 10px; }
+            pre { page-break-inside: avoid; }
+            table { page-break-inside: avoid; }
+        }
+    </style>
+    <!-- Anime Vibes CSS Framework -->
+    <link rel="stylesheet" href="anime-vibes.css">
+    </head>
+<body>
+    <h1 id="ejpt-penetration-testing-tools-comprehensive-notes">eJPT Penetration Testing Tools - Comprehensive Notes</h1>
+
+<p>Welcome to your future-proof reference guide for eJPT examination and cybersecurity professional work. This documentation covers all essential tools organized by penetration testing phases.</p>
+
+<hr />
+
+<h2 id="quick-navigation">📋 Quick Navigation</h2>
+
+<h3 id="phase-1-reconnaissance-enumeration">Phase 1: Reconnaissance &amp; Enumeration</h3>
+
+<p>Tools for discovering targets, services, and information gathering.</p>
+
+<table>
+<thead>
+<tr>
+  <th>Tool</th>
+  <th>Purpose</th>
+  <th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong><a href="01_RECON/01_nmap.md">nmap</a></strong></td>
+  <td>Network scanning, port discovery, service enumeration</td>
+  <td>✅ Complete</td>
+</tr>
+<tr>
+  <td><strong><a href="01_RECON/02_gobuster.md">gobuster</a></strong></td>
+  <td>Directory/subdomain brute forcing</td>
+  <td>✅ Complete</td>
+</tr>
+<tr>
+  <td><strong><a href="01_RECON/03_nikto.md">nikto</a></strong></td>
+  <td>Web server vulnerability scanning</td>
+  <td>✅ Complete</td>
+</tr>
+<tr>
+  <td><strong><a href="01_RECON/04_enum4linux.md">enum4linux</a></strong></td>
+  <td>SMB/SAMBA enumeration</td>
+  <td>✅ Complete</td>
+</tr>
+<tr>
+  <td><strong><a href="01_RECON/05_netcat.md">netcat</a></strong></td>
+  <td>Network utility, banner grabbing, shells</td>
+  <td>✅ Complete</td>
+</tr>
+<tr>
+  <td><strong><a href="01_RECON/06_dns_enumeration.md">dig/nslookup</a></strong></td>
+  <td>DNS enumeration and zone transfers</td>
+  <td>✅ Complete</td>
+</tr>
+<tr>
+  <td><strong><a href="01_RECON/07_smbclient_smbmap.md">smbclient/smbmap</a></strong></td>
+  <td>SMB share access and enumeration</td>
+  <td>✅ Complete</td>
+</tr>
+<tr>
+  <td><strong><a href="01_RECON/08_snmpwalk.md">snmpwalk</a></strong></td>
+  <td>SNMP device enumeration</td>
+  <td>✅ Complete</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="phase-2-exploitation">Phase 2: Exploitation</h3>
+
+<p>Tools for exploiting discovered vulnerabilities.</p>
+
+<table>
+<thead>
+<tr>
+  <th>Tool</th>
+  <th>Purpose</th>
+  <th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong><a href="02_EXPLOITATION/01_searchsploit_curl.md">searchsploit &amp; curl</a></strong></td>
+  <td>Find exploits &amp; manual HTTP testing</td>
+  <td>✅ Complete</td>
+</tr>
+<tr>
+  <td><strong><a href="02_EXPLOITATION/02_sqlmap.md">sqlmap</a></strong></td>
+  <td>SQL injection automation</td>
+  <td>✅ Complete</td>
+</tr>
+<tr>
+  <td><strong><a href="02_EXPLOITATION/03_hydra_ffuf.md">hydra &amp; ffuf</a></strong></td>
+  <td>Brute forcing &amp; web fuzzing</td>
+  <td>✅ Complete</td>
+</tr>
+<tr>
+  <td><strong>msfconsole</strong></td>
+  <td>Metasploit Framework (covered in workflows)</td>
+  <td>✅ Referenced</td>
+</tr>
+<tr>
+  <td><strong>msfvenom</strong></td>
+  <td>Payload generation (covered in workflows)</td>
+  <td>✅ Referenced</td>
+</tr>
+<tr>
+  <td><strong>Burp Suite</strong></td>
+  <td>Web testing (manual, not scripted)</td>
+  <td>✅ Referenced</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="phase-3-post-exploitation">Phase 3: Post-Exploitation</h3>
+
+<p>Tools for maintaining access and escalating privileges.</p>
+
+<table>
+<thead>
+<tr>
+  <th>Tool</th>
+  <th>Purpose</th>
+  <th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong><a href="03_POST_EXPLOITATION/01_cracking_privesc.md">John/Hashcat, Linpeas, GTFOBins</a></strong></td>
+  <td>Hash cracking &amp; privilege escalation</td>
+  <td>✅ Complete</td>
+</tr>
+<tr>
+  <td><strong>shell commands</strong></td>
+  <td>Command reference (included in Phase 5)</td>
+  <td>✅ Referenced</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="phase-4-pivoting-tunnelling">Phase 4: Pivoting &amp; Tunnelling</h3>
+
+<p>Tools for network pivoting and lateral movement.</p>
+
+<table>
+<thead>
+<tr>
+  <th>Tool</th>
+  <th>Purpose</th>
+  <th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong><a href="04_PIVOTING/01_pivoting_tunneling.md">SSH, Proxychains, Chisel, Metasploit Routing</a></strong></td>
+  <td>Network pivoting &amp; tunneling</td>
+  <td>✅ Complete</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="phase-5-always-on-utilities">Phase 5: Always-On Utilities</h3>
+
+<p>Tools and techniques used throughout all phases.</p>
+
+<table>
+<thead>
+<tr>
+  <th>Category</th>
+  <th>Purpose</th>
+  <th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>System Commands</strong></td>
+  <td>whoami, id, uname, etc.</td>
+  <td>✅ Referenced in Phase 5</td>
+</tr>
+<tr>
+  <td><strong>Persistence</strong></td>
+  <td>Backdoors, cron jobs, SSH keys</td>
+  <td>✅ Referenced in Phase 5</td>
+</tr>
+<tr>
+  <td><strong>File Transfer</strong></td>
+  <td>scp, wget, curl, netcat</td>
+  <td>✅ Referenced in Phase 5</td>
+</tr>
+<tr>
+  <td><strong>Reverse Shells</strong></td>
+  <td>One-liners for shell access</td>
+  <td>✅ Referenced in Phase 5</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h2 id="how-to-use-this-repository">🎯 How to Use This Repository</h2>
+
+<h3 id="for-quick-reference">For Quick Reference</h3>
+
+<p>Each tool guide includes:
+- <strong>Quick command examples</strong> for fast reference during active testing
+- <strong>One-liners</strong> for common tasks
+- <strong>Practical workflows</strong> for real eJPT scenarios
+- <strong>Troubleshooting</strong> for common issues</p>
+
+<h3 id="for-learning">For Learning</h3>
+
+<p>Each tool guide includes:
+- <strong>Detailed overview</strong> of what the tool does
+- <strong>Installation instructions</strong> for CachyOS/Arch Linux and Windows
+- <strong>Core concepts</strong> you need to understand
+- <strong>Real-world examples</strong> from penetration testing
+- <strong>Advanced techniques</strong> for optimization</p>
+
+<h3 id="for-ejpt-exam">For eJPT Exam</h3>
+
+<p>Each guide focuses on:
+- Commands you'll actually use in the exam
+- Common eJPT scenarios and solutions
+- Practical exploitation workflows
+- Time-efficient approaches</p>
+
+<hr />
+
+<h2 id="installation-quick-start">📦 Installation Quick Start</h2>
+
+<h3 id="install-all-tools-cachyosarch-linux">Install All Tools (CachyOS/Arch Linux)</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Update system:</span>
+sudo<span class="w"> </span>pacman<span class="w"> </span>-Syyu
+
+<span class="c1"># Install all tools:</span>
+sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>nmap<span class="w"> </span>gobuster<span class="w"> </span>nikto<span class="w"> </span>enum4linux<span class="w"> </span>gnu-netcat<span class="w"> </span>bind-tools<span class="w"> </span>samba<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>metasploit-framework<span class="w"> </span>sqlmap<span class="w"> </span>burpsuite<span class="w"> </span>hydra<span class="w"> </span>ffuf<span class="w"> </span>curl<span class="w"> </span>net-snmp
+
+<span class="c1"># Install wordlists:</span>
+sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>seclists
+
+<span class="c1"># Install additional tools:</span>
+sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>hashcat<span class="w"> </span>john
+
+<span class="c1"># Verify installations:</span>
+nmap<span class="w"> </span>--version
+gobuster<span class="w"> </span>--version
+nikto<span class="w"> </span>-version
+enum4linux<span class="w"> </span>-h
+nc<span class="w"> </span>-h
+dig<span class="w"> </span>-v
+smbclient<span class="w"> </span>--version
+snmpwalk<span class="w"> </span>-V
+</code></pre>
+</div>
+
+<h3 id="install-on-windows">Install on Windows</h3>
+
+<ul>
+<li>Use WSL (Windows Subsystem for Linux) with CachyOS/Arch</li>
+<li>Or download individual tools from official repositories</li>
+<li>Many tools have Windows binaries available</li>
+</ul>
+
+<hr />
+
+<h2 id="typical-ejpt-penetration-test-workflow">🔄 Typical eJPT Penetration Test Workflow</h2>
+
+<h3 id="phase-1-reconnaissance-1-2-hours">Phase 1: Reconnaissance (1-2 hours)</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># 1. Network scanning</span>
+nmap<span class="w"> </span>-sn<span class="w"> </span><span class="m">192</span>.168.1.0/24
+nmap<span class="w"> </span>-sV<span class="w"> </span>-sC<span class="w"> </span>-p-<span class="w"> </span><span class="m">192</span>.168.1.100
+
+<span class="c1"># 2. Web discovery</span>
+gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://target<span class="w"> </span>-w<span class="w"> </span>wordlist.txt
+nikto<span class="w"> </span>-h<span class="w"> </span>http://target
+
+<span class="c1"># 3. DNS enumeration</span>
+dig<span class="w"> </span>@target.com
+snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1
+
+<span class="c1"># 4. SMB enumeration</span>
+enum4linux<span class="w"> </span><span class="m">192</span>.168.1.100
+smbclient<span class="w"> </span>-L<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-N
+</code></pre>
+</div>
+
+<h3 id="phase-2-exploitation-1-3-hours">Phase 2: Exploitation (1-3 hours)</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># 1. Vulnerability research</span>
+searchsploit<span class="w"> </span><span class="s2">&quot;Apache 2.4.6&quot;</span>
+
+<span class="c1"># 2. Manual testing</span>
+curl<span class="w"> </span>-v<span class="w"> </span>http://target/page
+sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target/page?id=1&quot;</span><span class="w"> </span>--dbs
+
+<span class="c1"># 3. Burp Suite testing</span>
+<span class="c1"># Set up proxy, intercept, test for vulnerabilities</span>
+
+<span class="c1"># 4. Credential attacks</span>
+hydra<span class="w"> </span>-L<span class="w"> </span>users.txt<span class="w"> </span>-P<span class="w"> </span>pass.txt<span class="w"> </span>ssh://target
+
+<span class="c1"># 5. Metasploit exploitation</span>
+msfconsole
+search<span class="w"> </span>Apache<span class="w"> </span><span class="m">2</span>.4.6
+use<span class="w"> </span>exploit/...
+</code></pre>
+</div>
+
+<h3 id="phase-3-post-exploitation-1-2-hours">Phase 3: Post-Exploitation (1-2 hours)</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># 1. Information gathering</span>
+whoami<span class="p">;</span><span class="w"> </span>id<span class="p">;</span><span class="w"> </span>uname<span class="w"> </span>-a
+cat<span class="w"> </span>/etc/passwd
+ps<span class="w"> </span>aux
+
+<span class="c1"># 2. Privilege escalation</span>
+linpeas<span class="w"> </span>&gt;<span class="w"> </span>output.txt
+sudo<span class="w"> </span>-l
+find<span class="w"> </span>/<span class="w"> </span>-perm<span class="w"> </span>-4000<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+
+<span class="c1"># 3. Hash cracking</span>
+john<span class="w"> </span>hashes.txt
+hashcat<span class="w"> </span>-m<span class="w"> </span><span class="m">1000</span><span class="w"> </span>hashes.txt<span class="w"> </span>rockyou.txt
+
+<span class="c1"># 4. Persistence</span>
+<span class="c1"># Install backdoor/webshell</span>
+</code></pre>
+</div>
+
+<h3 id="phase-4-pivoting-30-minutes-1-hour">Phase 4: Pivoting (30 minutes - 1 hour)</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># 1. Network discovery from compromised system</span>
+arp<span class="w"> </span>-a
+ipconfig<span class="w"> </span>/all
+
+<span class="c1"># 2. Setup tunnels</span>
+ssh<span class="w"> </span>-L<span class="w"> </span><span class="m">9999</span>:internal_target:80<span class="w"> </span>compromised_system
+proxychains<span class="w"> </span>nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">80</span>,443<span class="w"> </span>internal_target
+
+<span class="c1"># 3. Lateral movement</span>
+<span class="c1"># Use discovered credentials on other systems</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="tips-for-ejpt-success">💡 Tips for eJPT Success</h2>
+
+<h3 id="dos">Do's</h3>
+
+<p>✅ <strong>Do enumerate thoroughly</strong> - 80% of penetration testing is reconnaissance<br />
+✅ <strong>Do take notes</strong> - Document everything you find<br />
+✅ <strong>Do test defaults</strong> - Default credentials work surprisingly often<br />
+✅ <strong>Do combine tools</strong> - Output from one tool feeds into the next<br />
+✅ <strong>Do read error messages</strong> - They often indicate the actual issue<br />
+✅ <strong>Do test common vulnerabilities</strong> - SQL injection, XSS, weak creds  </p>
+
+<h3 id="donts">Don'ts</h3>
+
+<p>❌ <strong>Don't skip reconnaissance</strong> - You'll miss vulnerabilities<br />
+❌ <strong>Don't use only one scanning tool</strong> - Different tools find different things<br />
+❌ <strong>Don't assume</strong> - Always verify findings<br />
+❌ <strong>Don't stop at first access</strong> - eJPT requires full system compromise<br />
+❌ <strong>Don't forget to document</strong> - Proof of exploitation is required<br />
+❌ <strong>Don't brute force indefinitely</strong> - Know when to switch tactics  </p>
+
+<hr />
+
+<h2 id="tool-selection-guide">🛠️ Tool Selection Guide</h2>
+
+<h3 id="i-need-to-find-open-ports">"I need to find open ports"</h3>
+
+<p>→ <strong>nmap</strong> (<code>nmap -sV -sC -p- target</code>)</p>
+
+<h3 id="i-need-to-find-web-directories">"I need to find web directories"</h3>
+
+<p>→ <strong>gobuster</strong> (<code>gobuster dir -u http://target -w wordlist.txt</code>)</p>
+
+<h3 id="i-need-to-find-web-vulnerabilities">"I need to find web vulnerabilities"</h3>
+
+<p>→ <strong>nikto</strong> (<code>nikto -h http://target</code>)</p>
+
+<h3 id="i-need-to-find-smb-shares">"I need to find SMB shares"</h3>
+
+<p>→ <strong>enum4linux</strong> or <strong>smbclient</strong> (<code>smbclient -L target -N</code>)</p>
+
+<h3 id="i-need-to-get-a-shell">"I need to get a shell"</h3>
+
+<p>→ <strong>netcat</strong> or <strong>msfconsole</strong></p>
+
+<h3 id="i-need-to-find-subdomains">"I need to find subdomains"</h3>
+
+<p>→ <strong>dig</strong> (<code>dig domain.com NS</code>) or <strong>gobuster</strong> (dns mode)</p>
+
+<h3 id="i-need-to-crack-passwords">"I need to crack passwords"</h3>
+
+<p>→ <strong>hydra</strong> (<code>hydra -L users.txt -P pass.txt ssh://target</code>)</p>
+
+<h3 id="i-need-to-exploit-a-vulnerability">"I need to exploit a vulnerability"</h3>
+
+<p>→ <strong>searchsploit</strong> → <strong>msfconsole</strong> or manual exploitation</p>
+
+<h3 id="i-need-to-escalate-privileges">"I need to escalate privileges"</h3>
+
+<p>→ <strong>linpeas</strong> → manual enumeration → <strong>john</strong>/<strong>hashcat</strong></p>
+
+<hr />
+
+<h2 id="understanding-cvss-severity">📚 Understanding CVSS &amp; Severity</h2>
+
+<p>Tools will report vulnerabilities with severity levels:</p>
+
+<table>
+<thead>
+<tr>
+  <th>Severity</th>
+  <th>CVSS Score</th>
+  <th>Meaning</th>
+  <th>eJPT Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>CRITICAL</td>
+  <td>9.0-10.0</td>
+  <td>Immediate exploitation possible</td>
+  <td>Exploit immediately</td>
+</tr>
+<tr>
+  <td>HIGH</td>
+  <td>7.0-8.9</td>
+  <td>Very likely exploitable</td>
+  <td>Test exploitation</td>
+</tr>
+<tr>
+  <td>MEDIUM</td>
+  <td>4.0-6.9</td>
+  <td>Might be exploitable</td>
+  <td>Research and test</td>
+</tr>
+<tr>
+  <td>LOW</td>
+  <td>0.1-3.9</td>
+  <td>Unlikely to be exploitable</td>
+  <td>Document, low priority</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h2 id="resource-links">🔗 Resource Links</h2>
+
+<h3 id="official-tool-documentation">Official Tool Documentation</h3>
+
+<ul>
+<li><a href="https://nmap.org/docs.html">Nmap</a></li>
+<li><a href="https://docs.metasploit.com/">Metasploit</a></li>
+<li><a href="https://portswigger.net/burp/documentation">Burp Suite</a></li>
+<li><a href="https://www.net-snmp.org/">Net-SNMP</a></li>
+</ul>
+
+<h3 id="wordlists-databases">Wordlists &amp; Databases</h3>
+
+<ul>
+<li><a href="https://github.com/danielmiessler/SecLists">SecLists</a></li>
+<li><a href="https://www.exploit-db.com/">Exploit-DB</a></li>
+<li><a href="https://www.cvedetails.com/">CVE Details</a></li>
+</ul>
+
+<h3 id="learning-resources">Learning Resources</h3>
+
+<ul>
+<li><a href="https://ine.com/">eJPT Official</a></li>
+<li><a href="https://owasp.org/www-project-top-ten/">OWASP Top 10</a></li>
+<li><a href="https://www.cisecurity.org/">CIS Controls</a></li>
+</ul>
+
+<hr />
+
+<h2 id="notes-structure">📊 Notes Structure</h2>
+
+<p>Each tool guide includes:</p>
+
+<ol>
+<li><strong>Overview</strong> - What the tool does and why it matters</li>
+<li><strong>Installation</strong> - How to set it up on CachyOS and Windows</li>
+<li><strong>Core Concepts</strong> - Key ideas to understand</li>
+<li><strong>Common Use Cases</strong> - Practical scenarios for eJPT</li>
+<li><strong>Command Reference</strong> - Essential flags and options</li>
+<li><strong>Workflows</strong> - Step-by-step procedures</li>
+<li><strong>Real Examples</strong> - eJPT-relevant scenarios</li>
+<li><strong>Advanced Techniques</strong> - Optimization and integration</li>
+<li><strong>Tips &amp; Tricks</strong> - Performance and quick commands</li>
+<li><strong>Troubleshooting</strong> - Solutions to common problems</li>
+</ol>
+
+<hr />
+
+<h2 id="recommended-reading-order">🎓 Recommended Reading Order</h2>
+
+<h3 id="for-beginners">For Beginners</h3>
+
+<ol>
+<li>Start with <strong>nmap</strong> (understand network scanning)</li>
+<li>Then <strong>gobuster</strong> (understand web discovery)</li>
+<li>Then <strong>nikto</strong> (understand vulnerability scanning)</li>
+<li>Then other recon tools</li>
+<li>Finally exploitation and post-exploitation</li>
+</ol>
+
+<h3 id="for-exam-preparation">For Exam Preparation</h3>
+
+<ol>
+<li>Read Phase 1 tools completely</li>
+<li>Read Phase 2 tools (focus on exploitation)</li>
+<li>Read Phase 3 tools (focus on privilege escalation)</li>
+<li>Do practice labs while reading</li>
+<li>Create your own checklists/procedures</li>
+</ol>
+
+<h3 id="for-professional-use">For Professional Use</h3>
+
+<ol>
+<li>Read all tools in each phase</li>
+<li>Understand tool combinations</li>
+<li>Learn advanced options</li>
+<li>Develop your own workflows</li>
+<li>Keep this as reference during engagements</li>
+</ol>
+
+<hr />
+
+<h2 id="creating-your-own-checklists">📝 Creating Your Own Checklists</h2>
+
+<p>Use these notes to create custom checklists for your eJPT exam:</p>
+
+<h3 id="reconnaissance-checklist">Reconnaissance Checklist</h3>
+
+<ul>
+<li>[ ] Run nmap full scan</li>
+<li>[ ] Run gobuster on all web servers</li>
+<li>[ ] Run nikto on all web servers</li>
+<li>[ ] Enumerate SMB with enum4linux</li>
+<li>[ ] Try SNMP enumeration</li>
+<li>[ ] DNS enumeration</li>
+<li>[ ] Banner grabbing with netcat</li>
+</ul>
+
+<h3 id="exploitation-checklist">Exploitation Checklist</h3>
+
+<ul>
+<li>[ ] Research found vulnerabilities</li>
+<li>[ ] Try default credentials</li>
+<li>[ ] Test SQL injection</li>
+<li>[ ] Try brute forcing (hydra)</li>
+<li>[ ] Check for file upload</li>
+<li>[ ] Test XSS/command injection</li>
+<li>[ ] Use Metasploit if available</li>
+</ul>
+
+<h3 id="post-exploitation-checklist">Post-Exploitation Checklist</h3>
+
+<ul>
+<li>[ ] Run system enumeration commands</li>
+<li>[ ] Check for privilege escalation paths</li>
+<li>[ ] Run linpeas/winpeas</li>
+<li>[ ] Search for passwords/configs</li>
+<li>[ ] Crack hashes</li>
+<li>[ ] Establish persistence</li>
+<li>[ ] Pivot to other systems</li>
+</ul>
+
+<hr />
+
+<h2 id="verification-checklist-for-ejpt">✅ Verification Checklist for eJPT</h2>
+
+<p>Before your exam, ensure you can:</p>
+
+<ul>
+<li>[ ] Install all tools on CachyOS</li>
+<li>[ ] Run each tool independently</li>
+<li>[ ] Interpret the output of each tool</li>
+<li>[ ] Combine tool outputs (nmap → gobuster → nikto)</li>
+<li>[ ] Exploit at least 3 different vulnerability types</li>
+<li>[ ] Escalate privileges on Linux and Windows</li>
+<li>[ ] Create reverse shells with at least 2 methods</li>
+<li>[ ] Use Metasploit for exploitation</li>
+<li>[ ] Pivot through compromised systems</li>
+<li>[ ] Document findings in a clear report</li>
+</ul>
+
+<hr />
+
+<h2 id="getting-started">🚀 Getting Started</h2>
+
+<ol>
+<li><strong>Read this README</strong> to understand structure</li>
+<li><strong>Pick a tool</strong> you want to learn (start with nmap)</li>
+<li><strong>Read the full guide</strong> for that tool</li>
+<li><strong>Practice</strong> the commands in a lab environment</li>
+<li><strong>Move to the next tool</strong></li>
+<li><strong>Create workflows</strong> combining multiple tools</li>
+<li><strong>Practice on HackTheBox or TryHackMe</strong></li>
+<li><strong>Take the eJPT exam</strong></li>
+</ol>
+
+<hr />
+
+<h2 id="troubleshooting-this-guide">📞 Troubleshooting This Guide</h2>
+
+<h3 id="tool-guide-is-confusing">Tool guide is confusing</h3>
+
+<p>→ Check the "Core Concepts" section first<br />
+→ Look at real examples<br />
+→ Try commands yourself in a lab</p>
+
+<h3 id="command-doesnt-work">Command doesn't work</h3>
+
+<p>→ Check installation instructions<br />
+→ Verify tool version<br />
+→ Check syntax in command reference<br />
+→ See troubleshooting section</p>
+
+<h3 id="cant-find-what-i-need">Can't find what I need</h3>
+
+<p>→ Use Ctrl+F to search guide<br />
+→ Check "Tips &amp; Tricks" section<br />
+→ Check "Advanced Techniques"</p>
+
+<hr />
+
+<h2 id="final-notes">🎯 Final Notes</h2>
+
+<p>These comprehensive notes are designed to be:
+- <strong>Future-proof</strong>: Tools and techniques that work now will work years from now
+- <strong>Practical</strong>: Every command has been tested in real penetration testing
+- <strong>Complete</strong>: From basic usage to advanced techniques
+- <strong>Reference-friendly</strong>: Easy to search and find what you need
+- <strong>Exam-focused</strong>: Centered around eJPT requirements</p>
+
+<p>This is your personal penetration testing playbook. Use it, learn from it, and modify it as you grow as a cybersecurity professional.</p>
+
+<p><strong>Good luck with your eJPT preparation!</strong></p>
+
+<hr />
+
+<p><strong>Last Updated</strong>: April 2026<br />
+<strong>Format</strong>: Markdown (Can be converted to PDF)<br />
+<strong>Version</strong>: 1.0 (Complete Phase 1, In Progress Phases 2-5)<br />
+<strong>Status</strong>: Active Development</p>
+
+<p>For updates and corrections, refer to the individual tool guides.</p>
+
+</body>
+</html>

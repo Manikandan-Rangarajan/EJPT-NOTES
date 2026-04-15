@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>03_hydra_ffuf.md</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            color: #2c3e50;
+            margin-top: 24px;
+            margin-bottom: 16px;
+        }
+        h1 { border-bottom: 2px solid #0066cc; padding-bottom: 10px; }
+        code {
+            background: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #c7254e;
+        }
+        pre {
+            background: #f5f5f5;
+            color: #333;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 13px;
+            font-family: 'Courier New', monospace;
+            line-height: 1.4;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        pre code {
+            background: transparent;
+            color: #333;
+            padding: 0;
+        }
+        .codehilite {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 0;
+            margin: 15px 0;
+        }
+        .codehilite pre {
+            margin: 0;
+            border: none;
+            background: #f5f5f5;
+            padding: 15px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        blockquote {
+            border-left: 4px solid #0066cc;
+            margin: 15px 0;
+            padding-left: 15px;
+            color: #666;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        @media print {
+            body { margin: 0; padding: 10px; }
+            pre { page-break-inside: avoid; }
+            table { page-break-inside: avoid; }
+        }
+    </style>
+    <!-- Anime Vibes CSS Framework -->
+    <link rel="stylesheet" href="anime-vibes.css">
+    </head>
+<body>
+    <h1 id="hydra-credential-brute-forcing">HYDRA - Credential Brute Forcing</h1>
+
+<h2 id="overview">Overview</h2>
+
+<p><strong>Hydra</strong> automates brute-force attacks on various services (SSH, FTP, HTTP, RDP, SMB, etc.). It attempts multiple credential combinations quickly using multiple parallel threads.</p>
+
+<h3 id="why-its-critical-for-ejpt">Why It's Critical for eJPT:</h3>
+
+<ul>
+<li>Often default or weak credentials exist</li>
+<li>Automates credential testing</li>
+<li>Supports 50+ protocols</li>
+<li>Parallel threading for speed</li>
+<li>Can use username/password lists</li>
+</ul>
+
+<hr />
+
+<h2 id="installation-setup">Installation &amp; Setup</h2>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># CachyOS:</span>
+sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>hydra
+hydra<span class="w"> </span>-h<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-20<span class="w">  </span><span class="c1"># Verify</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="common-use-cases">Common Use Cases</h2>
+
+<h3 id="1-ssh-brute-force">1. <strong>SSH Brute Force</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>hydra<span class="w"> </span>-l<span class="w"> </span>admin<span class="w"> </span>-p<span class="w"> </span>password<span class="w"> </span>ssh://192.168.1.100
+hydra<span class="w"> </span>-L<span class="w"> </span>users.txt<span class="w"> </span>-P<span class="w"> </span>passwords.txt<span class="w"> </span>ssh://192.168.1.100<span class="w"> </span>-t<span class="w"> </span><span class="m">4</span>
+</code></pre>
+</div>
+
+<h3 id="2-ftp-brute-force">2. <strong>FTP Brute Force</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>hydra<span class="w"> </span>-l<span class="w"> </span>admin<span class="w"> </span>-p<span class="w"> </span>password<span class="w"> </span>ftp://192.168.1.100
+hydra<span class="w"> </span>-L<span class="w"> </span>users.txt<span class="w"> </span>-P<span class="w"> </span>pass.txt<span class="w"> </span>ftp://192.168.1.100<span class="w"> </span>-t<span class="w"> </span><span class="m">4</span>
+</code></pre>
+</div>
+
+<h3 id="3-http-login-form">3. <strong>HTTP Login Form</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>hydra<span class="w"> </span>-l<span class="w"> </span>admin<span class="w"> </span>-P<span class="w"> </span>passwords.txt<span class="w"> </span>http-post-form://target.com/login.php:user<span class="o">=</span>^USER^<span class="p">&amp;</span><span class="nv">pass</span><span class="o">=</span>^PASS^:F<span class="o">=</span>Login
+</code></pre>
+</div>
+
+<h3 id="4-rdp-brute-force">4. <strong>RDP Brute Force</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>hydra<span class="w"> </span>-l<span class="w"> </span>administrator<span class="w"> </span>-P<span class="w"> </span>passwords.txt<span class="w"> </span>rdp://192.168.1.100
+</code></pre>
+</div>
+
+<h3 id="5-smb-brute-force">5. <strong>SMB Brute Force</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>hydra<span class="w"> </span>-l<span class="w"> </span>administrator<span class="w"> </span>-P<span class="w"> </span>passwords.txt<span class="w"> </span>smb://192.168.1.100
+</code></pre>
+</div>
+
+<h3 id="6-multiple-services-at-once">6. <strong>Multiple Services at Once</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>hydra<span class="w"> </span>-l<span class="w"> </span>admin<span class="w"> </span>-P<span class="w"> </span>pass.txt<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>ssh<span class="w"> </span>ftp<span class="w"> </span>http-get
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="command-reference">Command Reference</h2>
+
+<table>
+<thead>
+<tr>
+  <th>Flag</th>
+  <th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>-l</code></td>
+  <td>Single username</td>
+</tr>
+<tr>
+  <td><code>-L</code></td>
+  <td>Username list file</td>
+</tr>
+<tr>
+  <td><code>-p</code></td>
+  <td>Single password</td>
+</tr>
+<tr>
+  <td><code>-P</code></td>
+  <td>Password list file</td>
+</tr>
+<tr>
+  <td><code>-t</code></td>
+  <td>Threads (default: 16)</td>
+</tr>
+<tr>
+  <td><code>-x</code></td>
+  <td>Password options (min:max:charset)</td>
+</tr>
+<tr>
+  <td><code>-C</code></td>
+  <td>Credentials file (user:pass pairs)</td>
+</tr>
+<tr>
+  <td><code>-vV</code></td>
+  <td>Very verbose</td>
+</tr>
+<tr>
+  <td><code>-o</code></td>
+  <td>Output file</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h2 id="real-world-example">Real-World Example</h2>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Scenario: Found service running, need credentials</span>
+
+<span class="c1"># Step 1: Create user list from reconnaissance</span>
+enum4linux<span class="w"> </span>-U<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>&gt;<span class="w"> </span>users.txt
+
+<span class="c1"># Step 2: Extract just usernames</span>
+grep<span class="w"> </span><span class="s2">&quot;Account:&quot;</span><span class="w"> </span>users.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $NF}&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>usernames.txt
+
+<span class="c1"># Step 3: Brute force SSH</span>
+hydra<span class="w"> </span>-L<span class="w"> </span>usernames.txt<span class="w"> </span>-P<span class="w"> </span>/usr/share/wordlists/rockyou.txt<span class="w"> </span>ssh://192.168.1.100<span class="w"> </span>-t<span class="w"> </span><span class="m">4</span>
+
+<span class="c1"># Step 4: Found credentials!</span>
+<span class="c1"># user1:password123</span>
+
+<span class="c1"># Step 5: Login</span>
+ssh<span class="w"> </span>user1@192.168.1.100
+<span class="c1"># Enter password: password123</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="tips">Tips</h2>
+
+<ul>
+<li><strong>Use targeted wordlists</strong>: rockyou.txt for weak passwords</li>
+<li><strong>Adjust threads carefully</strong>: Too many = slow/detectable</li>
+<li><strong>Extract users first</strong>: enum4linux, nmap script output</li>
+<li><strong>Start with common credentials</strong>: admin/admin, admin/password</li>
+<li><strong>Monitor progress</strong>: Use <code>-vV</code> for verbose output</li>
+<li><strong>Save successful findings</strong>: Use <code>-o results.txt</code></li>
+</ul>
+
+<hr />
+
+<h2 id="key-takeaways">Key Takeaways</h2>
+
+<ol>
+<li><strong>SSH brute force</strong>: <code>hydra -L users.txt -P pass.txt ssh://target</code></li>
+<li><strong>FTP brute force</strong>: <code>hydra -L users.txt -P pass.txt ftp://target</code></li>
+<li><strong>HTTP form</strong>: <code>hydra -L users -P pass http-post-form://target/page:data</code></li>
+<li><strong>RDP brute force</strong>: <code>hydra -L users -P pass rdp://target</code></li>
+<li><strong>Multiple services</strong>: <code>hydra -L users -P pass target ssh ftp http-get</code></li>
+<li><strong>Control speed</strong>: <code>-t 4</code> for stealthy, <code>-t 16</code> for fast</li>
+<li><strong>Combine with enum</strong>: Use users from enum4linux/nmap</li>
+</ol>
+
+<hr />
+
+<p><strong>Next Steps</strong>: Use found credentials for access, privilege escalation, or lateral movement.</p>
+
+<hr />
+
+<h1 id="ffuf-web-fuzzing">FFUF - Web Fuzzing</h1>
+
+<h2 id="overview-2">Overview</h2>
+
+<p><strong>ffuf</strong> (Fuzz Faster U Fool) is a fast web fuzzer for discovering files, directories, and parameters. It's faster than gobuster and more flexible.</p>
+
+<h3 id="why-its-critical-for-ejpt-2">Why It's Critical for eJPT:</h3>
+
+<ul>
+<li>Faster than gobuster for large wordlists</li>
+<li>Finds parameters, headers, cookies</li>
+<li>Can fuzz POST data</li>
+<li>Advanced filtering options</li>
+</ul>
+
+<hr />
+
+<h2 id="installation-setup-2">Installation &amp; Setup</h2>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># CachyOS:</span>
+sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>ffuf
+ffuf<span class="w"> </span>-h<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-20
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="common-use-cases-2">Common Use Cases</h2>
+
+<h3 id="1-directory-brute-force">1. <strong>Directory Brute Force</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>ffuf<span class="w"> </span>-u<span class="w"> </span>http://target/FUZZ<span class="w"> </span>-w<span class="w"> </span>wordlist.txt
+</code></pre>
+</div>
+
+<h3 id="2-with-extensions">2. <strong>with Extensions</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>ffuf<span class="w"> </span>-u<span class="w"> </span>http://target/FUZZ.php<span class="w"> </span>-w<span class="w"> </span>wordlist.txt
+</code></pre>
+</div>
+
+<h3 id="3-subdomain-fuzzing">3. <strong>Subdomain Fuzzing</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>ffuf<span class="w"> </span>-u<span class="w"> </span>http://FUZZ.target.com<span class="w"> </span>-w<span class="w"> </span>subdomains.txt<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Host: FUZZ.target.com&quot;</span>
+</code></pre>
+</div>
+
+<h3 id="4-post-parameter-fuzzing">4. <strong>POST Parameter Fuzzing</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>ffuf<span class="w"> </span>-u<span class="w"> </span>http://target/search<span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;q=FUZZ&quot;</span><span class="w"> </span>-w<span class="w"> </span>wordlist.txt
+</code></pre>
+</div>
+
+<h3 id="5-cookie-fuzzing">5. <strong>Cookie Fuzzing</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>ffuf<span class="w"> </span>-u<span class="w"> </span>http://target/page<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Cookie: id=FUZZ&quot;</span><span class="w"> </span>-w<span class="w"> </span>numbers.txt
+</code></pre>
+</div>
+
+<h3 id="6-custom-filtering">6. <strong>Custom Filtering</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code>ffuf<span class="w"> </span>-u<span class="w"> </span>http://target/FUZZ<span class="w"> </span>-w<span class="w"> </span>wordlist.txt<span class="w"> </span>-mc<span class="w"> </span><span class="m">200</span>,301
+ffuf<span class="w"> </span>-u<span class="w"> </span>http://target/FUZZ<span class="w"> </span>-w<span class="w"> </span>wordlist.txt<span class="w"> </span>-fc<span class="w"> </span><span class="m">404</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="command-reference-2">Command Reference</h2>
+
+<table>
+<thead>
+<tr>
+  <th>Flag</th>
+  <th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>-u</code></td>
+  <td>URL with FUZZ placeholder</td>
+</tr>
+<tr>
+  <td><code>-w</code></td>
+  <td>Wordlist</td>
+</tr>
+<tr>
+  <td><code>-d</code></td>
+  <td>POST data with FUZZ</td>
+</tr>
+<tr>
+  <td><code>-H</code></td>
+  <td>Header with FUZZ</td>
+</tr>
+<tr>
+  <td><code>-mc</code></td>
+  <td>Match status codes (200,301)</td>
+</tr>
+<tr>
+  <td><code>-fc</code></td>
+  <td>Filter status codes (404)</td>
+</tr>
+<tr>
+  <td><code>-ms</code></td>
+  <td>Match response size</td>
+</tr>
+<tr>
+  <td><code>-fs</code></td>
+  <td>Filter response size</td>
+</tr>
+<tr>
+  <td><code>-t</code></td>
+  <td>Threads</td>
+</tr>
+<tr>
+  <td><code>-o</code></td>
+  <td>Output file</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h2 id="key-takeaways-2">Key Takeaways</h2>
+
+<ol>
+<li><strong>Directory fuzz</strong>: <code>ffuf -u http://target/FUZZ -w wordlist.txt</code></li>
+<li><strong>Subdomain fuzz</strong>: <code>ffuf -u http://FUZZ.target.com -w subs.txt</code></li>
+<li><strong>Parameter fuzz</strong>: <code>ffuf -u http://target/FUZZ -w words.txt</code></li>
+<li><strong>POST fuzz</strong>: <code>ffuf -u http://target -d "param=FUZZ" -w list.txt</code></li>
+<li><strong>Filter responses</strong>: <code>-mc 200,301</code> or <code>-fc 404</code></li>
+</ol>
+
+<hr />
+
+<p><strong>Next Steps</strong>: Investigate found endpoints with Burp Suite or curl for vulnerabilities.</p>
+
+<hr />
+
+<h2 id="quick-tool-comparison">Quick Tool Comparison</h2>
+
+<table>
+<thead>
+<tr>
+  <th>Tool</th>
+  <th>Speed</th>
+  <th>Features</th>
+  <th>Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>gobuster</strong></td>
+  <td>Fast</td>
+  <td>Simple, directory focused</td>
+  <td>Basic directory enumeration</td>
+</tr>
+<tr>
+  <td><strong>ffuf</strong></td>
+  <td>Very Fast</td>
+  <td>Flexible, any parameter</td>
+  <td>Comprehensive fuzzing</td>
+</tr>
+<tr>
+  <td><strong>nikto</strong></td>
+  <td>Slow</td>
+  <td>Vulnerability scanning</td>
+  <td>Web server vulnerabilities</td>
+</tr>
+<tr>
+  <td><strong>Burp Suite</strong></td>
+  <td>Interactive</td>
+  <td>Manual + automated</td>
+  <td>Complete web testing</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<p><strong>Next Steps</strong>: Continue with Phase 3 and 4 tools...</p>
+
+</body>
+</html>

@@ -1,0 +1,684 @@
+<html><head>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            color: #2c3e50;
+            margin-top: 24px;
+            margin-bottom: 16px;
+        }
+        h1 { border-bottom: 2px solid #0066cc; padding-bottom: 10px; }
+        code {
+            background: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #c7254e;
+        }
+        pre {
+            background: #f5f5f5;
+            color: #333;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 13px;
+            font-family: 'Courier New', monospace;
+            line-height: 1.4;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        pre code {
+            background: transparent;
+            color: #333;
+            padding: 0;
+        }
+        .codehilite {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 0;
+            margin: 15px 0;
+        }
+        .codehilite pre {
+            margin: 0;
+            border: none;
+            background: #f5f5f5;
+            padding: 15px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        blockquote {
+            border-left: 4px solid #0066cc;
+            margin: 15px 0;
+            padding-left: 15px;
+            color: #666;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        @media print {
+            body { margin: 0; padding: 10px; }
+            pre { page-break-inside: avoid; }
+            table { page-break-inside: avoid; }
+        }
+    </style><meta charset='utf-8'>    <!-- Anime Vibes CSS Framework -->
+    <link rel="stylesheet" href="anime-vibes.css">
+    </head><body><h1>NMAP - Network Mapper</h1>
+
+<h2>Overview</h2>
+
+<p><strong>Nmap</strong> (Network Mapper) is the industry-standard open-source tool for network discovery and security auditing. It's the first tool you'll use in almost every penetration test to identify live hosts, open ports, running services, and operating systems on a network.</p>
+
+<h3>Why It's Critical for eJPT:</h3>
+
+<ul>
+<li>Network reconnaissance is 80% of a successful penetration test</li>
+<li>Identifies attack surface quickly</li>
+<li>Reveals service versions that may have known vulnerabilities</li>
+<li>Foundation for all subsequent exploitation activities</li>
+</ul>
+
+<hr />
+
+<h2>Installation &amp; Setup</h2>
+
+<h3>CachyOS (Arch Linux)</h3>
+
+<div class="codehilite">
+<pre><span></span><code>sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>nmap
+nmap<span class="w"> </span>--version<span class="w">  </span><span class="c1"># Verify installation</span>
+</code></pre>
+</div>
+
+<h3>Alternative Installation (if not in repos)</h3>
+
+<div class="codehilite">
+<pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/nmap/nmap.git
+<span class="nb">cd</span><span class="w"> </span>nmap
+./configure
+make
+sudo<span class="w"> </span>make<span class="w"> </span>install
+</code></pre>
+</div>
+
+<h3>Windows</h3>
+
+<ul>
+<li>Download from: https://nmap.org/download.html</li>
+<li>Run installer (includes Zenmap GUI)</li>
+<li>Or use Windows Subsystem for Linux (WSL)</li>
+</ul>
+
+<hr />
+
+<h2>Core Concepts</h2>
+
+<h3>Port States (What nmap reports)</h3>
+
+<ul>
+<li><strong>Open</strong>: Application is actively listening</li>
+<li><strong>Closed</strong>: Port is accessible but no application listening</li>
+<li><strong>Filtered</strong>: Firewall/IDS blocking the probe</li>
+<li><strong>Unfiltered</strong>: Port is accessible but state unknown</li>
+<li><strong>Open|Filtered</strong>: Can't determine if open or filtered</li>
+<li><strong>Closed|Filtered</strong>: Can't determine if closed or filtered</li>
+</ul>
+
+<h3>Scanning Types</h3>
+
+<ul>
+<li><strong>TCP Connect Scan (-sT)</strong>: Full 3-way handshake (slower, logged)</li>
+<li><strong>TCP SYN Scan (-sS)</strong>: Half-open scan (faster, stealthier)</li>
+<li><strong>UDP Scan (-sU)</strong>: For UDP services</li>
+<li><strong>Ping Scan (-sn)</strong>: Host discovery only</li>
+</ul>
+
+<hr />
+
+<h2>Common Use Cases for eJPT</h2>
+
+<h3>1. <strong>Basic Network Discovery</strong></h3>
+
+<p>Identify all live hosts on a network segment.</p>
+
+<div class="codehilite">
+<pre><span></span><code>nmap<span class="w"> </span>-sn<span class="w"> </span><span class="m">192</span>.168.1.0/24
+</code></pre>
+</div>
+
+<ul>
+<li><code>-sn</code>: Ping scan (no port scanning)</li>
+<li>Useful for: Identifying live targets before detailed scanning</li>
+</ul>
+
+<h3>2. <strong>Fast Port Scan</strong></h3>
+
+<p>Quickly identify open ports on a target.</p>
+
+<div class="codehilite">
+<pre><span></span><code>nmap<span class="w"> </span>-F<span class="w"> </span><span class="m">192</span>.168.1.100
+</code></pre>
+</div>
+
+<ul>
+<li><code>-F</code>: Scans only the 100 most common ports</li>
+<li>Output: Service names based on common ports</li>
+</ul>
+
+<h3>3. <strong>Standard Full Scan</strong></h3>
+
+<p>The most common eJPT scan - get port numbers, services, and versions.</p>
+
+<div class="codehilite">
+<pre><span></span><code>nmap<span class="w"> </span>-sV<span class="w"> </span>-sC<span class="w"> </span>-p-<span class="w"> </span><span class="m">192</span>.168.1.100
+</code></pre>
+</div>
+
+<ul>
+<li><code>-sV</code>: Service version detection</li>
+<li><code>-sC</code>: Run default NSE scripts</li>
+<li><code>-p-</code>: All 65535 ports</li>
+<li>Time: 10-30 minutes depending on target</li>
+</ul>
+
+<h3>4. <strong>Aggressive Scan (OS Detection)</strong></h3>
+
+<p>Gather maximum information including OS fingerprinting.</p>
+
+<div class="codehilite">
+<pre><span></span><code>nmap<span class="w"> </span>-A<span class="w"> </span><span class="m">192</span>.168.1.100
+</code></pre>
+</div>
+
+<ul>
+<li>Equivalent to: <code>-sV -sC -O --traceroute</code></li>
+<li><code>-O</code>: OS detection</li>
+<li>Slower but very informative</li>
+</ul>
+
+<h3>5. <strong>Stealthy Scan (Avoid Detection)</strong></h3>
+
+<p>Slow scan to bypass firewalls/IDS.</p>
+
+<div class="codehilite">
+<pre><span></span><code>nmap<span class="w"> </span>-T2<span class="w"> </span>-sS<span class="w"> </span>-p-<span class="w"> </span><span class="m">192</span>.168.1.100
+</code></pre>
+</div>
+
+<ul>
+<li><code>-T2</code>: Paranoid timing (very slow)</li>
+<li><code>-sS</code>: SYN scan (half-open, doesn't complete connection)</li>
+</ul>
+
+<h3>6. <strong>UDP Service Discovery</strong></h3>
+
+<p>Find UDP services (DNS, SNMP, etc.).</p>
+
+<div class="codehilite">
+<pre><span></span><code>nmap<span class="w"> </span>-sU<span class="w"> </span>--top-ports<span class="w"> </span><span class="m">100</span><span class="w"> </span><span class="m">192</span>.168.1.100
+</code></pre>
+</div>
+
+<ul>
+<li>UDP is often overlooked but critical</li>
+<li>Common services: DNS (53), SNMP (161), DHCP (67)</li>
+</ul>
+
+<h3>7. <strong>Scan for Specific Ports</strong></h3>
+
+<p>When you only care about certain services.</p>
+
+<div class="codehilite">
+<pre><span></span><code>nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">22</span>,80,443,3306<span class="w"> </span><span class="m">192</span>.168.1.100
+</code></pre>
+</div>
+
+<ul>
+<li>22: SSH, 80: HTTP, 443: HTTPS, 3306: MySQL</li>
+</ul>
+
+<h3>8. <strong>Output to Multiple Formats</strong></h3>
+
+<p>Save results for reporting and further analysis.</p>
+
+<div class="codehilite">
+<pre><span></span><code>nmap<span class="w"> </span>-sV<span class="w"> </span>-sC<span class="w"> </span>-p-<span class="w"> </span>-oA<span class="w"> </span>scan_results<span class="w"> </span><span class="m">192</span>.168.1.100
+<span class="c1"># Creates: scan_results.nmap, scan_results.xml, scan_results.gnmap</span>
+</code></pre>
+</div>
+
+<ul>
+<li><code>-oA</code>: Output all formats (.nmap, .xml, .gnmap)</li>
+<li><code>-oN</code>: Output normal format (.nmap)</li>
+<li><code>-oX</code>: Output XML format (.xml)</li>
+<li><code>-oG</code>: Output grepable format (.gnmap)</li>
+</ul>
+
+<h3>9. <strong>Comparing Scan Results</strong></h3>
+
+<p>Find differences between two scans.</p>
+
+<div class="codehilite">
+<pre><span></span><code>nmap<span class="w"> </span>-sV<span class="w"> </span>-p-<span class="w"> </span>-oX<span class="w"> </span>scan1.xml<span class="w"> </span><span class="m">192</span>.168.1.100
+nmap<span class="w"> </span>-sV<span class="w"> </span>-p-<span class="w"> </span>-oX<span class="w"> </span>scan2.xml<span class="w"> </span><span class="m">192</span>.168.1.100
+ndiff<span class="w"> </span>scan1.xml<span class="w"> </span>scan2.xml
+</code></pre>
+</div>
+
+<hr />
+
+<h2>Command Reference - Essential Flags</h2>
+
+<table>
+<thead>
+<tr>
+  <th>Flag</th>
+  <th>Purpose</th>
+  <th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>-p</code></td>
+  <td>Specify ports</td>
+  <td><code>-p 80,443</code> or <code>-p 1-1000</code> or <code>-p-</code> (all)</td>
+</tr>
+<tr>
+  <td><code>-sV</code></td>
+  <td>Version detection</td>
+  <td>Identifies service versions</td>
+</tr>
+<tr>
+  <td><code>-sC</code></td>
+  <td>Default scripts</td>
+  <td>Runs NSE scripts for more info</td>
+</tr>
+<tr>
+  <td><code>-O</code></td>
+  <td>OS detection</td>
+  <td>Fingerprints operating system</td>
+</tr>
+<tr>
+  <td><code>-A</code></td>
+  <td>Aggressive</td>
+  <td>Combines -sV, -sC, -O, --traceroute</td>
+</tr>
+<tr>
+  <td><code>-sS</code></td>
+  <td>SYN scan</td>
+  <td>Stealth scan (half-open)</td>
+</tr>
+<tr>
+  <td><code>-sT</code></td>
+  <td>Connect scan</td>
+  <td>Full connection (noisier)</td>
+</tr>
+<tr>
+  <td><code>-sU</code></td>
+  <td>UDP scan</td>
+  <td>Scans UDP ports</td>
+</tr>
+<tr>
+  <td><code>-sn</code></td>
+  <td>Ping scan</td>
+  <td>Host discovery only</td>
+</tr>
+<tr>
+  <td><code>-Pn</code></td>
+  <td>Skip ping</td>
+  <td>Assume host is up</td>
+</tr>
+<tr>
+  <td><code>-T</code></td>
+  <td>Timing</td>
+  <td>T0-T5 (paranoid to insane)</td>
+</tr>
+<tr>
+  <td><code>-oA</code></td>
+  <td>Output all</td>
+  <td>.nmap, .xml, .gnmap formats</td>
+</tr>
+<tr>
+  <td><code>-oX</code></td>
+  <td>Output XML</td>
+  <td>XML format</td>
+</tr>
+<tr>
+  <td><code>--script</code></td>
+  <td>NSE scripts</td>
+  <td><code>--script vuln</code> for vulnerabilities</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h2>Practical eJPT Workflow</h2>
+
+<h3>Step 1: Network Reconnaissance (5 minutes)</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Identify all live hosts</span>
+nmap<span class="w"> </span>-sn<span class="w"> </span><span class="m">192</span>.168.1.0/24<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;Nmap scan report&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $5}&#39;</span>
+</code></pre>
+</div>
+
+<p>Output: List of live IPs</p>
+
+<h3>Step 2: Port Scanning on Each Target (15-30 minutes)</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># For each target identified:</span>
+nmap<span class="w"> </span>-sV<span class="w"> </span>-sC<span class="w"> </span>-p-<span class="w"> </span>--open<span class="w"> </span>-oX<span class="w"> </span>target_name.xml<span class="w"> </span><span class="m">192</span>.168.1.X
+</code></pre>
+</div>
+
+<h3>Step 3: Parse Results for Vulnerabilities</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Look for interesting services:</span>
+grep<span class="w"> </span><span class="s2">&quot;open&quot;</span><span class="w"> </span>scan_results.gnmap<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;filtered&quot;</span>
+
+<span class="c1"># Export to text for analysis:</span>
+cat<span class="w"> </span>scan_results.nmap<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-A<span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="s2">&quot;open&quot;</span>
+</code></pre>
+</div>
+
+<h3>Step 4: Service-Specific Scanning</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># If HTTP found, scan for web vulnerabilities:</span>
+nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">80</span><span class="w"> </span>--script<span class="w"> </span>http-enum,http-title<span class="w"> </span><span class="m">192</span>.168.1.X
+
+<span class="c1"># If SMB found:</span>
+nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">445</span><span class="w"> </span>--script<span class="w"> </span>smb-enum-shares,smb-os-discovery<span class="w"> </span><span class="m">192</span>.168.1.X
+
+<span class="c1"># If SNMP found:</span>
+nmap<span class="w"> </span>-sU<span class="w"> </span>-p<span class="w"> </span><span class="m">161</span><span class="w"> </span>--script<span class="w"> </span>snmp-sysdescr<span class="w"> </span><span class="m">192</span>.168.1.X
+</code></pre>
+</div>
+
+<hr />
+
+<h2>Reading Nmap Output</h2>
+
+<h3>Normal Output Example</h3>
+
+<pre><code>PORT      STATE  SERVICE     VERSION
+22/tcp    open   ssh         OpenSSH 7.4 (protocol 2.0)
+80/tcp    open   http        Apache httpd 2.4.6 (CentOS)
+443/tcp   open   https       Apache httpd 2.4.6 (CentOS)
+3306/tcp  open   mysql       MySQL 5.7.17-13-log
+5900/tcp  open   vnc         VNC (protocol 3.8)
+</code></pre>
+
+<p><strong>What to Look For:</strong>
+- Version numbers: Can be searched for known CVEs
+- Service types: Determines exploitation approach
+- Open ports: Reduces scope of attack surface
+- Filtered ports: May indicate firewall or IDS</p>
+
+<h3>XML Output (for parsing and automation)</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Extract open ports from XML:</span>
+grep<span class="w"> </span>-oP<span class="w"> </span><span class="s1">&#39;(?&lt;=portid=&quot;)[^&quot;]*&#39;</span><span class="w"> </span>scan_results.xml<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>open
+
+<span class="c1"># Parse with xmllint:</span>
+xmllint<span class="w"> </span>--xpath<span class="w"> </span><span class="s2">&quot;//port[@protocol=&#39;tcp&#39; and state/@state=&#39;open&#39;]&quot;</span><span class="w"> </span>scan_results.xml
+</code></pre>
+</div>
+
+<hr />
+
+<h2>Advanced Techniques</h2>
+
+<h3>1. <strong>NSE Script Usage</strong></h3>
+
+<p>Nmap Scripting Engine for extended functionality.</p>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># List available scripts:</span>
+ls<span class="w"> </span>/usr/share/nmap/scripts/
+
+<span class="c1"># Run vulnerability scanning scripts:</span>
+nmap<span class="w"> </span>-p-<span class="w"> </span>--script<span class="w"> </span>vuln<span class="w"> </span><span class="m">192</span>.168.1.100
+
+<span class="c1"># Custom script categories:</span>
+nmap<span class="w"> </span>-p-<span class="w"> </span>--script<span class="w"> </span><span class="s2">&quot;default or discovery&quot;</span><span class="w"> </span><span class="m">192</span>.168.1.100
+
+<span class="c1"># Specific service scripts:</span>
+nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">445</span><span class="w"> </span>--script<span class="w"> </span>smb-*<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w">  </span><span class="c1"># All SMB scripts</span>
+nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">80</span><span class="w"> </span>--script<span class="w"> </span>http-*<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w">  </span><span class="c1"># All HTTP scripts</span>
+</code></pre>
+</div>
+
+<h3>2. <strong>Firewall Evasion</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Fragment packets (bypass simple firewalls):</span>
+nmap<span class="w"> </span>-f<span class="w"> </span><span class="m">192</span>.168.1.100
+
+<span class="c1"># Decoy scanning (hide among other scans):</span>
+nmap<span class="w"> </span>-D<span class="w"> </span>RND:10<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w">  </span><span class="c1"># 10 random decoys</span>
+
+<span class="c1"># Idle/Zombie scan (most stealthy):</span>
+nmap<span class="w"> </span>-sI<span class="w"> </span>zombie_ip<span class="w"> </span><span class="m">192</span>.168.1.100
+
+<span class="c1"># Use specific source port (bypass firewall rules):</span>
+nmap<span class="w"> </span>--source-port<span class="w"> </span><span class="m">53</span><span class="w"> </span><span class="m">192</span>.168.1.100
+</code></pre>
+</div>
+
+<h3>3. <strong>Performance Optimization</strong></h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Fast scan of common ports:</span>
+nmap<span class="w"> </span>-F<span class="w"> </span><span class="m">192</span>.168.1.0/24
+
+<span class="c1"># Parallel scanning:</span>
+nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">80</span><span class="w"> </span>--max-parallelism<span class="w"> </span><span class="m">100</span><span class="w"> </span><span class="m">192</span>.168.1.0/24
+
+<span class="c1"># Timing templates:</span>
+<span class="c1"># T0 = paranoid, T1 = sneaky, T2 = polite, T3 = normal, T4 = aggressive, T5 = insane</span>
+nmap<span class="w"> </span>-T5<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w">  </span><span class="c1"># Very fast but unreliable</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2>Common eJPT Scenarios</h2>
+
+<h3>Scenario 1: You get an IP range - Scan everything</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Phase 1: Host discovery</span>
+nmap<span class="w"> </span>-sn<span class="w"> </span><span class="m">192</span>.168.1.0/24<span class="w"> </span>-oG<span class="w"> </span>hosts.txt
+
+<span class="c1"># Phase 2: Extract live hosts and scan deeply</span>
+grep<span class="w"> </span><span class="s2">&quot;Up&quot;</span><span class="w"> </span>hosts.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $2}&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>live_hosts.txt
+<span class="k">for</span><span class="w"> </span>host<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>cat<span class="w"> </span>live_hosts.txt<span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span>nmap<span class="w"> </span>-sV<span class="w"> </span>-sC<span class="w"> </span>-p-<span class="w"> </span>-oA<span class="w"> </span>scan_<span class="nv">$host</span><span class="w"> </span><span class="nv">$host</span>
+<span class="k">done</span>
+</code></pre>
+</div>
+
+<h3>Scenario 2: Single target with hidden services</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Run multiple scan types to find all services:</span>
+nmap<span class="w"> </span>-sS<span class="w"> </span>-p-<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w">  </span><span class="c1"># TCP SYN</span>
+nmap<span class="w"> </span>-sU<span class="w"> </span>--top-ports<span class="w"> </span><span class="m">100</span><span class="w"> </span><span class="m">192</span>.168.1.100<span class="w">  </span><span class="c1"># UDP</span>
+nmap<span class="w"> </span>-A<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w">  </span><span class="c1"># Aggressive</span>
+</code></pre>
+</div>
+
+<h3>Scenario 3: Firewall detected, need to bypass</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Try different scan types:</span>
+nmap<span class="w"> </span>-sS<span class="w"> </span>-T2<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w">  </span><span class="c1"># Stealth SYN with slow timing</span>
+nmap<span class="w"> </span>-f<span class="w"> </span>--mtu<span class="w"> </span><span class="m">16</span><span class="w"> </span><span class="m">192</span>.168.1.100<span class="w">  </span><span class="c1"># Fragmented packets</span>
+nmap<span class="w"> </span>-Pn<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w">  </span><span class="c1"># Skip ping (assume host up)</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2>Tips &amp; Tricks for eJPT</h2>
+
+<h3>Quick Reference One-Liners</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Get just open ports from target:</span>
+nmap<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-p-<span class="w"> </span>--open<span class="w"> </span>-oG<span class="w"> </span>-<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;open&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $5}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="s1">&#39;/&#39;</span><span class="w"> </span>-f1<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-u
+
+<span class="c1"># Find all HTTP/HTTPS servers in range:</span>
+nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">80</span>,443<span class="w"> </span><span class="m">192</span>.168.1.0/24<span class="w"> </span>-oG<span class="w"> </span>-<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;80/open\|443/open&quot;</span>
+
+<span class="c1"># Extract service versions:</span>
+nmap<span class="w"> </span>-sV<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-oX<span class="w"> </span>-<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;product&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span><span class="s1">&#39;s/&lt;[^&gt;]*&gt;//g&#39;</span>
+
+<span class="c1"># Find hosts with specific service:</span>
+nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">3306</span><span class="w"> </span><span class="m">192</span>.168.1.0/24<span class="w"> </span>--open<span class="w"> </span>-oG<span class="w"> </span>-<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;Status: Down&quot;</span>
+
+<span class="c1"># Save results and compare later:</span>
+nmap<span class="w"> </span>-sV<span class="w"> </span>-p-<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-oA<span class="w"> </span>baseline
+nmap<span class="w"> </span>-sV<span class="w"> </span>-p-<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-oX<span class="w"> </span>new.xml
+ndiff<span class="w"> </span>baseline.xml<span class="w"> </span>new.xml
+</code></pre>
+</div>
+
+<h3>Performance Tips</h3>
+
+<ul>
+<li>Use <code>-Pn</code> if you know host is up (skips ping)</li>
+<li>Use <code>-p-</code> carefully on large networks (takes time)</li>
+<li>Use <code>--max-parallelism</code> to speed up scanning</li>
+<li>Use <code>--min-rate</code> and <code>--max-rate</code> to control packet speed</li>
+</ul>
+
+<h3>Avoiding Detection</h3>
+
+<ul>
+<li>Use <code>-T2</code> or <code>-T1</code> for slow, stealthy scans</li>
+<li>Use <code>-sS</code> (SYN scan) instead of <code>-sT</code> (Connect scan)</li>
+<li>Use decoys: <code>-D RND:10</code></li>
+<li>Randomize port scanning order: <code>--randomize-hosts</code></li>
+</ul>
+
+<hr />
+
+<h2>Real-World eJPT Examples</h2>
+
+<h3>Example 1: Wordpress Site Enumeration</h3>
+
+<div class="codehilite">
+<pre><span></span><code>nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">80</span>,443<span class="w"> </span>-sV<span class="w"> </span>-sC<span class="w"> </span>--script<span class="w"> </span>http-title,http-enum<span class="w"> </span><span class="m">192</span>.168.1.50
+<span class="c1"># Identifies Wordpress installation and common paths</span>
+</code></pre>
+</div>
+
+<h3>Example 2: Database Server Discovery</h3>
+
+<div class="codehilite">
+<pre><span></span><code>nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">3306</span>,5432,1433<span class="w"> </span>--open<span class="w"> </span><span class="m">192</span>.168.1.0/24
+<span class="c1"># Finds MySQL, PostgreSQL, MSSQL servers on network</span>
+</code></pre>
+</div>
+
+<h3>Example 3: SMB Enumeration for Privilege Escalation</h3>
+
+<div class="codehilite">
+<pre><span></span><code>nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">445</span><span class="w"> </span>--script<span class="w"> </span>smb-enum-users,smb-enum-shares,smb-os-discovery<span class="w"> </span><span class="m">192</span>.168.1.100
+<span class="c1"># Gathers users and shares for social engineering/exploitation</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2>Troubleshooting</h2>
+
+<table>
+<thead>
+<tr>
+  <th>Problem</th>
+  <th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>"All ports appear filtered"</td>
+  <td>Use <code>-Pn</code> to force scan, target may have firewall</td>
+</tr>
+<tr>
+  <td>"Scan takes too long"</td>
+  <td>Use <code>-T4</code> or <code>-T5</code> to speed up, or use <code>-F</code> for fast scan</td>
+</tr>
+<tr>
+  <td>"Getting permission denied"</td>
+  <td>Use <code>sudo</code> for raw packets, or use <code>-sT</code> (connect scan)</td>
+</tr>
+<tr>
+  <td>"Version detection not working"</td>
+  <td>Make sure service is answering probes, try <code>-sV --version-intensity 9</code></td>
+</tr>
+<tr>
+  <td>"NSE scripts not found"</td>
+  <td>Update nmap: <code>sudo pacman -Syy nmap</code> or check <code>/usr/share/nmap/scripts/</code></td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h2>Official Documentation &amp; Resources</h2>
+
+<ul>
+<li><strong>Official Nmap Guide</strong>: https://nmap.org/book/</li>
+<li><strong>NSE Script Documentation</strong>: https://nmap.org/nsedoc/</li>
+<li><strong>Nmap Reference</strong>: https://nmap.org/docs.html</li>
+<li><strong>Quick Reference Card</strong>: https://nmap.org/docs.html</li>
+</ul>
+
+<hr />
+
+<h2>Key Takeaways for eJPT</h2>
+
+<ol>
+<li><strong>nmap -sn</strong>: Host discovery (network reconnaissance)</li>
+<li><strong>nmap -sV -sC -p-</strong>: Full service enumeration (your goto command)</li>
+<li><strong>nmap -A</strong>: Aggressive scan with OS detection</li>
+<li><strong>nmap --script vuln</strong>: Quick vulnerability checks</li>
+<li><strong>Always save output</strong>: Use <code>-oA</code> for multiple formats</li>
+<li><strong>NSE scripts are powerful</strong>: Use them for service-specific enumeration</li>
+<li><strong>Combine with other tools</strong>: nmap output feeds into gobuster, nikto, etc.</li>
+</ol>
+
+<hr />
+
+<p><strong>Next Steps</strong>: Take your nmap results and use them to inform your choice of tools for exploitation (sqlmap for SQL services, Burp Suite for web apps, etc.).</p>
+</body></html>
