@@ -82,17 +82,6 @@
         a:hover {
             text-decoration: underline;
         }
-        /* Force all syntax highlighting spans to black */
-        .codehilite pre span,
-        .codehilite pre span.c, .codehilite pre span.c1, .codehilite pre span.ch,
-        .codehilite pre span.k, .codehilite pre span.kd, .codehilite pre span.kr,
-        .codehilite pre span.m, .codehilite pre span.mi,
-        .codehilite pre span.n, .codehilite pre span.nb, .codehilite pre span.nc, .codehilite pre span.nf, .codehilite pre span.nv,
-        .codehilite pre span.o,
-        .codehilite pre span.p, .codehilite pre span.py,
-        .codehilite pre span.s, .codehilite pre span.s1, .codehilite pre span.s2, .codehilite pre span.se,
-        .codehilite pre span.w { color: #000000 !important; }
-        pre span { color: #000000 !important; }
         @media print {
             body { margin: 0; padding: 10px; }
             pre { page-break-inside: avoid; }
@@ -122,19 +111,19 @@
 <h3>CachyOS (Arch Linux)</h3>
 
 <div class="codehilite">
-<pre><span></span><code>sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>nmap
-nmap<span class="w"> </span>--version<span class="w">  </span><span class="c1"># Verify installation</span>
+<pre><code>sudo pacman -S nmap
+nmap --version  # Verify installation
 </code></pre>
 </div>
 
 <h3>Alternative Installation (if not in repos)</h3>
 
 <div class="codehilite">
-<pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/nmap/nmap.git
-<span class="nb">cd</span><span class="w"> </span>nmap
+<pre><code>git clone https://github.com/nmap/nmap.git
+cd nmap
 ./configure
 make
-sudo<span class="w"> </span>make<span class="w"> </span>install
+sudo make install
 </code></pre>
 </div>
 
@@ -179,7 +168,7 @@ sudo<span class="w"> </span>make<span class="w"> </span>install
 <p>Identify all live hosts on a network segment.</p>
 
 <div class="codehilite">
-<pre><span></span><code>nmap<span class="w"> </span>-sn<span class="w"> </span><span class="m">192</span>.168.1.0/24
+<pre><code>nmap -sn 192.168.1.0/24
 </code></pre>
 </div>
 
@@ -193,7 +182,7 @@ sudo<span class="w"> </span>make<span class="w"> </span>install
 <p>Quickly identify open ports on a target.</p>
 
 <div class="codehilite">
-<pre><span></span><code>nmap<span class="w"> </span>-F<span class="w"> </span><span class="m">192</span>.168.1.100
+<pre><code>nmap -F 192.168.1.100
 </code></pre>
 </div>
 
@@ -207,7 +196,7 @@ sudo<span class="w"> </span>make<span class="w"> </span>install
 <p>The most common eJPT scan - get port numbers, services, and versions.</p>
 
 <div class="codehilite">
-<pre><span></span><code>nmap<span class="w"> </span>-sV<span class="w"> </span>-sC<span class="w"> </span>-p-<span class="w"> </span><span class="m">192</span>.168.1.100
+<pre><code>nmap -sV -sC -p- 192.168.1.100
 </code></pre>
 </div>
 
@@ -223,7 +212,7 @@ sudo<span class="w"> </span>make<span class="w"> </span>install
 <p>Gather maximum information including OS fingerprinting.</p>
 
 <div class="codehilite">
-<pre><span></span><code>nmap<span class="w"> </span>-A<span class="w"> </span><span class="m">192</span>.168.1.100
+<pre><code>nmap -A 192.168.1.100
 </code></pre>
 </div>
 
@@ -238,7 +227,7 @@ sudo<span class="w"> </span>make<span class="w"> </span>install
 <p>Slow scan to bypass firewalls/IDS.</p>
 
 <div class="codehilite">
-<pre><span></span><code>nmap<span class="w"> </span>-T2<span class="w"> </span>-sS<span class="w"> </span>-p-<span class="w"> </span><span class="m">192</span>.168.1.100
+<pre><code>nmap -T2 -sS -p- 192.168.1.100
 </code></pre>
 </div>
 
@@ -252,7 +241,7 @@ sudo<span class="w"> </span>make<span class="w"> </span>install
 <p>Find UDP services (DNS, SNMP, etc.).</p>
 
 <div class="codehilite">
-<pre><span></span><code>nmap<span class="w"> </span>-sU<span class="w"> </span>--top-ports<span class="w"> </span><span class="m">100</span><span class="w"> </span><span class="m">192</span>.168.1.100
+<pre><code>nmap -sU --top-ports 100 192.168.1.100
 </code></pre>
 </div>
 
@@ -266,7 +255,7 @@ sudo<span class="w"> </span>make<span class="w"> </span>install
 <p>When you only care about certain services.</p>
 
 <div class="codehilite">
-<pre><span></span><code>nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">22</span>,80,443,3306<span class="w"> </span><span class="m">192</span>.168.1.100
+<pre><code>nmap -p 22,80,443,3306 192.168.1.100
 </code></pre>
 </div>
 
@@ -279,8 +268,8 @@ sudo<span class="w"> </span>make<span class="w"> </span>install
 <p>Save results for reporting and further analysis.</p>
 
 <div class="codehilite">
-<pre><span></span><code>nmap<span class="w"> </span>-sV<span class="w"> </span>-sC<span class="w"> </span>-p-<span class="w"> </span>-oA<span class="w"> </span>scan_results<span class="w"> </span><span class="m">192</span>.168.1.100
-<span class="c1"># Creates: scan_results.nmap, scan_results.xml, scan_results.gnmap</span>
+<pre><code>nmap -sV -sC -p- -oA scan_results 192.168.1.100
+# Creates: scan_results.nmap, scan_results.xml, scan_results.gnmap
 </code></pre>
 </div>
 
@@ -296,9 +285,9 @@ sudo<span class="w"> </span>make<span class="w"> </span>install
 <p>Find differences between two scans.</p>
 
 <div class="codehilite">
-<pre><span></span><code>nmap<span class="w"> </span>-sV<span class="w"> </span>-p-<span class="w"> </span>-oX<span class="w"> </span>scan1.xml<span class="w"> </span><span class="m">192</span>.168.1.100
-nmap<span class="w"> </span>-sV<span class="w"> </span>-p-<span class="w"> </span>-oX<span class="w"> </span>scan2.xml<span class="w"> </span><span class="m">192</span>.168.1.100
-ndiff<span class="w"> </span>scan1.xml<span class="w"> </span>scan2.xml
+<pre><code>nmap -sV -p- -oX scan1.xml 192.168.1.100
+nmap -sV -p- -oX scan2.xml 192.168.1.100
+ndiff scan1.xml scan2.xml
 </code></pre>
 </div>
 
@@ -395,8 +384,8 @@ ndiff<span class="w"> </span>scan1.xml<span class="w"> </span>scan2.xml
 <h3>Step 1: Network Reconnaissance (5 minutes)</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Identify all live hosts</span>
-nmap<span class="w"> </span>-sn<span class="w"> </span><span class="m">192</span>.168.1.0/24<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;Nmap scan report&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $5}&#39;</span>
+<pre><code># Identify all live hosts
+nmap -sn 192.168.1.0/24 | grep &quot;Nmap scan report&quot; | awk &#39;{print $5}&#39;
 </code></pre>
 </div>
 
@@ -405,33 +394,33 @@ nmap<span class="w"> </span>-sn<span class="w"> </span><span class="m">192</span
 <h3>Step 2: Port Scanning on Each Target (15-30 minutes)</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># For each target identified:</span>
-nmap<span class="w"> </span>-sV<span class="w"> </span>-sC<span class="w"> </span>-p-<span class="w"> </span>--open<span class="w"> </span>-oX<span class="w"> </span>target_name.xml<span class="w"> </span><span class="m">192</span>.168.1.X
+<pre><code># For each target identified:
+nmap -sV -sC -p- --open -oX target_name.xml 192.168.1.X
 </code></pre>
 </div>
 
 <h3>Step 3: Parse Results for Vulnerabilities</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Look for interesting services:</span>
-grep<span class="w"> </span><span class="s2">&quot;open&quot;</span><span class="w"> </span>scan_results.gnmap<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;filtered&quot;</span>
+<pre><code># Look for interesting services:
+grep &quot;open&quot; scan_results.gnmap | grep -v &quot;filtered&quot;
 
-<span class="c1"># Export to text for analysis:</span>
-cat<span class="w"> </span>scan_results.nmap<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-A<span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="s2">&quot;open&quot;</span>
+# Export to text for analysis:
+cat scan_results.nmap | grep -A 5 &quot;open&quot;
 </code></pre>
 </div>
 
 <h3>Step 4: Service-Specific Scanning</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># If HTTP found, scan for web vulnerabilities:</span>
-nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">80</span><span class="w"> </span>--script<span class="w"> </span>http-enum,http-title<span class="w"> </span><span class="m">192</span>.168.1.X
+<pre><code># If HTTP found, scan for web vulnerabilities:
+nmap -p 80 --script http-enum,http-title 192.168.1.X
 
-<span class="c1"># If SMB found:</span>
-nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">445</span><span class="w"> </span>--script<span class="w"> </span>smb-enum-shares,smb-os-discovery<span class="w"> </span><span class="m">192</span>.168.1.X
+# If SMB found:
+nmap -p 445 --script smb-enum-shares,smb-os-discovery 192.168.1.X
 
-<span class="c1"># If SNMP found:</span>
-nmap<span class="w"> </span>-sU<span class="w"> </span>-p<span class="w"> </span><span class="m">161</span><span class="w"> </span>--script<span class="w"> </span>snmp-sysdescr<span class="w"> </span><span class="m">192</span>.168.1.X
+# If SNMP found:
+nmap -sU -p 161 --script snmp-sysdescr 192.168.1.X
 </code></pre>
 </div>
 
@@ -458,11 +447,11 @@ nmap<span class="w"> </span>-sU<span class="w"> </span>-p<span class="w"> </span
 <h3>XML Output (for parsing and automation)</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Extract open ports from XML:</span>
-grep<span class="w"> </span>-oP<span class="w"> </span><span class="s1">&#39;(?&lt;=portid=&quot;)[^&quot;]*&#39;</span><span class="w"> </span>scan_results.xml<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>open
+<pre><code># Extract open ports from XML:
+grep -oP &#39;(?&lt;=portid=&quot;)[^&quot;]*&#39; scan_results.xml | grep open
 
-<span class="c1"># Parse with xmllint:</span>
-xmllint<span class="w"> </span>--xpath<span class="w"> </span><span class="s2">&quot;//port[@protocol=&#39;tcp&#39; and state/@state=&#39;open&#39;]&quot;</span><span class="w"> </span>scan_results.xml
+# Parse with xmllint:
+xmllint --xpath &quot;//port[@protocol=&#39;tcp&#39; and state/@state=&#39;open&#39;]&quot; scan_results.xml
 </code></pre>
 </div>
 
@@ -475,50 +464,50 @@ xmllint<span class="w"> </span>--xpath<span class="w"> </span><span class="s2">&
 <p>Nmap Scripting Engine for extended functionality.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># List available scripts:</span>
-ls<span class="w"> </span>/usr/share/nmap/scripts/
+<pre><code># List available scripts:
+ls /usr/share/nmap/scripts/
 
-<span class="c1"># Run vulnerability scanning scripts:</span>
-nmap<span class="w"> </span>-p-<span class="w"> </span>--script<span class="w"> </span>vuln<span class="w"> </span><span class="m">192</span>.168.1.100
+# Run vulnerability scanning scripts:
+nmap -p- --script vuln 192.168.1.100
 
-<span class="c1"># Custom script categories:</span>
-nmap<span class="w"> </span>-p-<span class="w"> </span>--script<span class="w"> </span><span class="s2">&quot;default or discovery&quot;</span><span class="w"> </span><span class="m">192</span>.168.1.100
+# Custom script categories:
+nmap -p- --script &quot;default or discovery&quot; 192.168.1.100
 
-<span class="c1"># Specific service scripts:</span>
-nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">445</span><span class="w"> </span>--script<span class="w"> </span>smb-*<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w">  </span><span class="c1"># All SMB scripts</span>
-nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">80</span><span class="w"> </span>--script<span class="w"> </span>http-*<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w">  </span><span class="c1"># All HTTP scripts</span>
+# Specific service scripts:
+nmap -p 445 --script smb-* 192.168.1.100  # All SMB scripts
+nmap -p 80 --script http-* 192.168.1.100  # All HTTP scripts
 </code></pre>
 </div>
 
 <h3>2. <strong>Firewall Evasion</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Fragment packets (bypass simple firewalls):</span>
-nmap<span class="w"> </span>-f<span class="w"> </span><span class="m">192</span>.168.1.100
+<pre><code># Fragment packets (bypass simple firewalls):
+nmap -f 192.168.1.100
 
-<span class="c1"># Decoy scanning (hide among other scans):</span>
-nmap<span class="w"> </span>-D<span class="w"> </span>RND:10<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w">  </span><span class="c1"># 10 random decoys</span>
+# Decoy scanning (hide among other scans):
+nmap -D RND:10 192.168.1.100  # 10 random decoys
 
-<span class="c1"># Idle/Zombie scan (most stealthy):</span>
-nmap<span class="w"> </span>-sI<span class="w"> </span>zombie_ip<span class="w"> </span><span class="m">192</span>.168.1.100
+# Idle/Zombie scan (most stealthy):
+nmap -sI zombie_ip 192.168.1.100
 
-<span class="c1"># Use specific source port (bypass firewall rules):</span>
-nmap<span class="w"> </span>--source-port<span class="w"> </span><span class="m">53</span><span class="w"> </span><span class="m">192</span>.168.1.100
+# Use specific source port (bypass firewall rules):
+nmap --source-port 53 192.168.1.100
 </code></pre>
 </div>
 
 <h3>3. <strong>Performance Optimization</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Fast scan of common ports:</span>
-nmap<span class="w"> </span>-F<span class="w"> </span><span class="m">192</span>.168.1.0/24
+<pre><code># Fast scan of common ports:
+nmap -F 192.168.1.0/24
 
-<span class="c1"># Parallel scanning:</span>
-nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">80</span><span class="w"> </span>--max-parallelism<span class="w"> </span><span class="m">100</span><span class="w"> </span><span class="m">192</span>.168.1.0/24
+# Parallel scanning:
+nmap -p 80 --max-parallelism 100 192.168.1.0/24
 
-<span class="c1"># Timing templates:</span>
-<span class="c1"># T0 = paranoid, T1 = sneaky, T2 = polite, T3 = normal, T4 = aggressive, T5 = insane</span>
-nmap<span class="w"> </span>-T5<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w">  </span><span class="c1"># Very fast but unreliable</span>
+# Timing templates:
+# T0 = paranoid, T1 = sneaky, T2 = polite, T3 = normal, T4 = aggressive, T5 = insane
+nmap -T5 192.168.1.100  # Very fast but unreliable
 </code></pre>
 </div>
 
@@ -529,34 +518,34 @@ nmap<span class="w"> </span>-T5<span class="w"> </span><span class="m">192</span
 <h3>Scenario 1: You get an IP range - Scan everything</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Phase 1: Host discovery</span>
-nmap<span class="w"> </span>-sn<span class="w"> </span><span class="m">192</span>.168.1.0/24<span class="w"> </span>-oG<span class="w"> </span>hosts.txt
+<pre><code># Phase 1: Host discovery
+nmap -sn 192.168.1.0/24 -oG hosts.txt
 
-<span class="c1"># Phase 2: Extract live hosts and scan deeply</span>
-grep<span class="w"> </span><span class="s2">&quot;Up&quot;</span><span class="w"> </span>hosts.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $2}&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>live_hosts.txt
-<span class="k">for</span><span class="w"> </span>host<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>cat<span class="w"> </span>live_hosts.txt<span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span>nmap<span class="w"> </span>-sV<span class="w"> </span>-sC<span class="w"> </span>-p-<span class="w"> </span>-oA<span class="w"> </span>scan_<span class="nv">$host</span><span class="w"> </span><span class="nv">$host</span>
-<span class="k">done</span>
+# Phase 2: Extract live hosts and scan deeply
+grep &quot;Up&quot; hosts.txt | awk &#39;{print $2}&#39; &gt; live_hosts.txt
+for host in $(cat live_hosts.txt); do
+  nmap -sV -sC -p- -oA scan_$host $host
+done
 </code></pre>
 </div>
 
 <h3>Scenario 2: Single target with hidden services</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Run multiple scan types to find all services:</span>
-nmap<span class="w"> </span>-sS<span class="w"> </span>-p-<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w">  </span><span class="c1"># TCP SYN</span>
-nmap<span class="w"> </span>-sU<span class="w"> </span>--top-ports<span class="w"> </span><span class="m">100</span><span class="w"> </span><span class="m">192</span>.168.1.100<span class="w">  </span><span class="c1"># UDP</span>
-nmap<span class="w"> </span>-A<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w">  </span><span class="c1"># Aggressive</span>
+<pre><code># Run multiple scan types to find all services:
+nmap -sS -p- 192.168.1.100  # TCP SYN
+nmap -sU --top-ports 100 192.168.1.100  # UDP
+nmap -A 192.168.1.100  # Aggressive
 </code></pre>
 </div>
 
 <h3>Scenario 3: Firewall detected, need to bypass</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Try different scan types:</span>
-nmap<span class="w"> </span>-sS<span class="w"> </span>-T2<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w">  </span><span class="c1"># Stealth SYN with slow timing</span>
-nmap<span class="w"> </span>-f<span class="w"> </span>--mtu<span class="w"> </span><span class="m">16</span><span class="w"> </span><span class="m">192</span>.168.1.100<span class="w">  </span><span class="c1"># Fragmented packets</span>
-nmap<span class="w"> </span>-Pn<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w">  </span><span class="c1"># Skip ping (assume host up)</span>
+<pre><code># Try different scan types:
+nmap -sS -T2 192.168.1.100  # Stealth SYN with slow timing
+nmap -f --mtu 16 192.168.1.100  # Fragmented packets
+nmap -Pn 192.168.1.100  # Skip ping (assume host up)
 </code></pre>
 </div>
 
@@ -567,22 +556,22 @@ nmap<span class="w"> </span>-Pn<span class="w"> </span><span class="m">192</span
 <h3>Quick Reference One-Liners</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Get just open ports from target:</span>
-nmap<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-p-<span class="w"> </span>--open<span class="w"> </span>-oG<span class="w"> </span>-<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;open&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $5}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="s1">&#39;/&#39;</span><span class="w"> </span>-f1<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-u
+<pre><code># Get just open ports from target:
+nmap 192.168.1.100 -p- --open -oG - | grep &quot;open&quot; | awk &#39;{print $5}&#39; | cut -d&#39;/&#39; -f1 | sort -u
 
-<span class="c1"># Find all HTTP/HTTPS servers in range:</span>
-nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">80</span>,443<span class="w"> </span><span class="m">192</span>.168.1.0/24<span class="w"> </span>-oG<span class="w"> </span>-<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;80/open\|443/open&quot;</span>
+# Find all HTTP/HTTPS servers in range:
+nmap -p 80,443 192.168.1.0/24 -oG - | grep &quot;80/open\|443/open&quot;
 
-<span class="c1"># Extract service versions:</span>
-nmap<span class="w"> </span>-sV<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-oX<span class="w"> </span>-<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;product&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span><span class="s1">&#39;s/&lt;[^&gt;]*&gt;//g&#39;</span>
+# Extract service versions:
+nmap -sV 192.168.1.100 -oX - | grep &quot;product&quot; | sed &#39;s/&lt;[^&gt;]*&gt;//g&#39;
 
-<span class="c1"># Find hosts with specific service:</span>
-nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">3306</span><span class="w"> </span><span class="m">192</span>.168.1.0/24<span class="w"> </span>--open<span class="w"> </span>-oG<span class="w"> </span>-<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;Status: Down&quot;</span>
+# Find hosts with specific service:
+nmap -p 3306 192.168.1.0/24 --open -oG - | grep -v &quot;Status: Down&quot;
 
-<span class="c1"># Save results and compare later:</span>
-nmap<span class="w"> </span>-sV<span class="w"> </span>-p-<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-oA<span class="w"> </span>baseline
-nmap<span class="w"> </span>-sV<span class="w"> </span>-p-<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-oX<span class="w"> </span>new.xml
-ndiff<span class="w"> </span>baseline.xml<span class="w"> </span>new.xml
+# Save results and compare later:
+nmap -sV -p- 192.168.1.100 -oA baseline
+nmap -sV -p- 192.168.1.100 -oX new.xml
+ndiff baseline.xml new.xml
 </code></pre>
 </div>
 
@@ -611,24 +600,24 @@ ndiff<span class="w"> </span>baseline.xml<span class="w"> </span>new.xml
 <h3>Example 1: Wordpress Site Enumeration</h3>
 
 <div class="codehilite">
-<pre><span></span><code>nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">80</span>,443<span class="w"> </span>-sV<span class="w"> </span>-sC<span class="w"> </span>--script<span class="w"> </span>http-title,http-enum<span class="w"> </span><span class="m">192</span>.168.1.50
-<span class="c1"># Identifies Wordpress installation and common paths</span>
+<pre><code>nmap -p 80,443 -sV -sC --script http-title,http-enum 192.168.1.50
+# Identifies Wordpress installation and common paths
 </code></pre>
 </div>
 
 <h3>Example 2: Database Server Discovery</h3>
 
 <div class="codehilite">
-<pre><span></span><code>nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">3306</span>,5432,1433<span class="w"> </span>--open<span class="w"> </span><span class="m">192</span>.168.1.0/24
-<span class="c1"># Finds MySQL, PostgreSQL, MSSQL servers on network</span>
+<pre><code>nmap -p 3306,5432,1433 --open 192.168.1.0/24
+# Finds MySQL, PostgreSQL, MSSQL servers on network
 </code></pre>
 </div>
 
 <h3>Example 3: SMB Enumeration for Privilege Escalation</h3>
 
 <div class="codehilite">
-<pre><span></span><code>nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">445</span><span class="w"> </span>--script<span class="w"> </span>smb-enum-users,smb-enum-shares,smb-os-discovery<span class="w"> </span><span class="m">192</span>.168.1.100
-<span class="c1"># Gathers users and shares for social engineering/exploitation</span>
+<pre><code>nmap -p 445 --script smb-enum-users,smb-enum-shares,smb-os-discovery 192.168.1.100
+# Gathers users and shares for social engineering/exploitation
 </code></pre>
 </div>
 

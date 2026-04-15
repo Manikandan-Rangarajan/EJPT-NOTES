@@ -87,17 +87,6 @@
         a:hover {
             text-decoration: underline;
         }
-        /* Force all syntax highlighting spans to black */
-        .codehilite pre span,
-        .codehilite pre span.c, .codehilite pre span.c1, .codehilite pre span.ch,
-        .codehilite pre span.k, .codehilite pre span.kd, .codehilite pre span.kr,
-        .codehilite pre span.m, .codehilite pre span.mi,
-        .codehilite pre span.n, .codehilite pre span.nb, .codehilite pre span.nc, .codehilite pre span.nf, .codehilite pre span.nv,
-        .codehilite pre span.o,
-        .codehilite pre span.p, .codehilite pre span.py,
-        .codehilite pre span.s, .codehilite pre span.s1, .codehilite pre span.s2, .codehilite pre span.se,
-        .codehilite pre span.w { color: #000000 !important; }
-        pre span { color: #000000 !important; }
         @media print {
             body { margin: 0; padding: 10px; }
             pre { page-break-inside: avoid; }
@@ -132,17 +121,17 @@
 <h3 id="cachyos-arch-linux">CachyOS (Arch Linux)</h3>
 
 <div class="codehilite">
-<pre><span></span><code>sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>nikto
-nikto<span class="w"> </span>-version<span class="w">  </span><span class="c1"># Verify installation</span>
+<pre><code>sudo pacman -S nikto
+nikto -version  # Verify installation
 </code></pre>
 </div>
 
 <h3 id="install-from-source-if-not-in-repos">Install from Source (if not in repos)</h3>
 
 <div class="codehilite">
-<pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/sullo/nikto.git
-<span class="nb">cd</span><span class="w"> </span>nikto/program
-perl<span class="w"> </span>nikto.pl<span class="w"> </span>-version
+<pre><code>git clone https://github.com/sullo/nikto.git
+cd nikto/program
+perl nikto.pl -version
 </code></pre>
 </div>
 
@@ -157,10 +146,10 @@ perl<span class="w"> </span>nikto.pl<span class="w"> </span>-version
 <h3 id="database-updates">Database Updates</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Update vulnerability database:</span>
-sudo<span class="w"> </span>nikto<span class="w"> </span>-update
+<pre><code># Update vulnerability database:
+sudo nikto -update
 
-<span class="c1"># On CachyOS, usually automatic with pacman -Syy</span>
+# On CachyOS, usually automatic with pacman -Syy
 </code></pre>
 </div>
 
@@ -210,7 +199,7 @@ sudo<span class="w"> </span>nikto<span class="w"> </span>-update
 <p>Quick vulnerability check on a web server.</p>
 
 <div class="codehilite">
-<pre><span></span><code>nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50
+<pre><code>nikto -h http://192.168.1.50
 </code></pre>
 </div>
 
@@ -246,7 +235,7 @@ sudo<span class="w"> </span>nikto<span class="w"> </span>-update
 <p>For secure web applications.</p>
 
 <div class="codehilite">
-<pre><span></span><code>nikto<span class="w"> </span>-h<span class="w"> </span>https://192.168.1.50<span class="w"> </span>-ssl
+<pre><code>nikto -h https://192.168.1.50 -ssl
 </code></pre>
 </div>
 
@@ -258,8 +247,8 @@ sudo<span class="w"> </span>nikto<span class="w"> </span>-update
 <p>Web servers often run on non-standard ports.</p>
 
 <div class="codehilite">
-<pre><span></span><code>nikto<span class="w"> </span>-h<span class="w"> </span><span class="m">192</span>.168.1.50<span class="w"> </span>-p<span class="w"> </span><span class="m">8080</span>
-nikto<span class="w"> </span>-h<span class="w"> </span><span class="m">192</span>.168.1.50<span class="w"> </span>-p<span class="w"> </span><span class="m">8443</span><span class="w"> </span>-ssl
+<pre><code>nikto -h 192.168.1.50 -p 8080
+nikto -h 192.168.1.50 -p 8443 -ssl
 </code></pre>
 </div>
 
@@ -271,9 +260,9 @@ nikto<span class="w"> </span>-h<span class="w"> </span><span class="m">192</span
 <p>Export findings for reporting.</p>
 
 <div class="codehilite">
-<pre><span></span><code>nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span>-o<span class="w"> </span>results.txt
-nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span>-o<span class="w"> </span>results.html<span class="w"> </span>-F<span class="w"> </span>htm<span class="w">  </span><span class="c1"># HTML report</span>
-nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span>-o<span class="w"> </span>results.xml<span class="w"> </span>-F<span class="w"> </span>xml<span class="w">   </span><span class="c1"># XML report</span>
+<pre><code>nikto -h http://192.168.1.50 -o results.txt
+nikto -h http://192.168.1.50 -o results.html -F htm  # HTML report
+nikto -h http://192.168.1.50 -o results.xml -F xml   # XML report
 </code></pre>
 </div>
 
@@ -286,7 +275,7 @@ nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span 
 <p>More thorough but slower scan.</p>
 
 <div class="codehilite">
-<pre><span></span><code>nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span>-Display<span class="w"> </span>V
+<pre><code>nikto -h http://192.168.1.50 -Display V
 </code></pre>
 </div>
 
@@ -298,7 +287,7 @@ nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span 
 <p>Route scan through proxy (useful in corporate networks).</p>
 
 <div class="codehilite">
-<pre><span></span><code>nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span>-p<span class="w"> </span>http://proxy:8080
+<pre><code>nikto -h http://192.168.1.50 -p http://proxy:8080
 </code></pre>
 </div>
 
@@ -310,7 +299,7 @@ nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span 
 <p>If the web server requires authentication.</p>
 
 <div class="codehilite">
-<pre><span></span><code>nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span>-id<span class="w"> </span>username:password
+<pre><code>nikto -h http://192.168.1.50 -id username:password
 </code></pre>
 </div>
 
@@ -322,8 +311,8 @@ nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span 
 <p>Run only specific vulnerability checks.</p>
 
 <div class="codehilite">
-<pre><span></span><code>nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span>-Plugins<span class="w"> </span>single_server_banner
-nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span>-Plugins<span class="w"> </span><span class="s2">&quot;single_server_banner,outdated&quot;</span><span class="w"> </span>-v
+<pre><code>nikto -h http://192.168.1.50 -Plugins single_server_banner
+nikto -h http://192.168.1.50 -Plugins &quot;single_server_banner,outdated&quot; -v
 </code></pre>
 </div>
 
@@ -335,8 +324,8 @@ nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span 
 <p>Skip certain checks.</p>
 
 <div class="codehilite">
-<pre><span></span><code>nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span>-noSSL
-nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span>-nolookups<span class="w">  </span><span class="c1"># Skip DNS lookups</span>
+<pre><code>nikto -h http://192.168.1.50 -noSSL
+nikto -h http://192.168.1.50 -nolookups  # Skip DNS lookups
 </code></pre>
 </div>
 
@@ -345,8 +334,8 @@ nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span 
 <p>Scan a list of targets.</p>
 
 <div class="codehilite">
-<pre><span></span><code>nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.<span class="o">{</span><span class="m">50</span>..60<span class="o">}</span>:80/<span class="w">  </span><span class="c1"># Scan range</span>
-nikto<span class="w"> </span>-h<span class="w"> </span>hosts.txt<span class="w">  </span><span class="c1"># Scan from file (one per line)</span>
+<pre><code>nikto -h http://192.168.1.{50..60}:80/  # Scan range
+nikto -h hosts.txt  # Scan from file (one per line)
 </code></pre>
 </div>
 
@@ -443,37 +432,37 @@ nikto<span class="w"> </span>-h<span class="w"> </span>hosts.txt<span class="w">
 <h3 id="basic-web-reconnaissance-workflow">Basic Web Reconnaissance Workflow</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Quick scan with nmap to find web servers</span>
-nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">80</span>,443,8080,8443<span class="w"> </span><span class="m">192</span>.168.1.0/24<span class="w"> </span>--open<span class="w"> </span>-oG<span class="w"> </span>web_servers.txt
+<pre><code># Step 1: Quick scan with nmap to find web servers
+nmap -p 80,443,8080,8443 192.168.1.0/24 --open -oG web_servers.txt
 
-<span class="c1"># Step 2: Extract IPs and scan each with nikto</span>
-grep<span class="w"> </span><span class="s2">&quot;Up&quot;</span><span class="w"> </span>web_servers.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $2}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="nb">read</span><span class="w"> </span>ip<span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;[*] Scanning </span><span class="nv">$ip</span><span class="s2">&quot;</span>
-<span class="w">  </span>nikto<span class="w"> </span>-h<span class="w"> </span>http://<span class="nv">$ip</span><span class="w"> </span>-o<span class="w"> </span>results_<span class="nv">$ip</span>.txt
-<span class="k">done</span>
+# Step 2: Extract IPs and scan each with nikto
+grep &quot;Up&quot; web_servers.txt | awk &#39;{print $2}&#39; | while read ip; do
+  echo &quot;[*] Scanning $ip&quot;
+  nikto -h http://$ip -o results_$ip.txt
+done
 
-<span class="c1"># Step 3: Review results</span>
-<span class="k">for</span><span class="w"> </span>file<span class="w"> </span><span class="k">in</span><span class="w"> </span>results_*.txt<span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;=== </span><span class="nv">$file</span><span class="s2"> ===&quot;</span>
-<span class="w">  </span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;OSVDB\|interesting\|dangerous&quot;</span><span class="w"> </span><span class="nv">$file</span>
-<span class="k">done</span>
+# Step 3: Review results
+for file in results_*.txt; do
+  echo &quot;=== $file ===&quot;
+  grep -i &quot;OSVDB\|interesting\|dangerous&quot; $file
+done
 </code></pre>
 </div>
 
 <h3 id="detailed-scanning-approach">Detailed Scanning Approach</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Initial scan (fast)</span>
-nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span>-o<span class="w"> </span>initial.txt
+<pre><code># Step 1: Initial scan (fast)
+nikto -h http://192.168.1.50 -o initial.txt
 
-<span class="c1"># Step 2: If interesting findings, do deeper scan</span>
-nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span>-Display<span class="w"> </span>V<span class="w"> </span>-o<span class="w"> </span>detailed.txt
+# Step 2: If interesting findings, do deeper scan
+nikto -h http://192.168.1.50 -Display V -o detailed.txt
 
-<span class="c1"># Step 3: Run in HTML for easier review</span>
-nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span>-o<span class="w"> </span>report.html<span class="w"> </span>-F<span class="w"> </span>htm
+# Step 3: Run in HTML for easier review
+nikto -h http://192.168.1.50 -o report.html -F htm
 
-<span class="c1"># Step 4: Investigate interesting findings manually</span>
-<span class="c1"># Use curl or Burp Suite to test findings</span>
+# Step 4: Investigate interesting findings manually
+# Use curl or Burp Suite to test findings
 </code></pre>
 </div>
 
@@ -484,57 +473,57 @@ nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span 
 <h3 id="example-1-quick-scan-of-known-vulnerable-app">Example 1: Quick Scan of Known Vulnerable App</h3>
 
 <div class="codehilite">
-<pre><span></span><code>nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span>-p<span class="w"> </span><span class="m">80</span>
+<pre><code>nikto -h http://192.168.1.50 -p 80
 
-<span class="c1"># Output shows:</span>
-<span class="c1"># + Server: Apache/2.4.1 (Vulnerable!)</span>
-<span class="c1"># + OSVDB-3092: /admin/: Admin panel found</span>
-<span class="c1"># + Retrieved directory listing</span>
-<span class="c1"># → Next: Use gobuster to find files in /admin/</span>
+# Output shows:
+# + Server: Apache/2.4.1 (Vulnerable!)
+# + OSVDB-3092: /admin/: Admin panel found
+# + Retrieved directory listing
+# → Next: Use gobuster to find files in /admin/
 </code></pre>
 </div>
 
 <h3 id="example-2-comprehensive-security-assessment">Example 2: Comprehensive Security Assessment</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Scan with all information:</span>
-nikto<span class="w"> </span>-h<span class="w"> </span>http://192.168.1.50<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-o<span class="w"> </span>report.html<span class="w"> </span>-F<span class="w"> </span>htm<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-Display<span class="w"> </span>V<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-Plugins<span class="w"> </span><span class="s2">&quot;default&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>&gt;<span class="w"> </span>verbose_output.txt
+<pre><code># Scan with all information:
+nikto -h http://192.168.1.50 \
+  -o report.html -F htm \
+  -Display V \
+  -Plugins &quot;default&quot; \
+  &gt; verbose_output.txt
 
-<span class="c1"># Creates detailed HTML report for client/documentation</span>
+# Creates detailed HTML report for client/documentation
 </code></pre>
 </div>
 
 <h3 id="example-3-https-website-with-certificate-issues">Example 3: HTTPS Website with Certificate Issues</h3>
 
 <div class="codehilite">
-<pre><span></span><code>nikto<span class="w"> </span>-h<span class="w"> </span>https://192.168.1.50<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-ssl<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-p<span class="w"> </span><span class="m">443</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-o<span class="w"> </span>secure_scan.txt
+<pre><code>nikto -h https://192.168.1.50 \
+  -ssl \
+  -p 443 \
+  -o secure_scan.txt
 
-<span class="c1"># -ssl flag handles self-signed/invalid certificates</span>
+# -ssl flag handles self-signed/invalid certificates
 </code></pre>
 </div>
 
 <h3 id="example-4-multi-target-scanning">Example 4: Multi-Target Scanning</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Create file with targets:</span>
-cat<span class="w"> </span>&gt;<span class="w"> </span>targets.txt<span class="w"> </span><span class="s">&lt;&lt; EOF</span>
-<span class="s">192.168.1.50:80</span>
-<span class="s">192.168.1.51:8080</span>
-<span class="s">192.168.1.52:443</span>
-<span class="s">EOF</span>
+<pre><code># Create file with targets:
+cat &gt; targets.txt &lt;&lt; EOF
+192.168.1.50:80
+192.168.1.51:8080
+192.168.1.52:443
+EOF
 
-<span class="c1"># Scan all:</span>
-<span class="k">for</span><span class="w"> </span>target<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>cat<span class="w"> </span>targets.txt<span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span>nikto<span class="w"> </span>-h<span class="w"> </span>http://<span class="nv">$target</span><span class="w"> </span>-o<span class="w"> </span>results_<span class="nv">$target</span>.txt<span class="w"> </span><span class="p">&amp;</span>
-<span class="k">done</span>
-<span class="nb">wait</span>
+# Scan all:
+for target in $(cat targets.txt); do
+  nikto -h http://$target -o results_$target.txt &amp;
+done
+wait
 </code></pre>
 </div>
 
@@ -545,64 +534,64 @@ cat<span class="w"> </span>&gt;<span class="w"> </span>targets.txt<span class="w
 <h3 id="1-custom-vulnerability-database">1. <strong>Custom Vulnerability Database</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Update before scanning for latest vulnerabilities:</span>
-nikto<span class="w"> </span>-update
+<pre><code># Update before scanning for latest vulnerabilities:
+nikto -update
 
-<span class="c1"># Then run scan:</span>
-nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com
+# Then run scan:
+nikto -h http://target.com
 </code></pre>
 </div>
 
 <h3 id="2-targeted-plugin-scanning">2. <strong>Targeted Plugin Scanning</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Find available plugins:</span>
-ls<span class="w"> </span>/usr/local/nikto/plugins/<span class="w">  </span><span class="c1"># or similar path</span>
+<pre><code># Find available plugins:
+ls /usr/local/nikto/plugins/  # or similar path
 
-<span class="c1"># Run specific plugin:</span>
-nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com<span class="w"> </span>-Plugins<span class="w"> </span>outdated
+# Run specific plugin:
+nikto -h http://target.com -Plugins outdated
 
-<span class="c1"># Combine multiple plugins:</span>
-nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com<span class="w"> </span>-Plugins<span class="w"> </span><span class="s2">&quot;outdated,ssl,headers&quot;</span>
+# Combine multiple plugins:
+nikto -h http://target.com -Plugins &quot;outdated,ssl,headers&quot;
 </code></pre>
 </div>
 
 <h3 id="3-integration-with-other-tools">3. <strong>Integration with Other Tools</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Pipe nmap results to nikto:</span>
-nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">80</span>,443<span class="w"> </span>--open<span class="w"> </span><span class="m">192</span>.168.1.0/24<span class="w"> </span>-oG<span class="w"> </span>-<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;Up&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print &quot;http://&quot; $2}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="nb">read</span><span class="w"> </span>target<span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span>nikto<span class="w"> </span>-h<span class="w"> </span><span class="nv">$target</span><span class="w"> </span>-o<span class="w"> </span>results_<span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="nv">$target</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tr<span class="w"> </span><span class="s1">&#39;/&#39;</span><span class="w"> </span><span class="s1">&#39;_&#39;</span><span class="k">)</span>.txt
-<span class="k">done</span>
+<pre><code># Pipe nmap results to nikto:
+nmap -p 80,443 --open 192.168.1.0/24 -oG - | grep &quot;Up&quot; | awk &#39;{print &quot;http://&quot; $2}&#39; | while read target; do
+  nikto -h $target -o results_$(echo $target | tr &#39;/&#39; &#39;_&#39;).txt
+done
 
-<span class="c1"># Parse nikto output for high-severity issues:</span>
-grep<span class="w"> </span><span class="s2">&quot;OSVDB&quot;</span><span class="w"> </span>results.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-u
-grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;critical\|high&quot;</span><span class="w"> </span>results.txt
+# Parse nikto output for high-severity issues:
+grep &quot;OSVDB&quot; results.txt | sort -u
+grep -i &quot;critical\|high&quot; results.txt
 </code></pre>
 </div>
 
 <h3 id="4-timing-control">4. <strong>Timing Control</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Slow scan (stealthy):</span>
-nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com<span class="w"> </span>-Plugins<span class="w"> </span><span class="s2">&quot;default&quot;</span><span class="w"> </span>-timeout<span class="w"> </span><span class="m">10</span>
+<pre><code># Slow scan (stealthy):
+nikto -h http://target.com -Plugins &quot;default&quot; -timeout 10
 
-<span class="c1"># Fast scan (may miss some issues):</span>
-nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com<span class="w"> </span>-nolookups
+# Fast scan (may miss some issues):
+nikto -h http://target.com -nolookups
 </code></pre>
 </div>
 
 <h3 id="5-output-parsing">5. <strong>Output Parsing</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Extract dangerous files:</span>
-grep<span class="w"> </span><span class="s2">&quot;OSVDB&quot;</span><span class="w"> </span>results.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;file\|directory&quot;</span>
+<pre><code># Extract dangerous files:
+grep &quot;OSVDB&quot; results.txt | grep -i &quot;file\|directory&quot;
 
-<span class="c1"># Find SSL/TLS issues:</span>
-grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;ssl\|certificate\|tls&quot;</span><span class="w"> </span>results.txt
+# Find SSL/TLS issues:
+grep -i &quot;ssl\|certificate\|tls&quot; results.txt
 
-<span class="c1"># Find outdated software:</span>
-grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;Apache\|IIS\|Nginx&quot;</span><span class="w"> </span>results.txt
+# Find outdated software:
+grep -i &quot;Apache\|IIS\|Nginx&quot; results.txt
 </code></pre>
 </div>
 
@@ -613,23 +602,23 @@ grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;Apa
 <h3 id="quick-reference-commands">Quick Reference Commands</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Fastest basic scan:</span>
-nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com<span class="w"> </span>-nolookups
+<pre><code># Fastest basic scan:
+nikto -h http://target.com -nolookups
 
-<span class="c1"># Most thorough:</span>
-nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com<span class="w"> </span>-Display<span class="w"> </span>V<span class="w"> </span>-o<span class="w"> </span>report.html<span class="w"> </span>-F<span class="w"> </span>htm
+# Most thorough:
+nikto -h http://target.com -Display V -o report.html -F htm
 
-<span class="c1"># HTTPS with verbose output:</span>
-nikto<span class="w"> </span>-h<span class="w"> </span>https://target.com<span class="w"> </span>-ssl<span class="w"> </span>-Display<span class="w"> </span>V
+# HTTPS with verbose output:
+nikto -h https://target.com -ssl -Display V
 
-<span class="c1"># Scan and immediately grep for interesting findings:</span>
-nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;OSVDB\|interesting\|dangerous&quot;</span>
+# Scan and immediately grep for interesting findings:
+nikto -h http://target.com | grep -i &quot;OSVDB\|interesting\|dangerous&quot;
 
-<span class="c1"># Scan multiple ports at once:</span>
-nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com:80<span class="w"> </span>-o<span class="w"> </span>port80.txt<span class="w"> </span><span class="p">&amp;</span><span class="w"> </span><span class="se">\</span>
-nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com:8080<span class="w"> </span>-o<span class="w"> </span>port8080.txt<span class="w"> </span><span class="p">&amp;</span><span class="w"> </span><span class="se">\</span>
-nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com:8443<span class="w"> </span>-ssl<span class="w"> </span>-o<span class="w"> </span>port8443.txt<span class="w"> </span><span class="p">&amp;</span><span class="w"> </span><span class="se">\</span>
-<span class="nb">wait</span>
+# Scan multiple ports at once:
+nikto -h http://target.com:80 -o port80.txt &amp; \
+nikto -h http://target.com:8080 -o port8080.txt &amp; \
+nikto -h http://target.com:8443 -ssl -o port8443.txt &amp; \
+wait
 </code></pre>
 </div>
 
@@ -680,20 +669,20 @@ nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com:8443<sp
 <h3 id="performance-optimization">Performance Optimization</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Scan only specific checks (faster):</span>
-nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com<span class="w"> </span>-Plugins<span class="w"> </span><span class="s2">&quot;outdated&quot;</span>
+<pre><code># Scan only specific checks (faster):
+nikto -h http://target.com -Plugins &quot;outdated&quot;
 
-<span class="c1"># Skip slow components:</span>
-nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com<span class="w"> </span>-nolookups
+# Skip slow components:
+nikto -h http://target.com -nolookups
 
-<span class="c1"># Use reasonable timeout:</span>
-nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com<span class="w"> </span>-timeout<span class="w"> </span><span class="m">5</span>
+# Use reasonable timeout:
+nikto -h http://target.com -timeout 5
 
-<span class="c1"># Parallel scanning of multiple targets:</span>
-<span class="k">for</span><span class="w"> </span>target<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">192</span>.168.1.<span class="o">{</span><span class="m">50</span>..60<span class="o">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span>nikto<span class="w"> </span>-h<span class="w"> </span>http://<span class="nv">$target</span><span class="w"> </span>-nolookups<span class="w"> </span><span class="p">&amp;</span>
-<span class="k">done</span>
-<span class="nb">wait</span>
+# Parallel scanning of multiple targets:
+for target in 192.168.1.{50..60}; do
+  nikto -h http://$target -nolookups &amp;
+done
+wait
 </code></pre>
 </div>
 
@@ -796,34 +785,34 @@ nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com<span cl
 <h3 id="nikto-gobuster">Nikto → Gobuster</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Nikto finds interesting directories</span>
-<span class="c1"># Gobuster goes deeper on those directories</span>
+<pre><code># Nikto finds interesting directories
+# Gobuster goes deeper on those directories
 
-nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;OSVDB&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>nikto_findings.txt
+nikto -h http://target.com | grep &quot;OSVDB&quot; &gt; nikto_findings.txt
 
-<span class="c1"># Then scan interesting paths with gobuster:</span>
-gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://target.com/admin<span class="w"> </span>-w<span class="w"> </span>common.txt
+# Then scan interesting paths with gobuster:
+gobuster dir -u http://target.com/admin -w common.txt
 </code></pre>
 </div>
 
 <h3 id="nikto-manual-testing-burp-suite">Nikto → Manual Testing (Burp Suite)</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Nikto finds vulnerability, you test it manually:</span>
+<pre><code># Nikto finds vulnerability, you test it manually:
 
-nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com<span class="w">  </span><span class="c1"># Identifies XSS vulnerability</span>
-<span class="c1"># Then open Burp Suite and manually test the payload</span>
+nikto -h http://target.com  # Identifies XSS vulnerability
+# Then open Burp Suite and manually test the payload
 </code></pre>
 </div>
 
 <h3 id="nikto-sqlmap">Nikto → SQLmap</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Nikto finds SQL injection point</span>
-nikto<span class="w"> </span>-h<span class="w"> </span>http://target.com<span class="w"> </span>-Display<span class="w"> </span>V<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;sql&quot;</span>
+<pre><code># Nikto finds SQL injection point
+nikto -h http://target.com -Display V | grep -i &quot;sql&quot;
 
-<span class="c1"># Then test with SQLmap:</span>
-sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target.com/page?id=1&quot;</span><span class="w"> </span>--dbs
+# Then test with SQLmap:
+sqlmap -u &quot;http://target.com/page?id=1&quot; --dbs
 </code></pre>
 </div>
 

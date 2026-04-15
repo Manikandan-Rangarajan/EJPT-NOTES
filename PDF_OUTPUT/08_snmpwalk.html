@@ -87,17 +87,6 @@
         a:hover {
             text-decoration: underline;
         }
-        /* Force all syntax highlighting spans to black */
-        .codehilite pre span,
-        .codehilite pre span.c, .codehilite pre span.c1, .codehilite pre span.ch,
-        .codehilite pre span.k, .codehilite pre span.kd, .codehilite pre span.kr,
-        .codehilite pre span.m, .codehilite pre span.mi,
-        .codehilite pre span.n, .codehilite pre span.nb, .codehilite pre span.nc, .codehilite pre span.nf, .codehilite pre span.nv,
-        .codehilite pre span.o,
-        .codehilite pre span.p, .codehilite pre span.py,
-        .codehilite pre span.s, .codehilite pre span.s1, .codehilite pre span.s2, .codehilite pre span.se,
-        .codehilite pre span.w { color: #000000 !important; }
-        pre span { color: #000000 !important; }
         @media print {
             body { margin: 0; padding: 10px; }
             pre { page-break-inside: avoid; }
@@ -131,17 +120,17 @@
 <h3 id="cachyos-arch-linux">CachyOS (Arch Linux)</h3>
 
 <div class="codehilite">
-<pre><span></span><code>sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>net-snmp
-snmpwalk<span class="w"> </span>-V<span class="w">  </span><span class="c1"># Verify installation</span>
-which<span class="w"> </span>snmpwalk<span class="w"> </span>snmpclient<span class="w"> </span>snmpgetnext
+<pre><code>sudo pacman -S net-snmp
+snmpwalk -V  # Verify installation
+which snmpwalk snmpclient snmpgetnext
 </code></pre>
 </div>
 
 <h3 id="alternative-installation">Alternative Installation</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># If not in repos:</span>
-sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>net-snmp<span class="w"> </span>net-snmp-utils
+<pre><code># If not in repos:
+sudo pacman -S net-snmp net-snmp-utils
 </code></pre>
 </div>
 
@@ -155,9 +144,9 @@ sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </s
 <h3 id="verify-installation">Verify Installation</h3>
 
 <div class="codehilite">
-<pre><span></span><code>snmpwalk<span class="w"> </span>-h
-snmpget<span class="w"> </span>-h
-snmpbulkwalk<span class="w"> </span>-h
+<pre><code>snmpwalk -h
+snmpget -h
+snmpbulkwalk -h
 </code></pre>
 </div>
 
@@ -213,7 +202,7 @@ snmpbulkwalk<span class="w"> </span>-h
 <p>Attempt to enumerate a device using default community string.</p>
 
 <div class="codehilite">
-<pre><span></span><code>snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1
+<pre><code>snmpwalk -v 2c -c public 192.168.1.1
 </code></pre>
 </div>
 
@@ -236,11 +225,11 @@ SNMPv2-MIB::sysORLastChange.0 = Timeticks: (1) 0:00:00.01
 <h3 id="2-try-different-community-strings">2. <strong>Try Different Community Strings</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Try common strings:</span>
-snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1
-snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>private<span class="w"> </span><span class="m">192</span>.168.1.1
-snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>guest<span class="w"> </span><span class="m">192</span>.168.1.1
-snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="m">192</span>.168.1.1<span class="w">  </span><span class="c1"># Empty string</span>
+<pre><code># Try common strings:
+snmpwalk -v 2c -c public 192.168.1.1
+snmpwalk -v 2c -c private 192.168.1.1
+snmpwalk -v 2c -c guest 192.168.1.1
+snmpwalk -v 2c -c &quot;&quot; 192.168.1.1  # Empty string
 </code></pre>
 </div>
 
@@ -249,27 +238,27 @@ snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </s
 <p>Query specific OID sections for targeted data.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># System description and version:</span>
-snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">1</span>.3.6.1.2.1.1.1
+<pre><code># System description and version:
+snmpwalk -v 2c -c public 192.168.1.1 1.3.6.1.2.1.1.1
 
-<span class="c1"># Hostname:</span>
-snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">1</span>.3.6.1.2.1.1.5
+# Hostname:
+snmpwalk -v 2c -c public 192.168.1.1 1.3.6.1.2.1.1.5
 
-<span class="c1"># Uptime:</span>
-snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">1</span>.3.6.1.2.1.1.3
+# Uptime:
+snmpwalk -v 2c -c public 192.168.1.1 1.3.6.1.2.1.1.3
 
-<span class="c1"># System contact:</span>
-snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">1</span>.3.6.1.2.1.1.4
+# System contact:
+snmpwalk -v 2c -c public 192.168.1.1 1.3.6.1.2.1.1.4
 
-<span class="c1"># System location:</span>
-snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">1</span>.3.6.1.2.1.1.6
+# System location:
+snmpwalk -v 2c -c public 192.168.1.1 1.3.6.1.2.1.1.6
 </code></pre>
 </div>
 
 <h3 id="4-enumerate-network-interfaces">4. <strong>Enumerate Network Interfaces</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">1</span>.3.6.1.2.1.2
+<pre><code>snmpwalk -v 2c -c public 192.168.1.1 1.3.6.1.2.1.2
 </code></pre>
 </div>
 
@@ -281,7 +270,7 @@ snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </s
 <h3 id="5-list-running-processes">5. <strong>List Running Processes</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">1</span>.3.6.1.2.1.25.4.2
+<pre><code>snmpwalk -v 2c -c public 192.168.1.1 1.3.6.1.2.1.25.4.2
 </code></pre>
 </div>
 
@@ -293,7 +282,7 @@ snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </s
 <h3 id="6-check-disk-usage">6. <strong>Check Disk Usage</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">1</span>.3.6.1.2.1.25.2
+<pre><code>snmpwalk -v 2c -c public 192.168.1.1 1.3.6.1.2.1.25.2
 </code></pre>
 </div>
 
@@ -306,14 +295,14 @@ snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </s
 <h3 id="7-get-filedirectory-information">7. <strong>Get File/Directory Information</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">1</span>.3.6.1.2.1.25.3.4.1
+<pre><code>snmpwalk -v 2c -c public 192.168.1.1 1.3.6.1.2.1.25.3.4.1
 </code></pre>
 </div>
 
 <h3 id="8-list-installed-software">8. <strong>List Installed Software</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">1</span>.3.6.1.2.1.25.6.3
+<pre><code>snmpwalk -v 2c -c public 192.168.1.1 1.3.6.1.2.1.25.6.3
 </code></pre>
 </div>
 
@@ -324,7 +313,7 @@ snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </s
 <h3 id="9-snmpv1-enumeration">9. <strong>SNMPv1 Enumeration</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>snmpwalk<span class="w"> </span>-v<span class="w"> </span><span class="m">1</span><span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1
+<pre><code>snmpwalk -v 1 -c public 192.168.1.1
 </code></pre>
 </div>
 
@@ -336,14 +325,14 @@ snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </s
 <p>Get everything the device will show (might be slow).</p>
 
 <div class="codehilite">
-<pre><span></span><code>snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">1</span>.3.6.1
+<pre><code>snmpwalk -v 2c -c public 192.168.1.1 1.3.6.1
 </code></pre>
 </div>
 
 <h3 id="11-specific-value-query-single-oid">11. <strong>Specific Value Query (Single OID)</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>snmpget<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">1</span>.3.6.1.2.1.1.1.0
+<pre><code>snmpget -v 2c -c public 192.168.1.1 1.3.6.1.2.1.1.1.0
 </code></pre>
 </div>
 
@@ -353,7 +342,7 @@ snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </s
 <h3 id="12-bulk-walk-faster">12. <strong>Bulk Walk (Faster)</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>snmpbulkwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">1</span>.3.6.1.2.1
+<pre><code>snmpbulkwalk -v 2c -c public 192.168.1.1 1.3.6.1.2.1
 </code></pre>
 </div>
 
@@ -362,7 +351,7 @@ snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </s
 <p>If community string has write access:</p>
 
 <div class="codehilite">
-<pre><span></span><code>snmpset<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>private<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">1</span>.3.6.1.2.1.1.4.0<span class="w"> </span>s<span class="w"> </span><span class="s2">&quot;new value&quot;</span>
+<pre><code>snmpset -v 2c -c private 192.168.1.1 1.3.6.1.2.1.1.4.0 s &quot;new value&quot;
 </code></pre>
 </div>
 
@@ -423,26 +412,26 @@ snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </s
 <h3 id="complete-snmp-enumeration-workflow">Complete SNMP Enumeration Workflow</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Check if SNMP is open:</span>
-nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">161</span><span class="w"> </span>-u<span class="w"> </span><span class="m">192</span>.168.1.0/24<span class="w"> </span>-sU
+<pre><code># Step 1: Check if SNMP is open:
+nmap -p 161 -u 192.168.1.0/24 -sU
 
-<span class="c1"># Step 2: Try to enumerate each device:</span>
-<span class="k">for</span><span class="w"> </span>host<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">192</span>.168.1.<span class="o">{</span><span class="m">1</span>,5,10,15<span class="o">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;[*] Checking </span><span class="nv">$host</span><span class="s2">&quot;</span>
+# Step 2: Try to enumerate each device:
+for host in 192.168.1.{1,5,10,15}; do
+  echo &quot;[*] Checking $host&quot;
 
-<span class="w">  </span><span class="c1"># Try different community strings:</span>
-<span class="w">  </span><span class="k">for</span><span class="w"> </span>community<span class="w"> </span><span class="k">in</span><span class="w"> </span>public<span class="w"> </span>private<span class="w"> </span>guest<span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">    </span><span class="nv">result</span><span class="o">=</span><span class="k">$(</span>snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$community</span><span class="s2">&quot;</span><span class="w"> </span><span class="nv">$host</span><span class="w"> </span><span class="m">1</span>.3.6.1.2.1.1.1.0<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="k">)</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="nv">$result</span><span class="w"> </span>!<span class="o">=</span><span class="w"> </span>*<span class="s2">&quot;Timeout&quot;</span>*<span class="w"> </span><span class="o">]]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span>!<span class="w"> </span>-z<span class="w"> </span><span class="nv">$result</span><span class="w"> </span><span class="o">]]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="w">      </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;[+] SUCCESS: </span><span class="nv">$community</span><span class="s2">&quot;</span>
-<span class="w">      </span>snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$community</span><span class="s2">&quot;</span><span class="w"> </span><span class="nv">$host</span><span class="w"> </span><span class="m">1</span>.3.6.1.2.1.1<span class="w"> </span>&gt;<span class="w"> </span>snmp_<span class="nv">$host</span>.txt
-<span class="w">      </span><span class="k">break</span>
-<span class="w">    </span><span class="k">fi</span>
-<span class="w">  </span><span class="k">done</span>
-<span class="k">done</span>
+  # Try different community strings:
+  for community in public private guest &quot;&quot;; do
+    result=$(snmpwalk -v 2c -c &quot;$community&quot; $host 1.3.6.1.2.1.1.1.0 2&gt;&amp;1)
+    if [[ $result != *&quot;Timeout&quot;* ]] &amp;&amp; [[ ! -z $result ]]; then
+      echo &quot;[+] SUCCESS: $community&quot;
+      snmpwalk -v 2c -c &quot;$community&quot; $host 1.3.6.1.2.1.1 &gt; snmp_$host.txt
+      break
+    fi
+  done
+done
 
-<span class="c1"># Step 3: Analyze results:</span>
-cat<span class="w"> </span>snmp_*.txt
+# Step 3: Analyze results:
+cat snmp_*.txt
 </code></pre>
 </div>
 
@@ -453,87 +442,87 @@ cat<span class="w"> </span>snmp_*.txt
 <h3 id="example-1-cisco-router-enumeration">Example 1: Cisco Router Enumeration</h3>
 
 <div class="codehilite">
-<pre><span></span><code>snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1
+<pre><code>snmpwalk -v 2c -c public 192.168.1.1
 
-<span class="c1"># Typical output:</span>
-<span class="c1"># Cisco IOS Software, Version 12.2(58)SE2</span>
-<span class="c1"># Hostname: router1</span>
-<span class="c1"># Uptime: 68 days, 22:41:08</span>
-<span class="c1"># Location: Building A, Floor 3</span>
-<span class="c1"># Contact: admin@company.com</span>
+# Typical output:
+# Cisco IOS Software, Version 12.2(58)SE2
+# Hostname: router1
+# Uptime: 68 days, 22:41:08
+# Location: Building A, Floor 3
+# Contact: admin@company.com
 </code></pre>
 </div>
 
 <h3 id="example-2-find-and-identify-all-snmp-devices">Example 2: Find and Identify All SNMP Devices</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="ch">#!/bin/bash</span>
-<span class="c1"># snmp_scan.sh</span>
+<pre><code>#!/bin/bash
+# snmp_scan.sh
 
-<span class="k">for</span><span class="w"> </span>host<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">192</span>.168.1.<span class="o">{</span><span class="m">1</span>..254<span class="o">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span><span class="o">(</span>
-<span class="w">    </span><span class="nv">result</span><span class="o">=</span><span class="k">$(</span>snmpget<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span>-O<span class="w"> </span>qv<span class="w"> </span><span class="nv">$host</span><span class="w"> </span><span class="m">1</span>.3.6.1.2.1.1.1.0<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="k">)</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="nv">$result</span><span class="w"> </span>!<span class="o">=</span><span class="w"> </span>*<span class="s2">&quot;Timeout&quot;</span>*<span class="w"> </span><span class="o">]]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span>!<span class="w"> </span>-z<span class="w"> </span><span class="nv">$result</span><span class="w"> </span><span class="o">]]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="w">      </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$host</span><span class="s2">: </span><span class="nv">$result</span><span class="s2">&quot;</span>
-<span class="w">    </span><span class="k">fi</span>
-<span class="w">  </span><span class="o">)</span><span class="w"> </span><span class="p">&amp;</span>
-<span class="k">done</span>
-<span class="nb">wait</span>
+for host in 192.168.1.{1..254}; do
+  (
+    result=$(snmpget -v 2c -c public -O qv $host 1.3.6.1.2.1.1.1.0 2&gt;&amp;1)
+    if [[ $result != *&quot;Timeout&quot;* ]] &amp;&amp; [[ ! -z $result ]]; then
+      echo &quot;$host: $result&quot;
+    fi
+  ) &amp;
+done
+wait
 </code></pre>
 </div>
 
 <h3 id="example-3-extract-sensitive-information">Example 3: Extract Sensitive Information</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="nv">SNMP_HOST</span><span class="o">=</span><span class="s2">&quot;192.168.1.1&quot;</span>
+<pre><code>SNMP_HOST=&quot;192.168.1.1&quot;
 
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;=== SNMP Enumeration Results ===&quot;</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;System Description:&quot;</span>
-snmpget<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span>-Oqv<span class="w"> </span><span class="nv">$SNMP_HOST</span><span class="w"> </span><span class="m">1</span>.3.6.1.2.1.1.1.0
+echo &quot;=== SNMP Enumeration Results ===&quot;
+echo &quot;&quot;
+echo &quot;System Description:&quot;
+snmpget -v 2c -c public -Oqv $SNMP_HOST 1.3.6.1.2.1.1.1.0
 
-<span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;\nHostname:&quot;</span>
-snmpget<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span>-Oqv<span class="w"> </span><span class="nv">$SNMP_HOST</span><span class="w"> </span><span class="m">1</span>.3.6.1.2.1.1.5.0
+echo -e &quot;\nHostname:&quot;
+snmpget -v 2c -c public -Oqv $SNMP_HOST 1.3.6.1.2.1.1.5.0
 
-<span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;\nContact:&quot;</span>
-snmpget<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span>-Oqv<span class="w"> </span><span class="nv">$SNMP_HOST</span><span class="w"> </span><span class="m">1</span>.3.6.1.2.1.1.4.0
+echo -e &quot;\nContact:&quot;
+snmpget -v 2c -c public -Oqv $SNMP_HOST 1.3.6.1.2.1.1.4.0
 
-<span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;\nLocation:&quot;</span>
-snmpget<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span>-Oqv<span class="w"> </span><span class="nv">$SNMP_HOST</span><span class="w"> </span><span class="m">1</span>.3.6.1.2.1.1.6.0
+echo -e &quot;\nLocation:&quot;
+snmpget -v 2c -c public -Oqv $SNMP_HOST 1.3.6.1.2.1.1.6.0
 
-<span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;\nUptime:&quot;</span>
-snmpget<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span>-Oqv<span class="w"> </span><span class="nv">$SNMP_HOST</span><span class="w"> </span><span class="m">1</span>.3.6.1.2.1.1.3.0
+echo -e &quot;\nUptime:&quot;
+snmpget -v 2c -c public -Oqv $SNMP_HOST 1.3.6.1.2.1.1.3.0
 
-<span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;\nRunning Processes:&quot;</span>
-snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span>-Oqv<span class="w"> </span><span class="nv">$SNMP_HOST</span><span class="w"> </span><span class="m">1</span>.3.6.1.2.1.25.4.2<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-20
+echo -e &quot;\nRunning Processes:&quot;
+snmpwalk -v 2c -c public -Oqv $SNMP_HOST 1.3.6.1.2.1.25.4.2 | head -20
 
-<span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;\nDisk Usage:&quot;</span>
-snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span>-Oqv<span class="w"> </span><span class="nv">$SNMP_HOST</span><span class="w"> </span><span class="m">1</span>.3.6.1.2.1.25.2.3.1.3
+echo -e &quot;\nDisk Usage:&quot;
+snmpwalk -v 2c -c public -Oqv $SNMP_HOST 1.3.6.1.2.1.25.2.3.1.3
 </code></pre>
 </div>
 
 <h3 id="example-4-snmp-community-string-brute-force">Example 4: SNMP Community String Brute Force</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="ch">#!/bin/bash</span>
-<span class="c1"># snmp_brute.sh</span>
+<pre><code>#!/bin/bash
+# snmp_brute.sh
 
-<span class="nv">HOST</span><span class="o">=</span><span class="nv">$1</span>
-<span class="nv">WORDLIST</span><span class="o">=</span><span class="nv">$2</span>
+HOST=$1
+WORDLIST=$2
 
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;[*] SNMP Community String Brute Force on </span><span class="nv">$HOST</span><span class="s2">&quot;</span>
+echo &quot;[*] SNMP Community String Brute Force on $HOST&quot;
 
-cat<span class="w"> </span><span class="nv">$WORDLIST</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="nb">read</span><span class="w"> </span>community<span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span><span class="nv">result</span><span class="o">=</span><span class="k">$(</span>snmpget<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$community</span><span class="s2">&quot;</span><span class="w"> </span>-O<span class="w"> </span>qv<span class="w"> </span><span class="nv">$HOST</span><span class="w"> </span><span class="m">1</span>.3.6.1.2.1.1.1.0<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="k">)</span>
+cat $WORDLIST | while read community; do
+  result=$(snmpget -v 2c -c &quot;$community&quot; -O qv $HOST 1.3.6.1.2.1.1.1.0 2&gt;&amp;1)
 
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="nv">$result</span><span class="w"> </span>!<span class="o">=</span><span class="w"> </span>*<span class="s2">&quot;Timeout&quot;</span>*<span class="w"> </span><span class="o">]]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span>!<span class="w"> </span>-z<span class="w"> </span><span class="nv">$result</span><span class="w"> </span><span class="o">]]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;[+] Found: </span><span class="nv">$community</span><span class="s2">&quot;</span>
-<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;    Response: </span><span class="nv">$result</span><span class="s2">&quot;</span>
-<span class="w">  </span><span class="k">fi</span>
-<span class="k">done</span>
+  if [[ $result != *&quot;Timeout&quot;* ]] &amp;&amp; [[ ! -z $result ]]; then
+    echo &quot;[+] Found: $community&quot;
+    echo &quot;    Response: $result&quot;
+  fi
+done
 
-<span class="c1"># Run:</span>
-<span class="c1"># ./snmp_brute.sh 192.168.1.1 /usr/share/wordlists/snmp.txt</span>
+# Run:
+# ./snmp_brute.sh 192.168.1.1 /usr/share/wordlists/snmp.txt
 </code></pre>
 </div>
 
@@ -544,41 +533,41 @@ cat<span class="w"> </span><span class="nv">$WORDLIST</span><span class="w"> </s
 <h3 id="1-snmp-version-detection">1. <strong>SNMP Version Detection</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Try SNMPv1:</span>
-snmpwalk<span class="w"> </span>-v<span class="w"> </span><span class="m">1</span><span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">1</span>.3.6.1.2.1.1.1
+<pre><code># Try SNMPv1:
+snmpwalk -v 1 -c public 192.168.1.1 1.3.6.1.2.1.1.1
 
-<span class="c1"># Try SNMPv2c:</span>
-snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">1</span>.3.6.1.2.1.1.1
+# Try SNMPv2c:
+snmpwalk -v 2c -c public 192.168.1.1 1.3.6.1.2.1.1.1
 
-<span class="c1"># Try SNMPv3 (encrypted):</span>
-snmpwalk<span class="w"> </span>-v<span class="w"> </span><span class="m">3</span><span class="w"> </span>-u<span class="w"> </span>username<span class="w"> </span>-A<span class="w"> </span>password<span class="w"> </span><span class="m">192</span>.168.1.1
+# Try SNMPv3 (encrypted):
+snmpwalk -v 3 -u username -A password 192.168.1.1
 </code></pre>
 </div>
 
 <h3 id="2-extract-routing-table">2. <strong>Extract Routing Table</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Learn network topology:</span>
-snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">1</span>.3.6.1.2.1.4.21.1
-<span class="c1"># Shows all routes known by device</span>
+<pre><code># Learn network topology:
+snmpwalk -v 2c -c public 192.168.1.1 1.3.6.1.2.1.4.21.1
+# Shows all routes known by device
 </code></pre>
 </div>
 
 <h3 id="3-arp-table-enumeration">3. <strong>ARP Table Enumeration</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Discover all devices on network:</span>
-snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">1</span>.3.6.1.2.1.3.1.1.2
-<span class="c1"># Shows MAC -&gt; IP mappings</span>
+<pre><code># Discover all devices on network:
+snmpwalk -v 2c -c public 192.168.1.1 1.3.6.1.2.1.3.1.1.2
+# Shows MAC -&gt; IP mappings
 </code></pre>
 </div>
 
 <h3 id="4-installed-software-discovery">4. <strong>Installed Software Discovery</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Find what software is running:</span>
-snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">1</span>.3.6.1.2.1.25.6.3.1.2
-<span class="c1"># Useful for searching CVEs</span>
+<pre><code># Find what software is running:
+snmpwalk -v 2c -c public 192.168.1.1 1.3.6.1.2.1.25.6.3.1.2
+# Useful for searching CVEs
 </code></pre>
 </div>
 
@@ -589,44 +578,44 @@ snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </s
 <h3 id="quick-reference-one-liners">Quick Reference One-Liners</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Test if SNMP responds:</span>
-snmpget<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span>-O<span class="w"> </span>qv<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">1</span>.3.6.1.2.1.1.1.0
+<pre><code># Test if SNMP responds:
+snmpget -v 2c -c public -O qv 192.168.1.1 1.3.6.1.2.1.1.1.0
 
-<span class="c1"># Get system description:</span>
-snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">1</span>.3.6.1.2.1.1.1
+# Get system description:
+snmpwalk -v 2c -c public 192.168.1.1 1.3.6.1.2.1.1.1
 
-<span class="c1"># Get hostname:</span>
-snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">1</span>.3.6.1.2.1.1.5
+# Get hostname:
+snmpwalk -v 2c -c public 192.168.1.1 1.3.6.1.2.1.1.5
 
-<span class="c1"># List processes:</span>
-snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">1</span>.3.6.1.2.1.25.4.2
+# List processes:
+snmpwalk -v 2c -c public 192.168.1.1 1.3.6.1.2.1.25.4.2
 
-<span class="c1"># Check disk space:</span>
-snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">1</span>.3.6.1.2.1.25.2
+# Check disk space:
+snmpwalk -v 2c -c public 192.168.1.1 1.3.6.1.2.1.25.2
 
-<span class="c1"># Test multiple hosts:</span>
-<span class="k">for</span><span class="w"> </span>host<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">192</span>.168.1.<span class="o">{</span><span class="m">1</span>,2,5,10<span class="o">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;=== </span><span class="nv">$host</span><span class="s2"> ===&quot;</span>
-<span class="w">  </span>snmpget<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span>-O<span class="w"> </span>qv<span class="w"> </span><span class="nv">$host</span><span class="w"> </span><span class="m">1</span>.3.6.1.2.1.1.5.0
-<span class="k">done</span>
+# Test multiple hosts:
+for host in 192.168.1.{1,2,5,10}; do
+  echo &quot;=== $host ===&quot;
+  snmpget -v 2c -c public -O qv $host 1.3.6.1.2.1.1.5.0
+done
 
-<span class="c1"># Full walk to file:</span>
-snmpwalk<span class="w"> </span>-v<span class="w"> </span>2c<span class="w"> </span>-c<span class="w"> </span>public<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">1</span>.3.6.1<span class="w"> </span>&gt;<span class="w"> </span>snmp_dump.txt
+# Full walk to file:
+snmpwalk -v 2c -c public 192.168.1.1 1.3.6.1 &gt; snmp_dump.txt
 </code></pre>
 </div>
 
 <h3 id="default-community-strings-to-try">Default Community Strings to Try</h3>
 
 <div class="codehilite">
-<pre><span></span><code>public<span class="w">        </span><span class="c1"># Most common, read-only</span>
-private<span class="w">       </span><span class="c1"># Sometimes set, read-write</span>
-guest<span class="w">         </span><span class="c1"># Sometimes set</span>
-comunidad<span class="w">     </span><span class="c1"># Spanish</span>
-manager<span class="w">       </span><span class="c1"># Sometimes set</span>
-snmp<span class="w">          </span><span class="c1"># Sometimes set</span>
-<span class="s2">&quot;&quot;</span><span class="w">            </span><span class="c1"># Empty string</span>
-<span class="m">1234</span><span class="w">          </span><span class="c1"># Weak password</span>
-<span class="m">12345</span><span class="w">         </span><span class="c1"># Weak password</span>
+<pre><code>public        # Most common, read-only
+private       # Sometimes set, read-write
+guest         # Sometimes set
+comunidad     # Spanish
+manager       # Sometimes set
+snmp          # Sometimes set
+&quot;&quot;            # Empty string
+1234          # Weak password
+12345         # Weak password
 </code></pre>
 </div>
 

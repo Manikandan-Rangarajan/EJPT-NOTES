@@ -87,17 +87,6 @@
         a:hover {
             text-decoration: underline;
         }
-        /* Force all syntax highlighting spans to black */
-        .codehilite pre span,
-        .codehilite pre span.c, .codehilite pre span.c1, .codehilite pre span.ch,
-        .codehilite pre span.k, .codehilite pre span.kd, .codehilite pre span.kr,
-        .codehilite pre span.m, .codehilite pre span.mi,
-        .codehilite pre span.n, .codehilite pre span.nb, .codehilite pre span.nc, .codehilite pre span.nf, .codehilite pre span.nv,
-        .codehilite pre span.o,
-        .codehilite pre span.p, .codehilite pre span.py,
-        .codehilite pre span.s, .codehilite pre span.s1, .codehilite pre span.s2, .codehilite pre span.se,
-        .codehilite pre span.w { color: #000000 !important; }
-        pre span { color: #000000 !important; }
         @media print {
             body { margin: 0; padding: 10px; }
             pre { page-break-inside: avoid; }
@@ -131,16 +120,16 @@
 <h3 id="cachyosarch-linux-installation">CachyOS/Arch Linux Installation</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Install Burp Suite Community Edition</span>
-yay<span class="w"> </span>-S<span class="w"> </span>burp-suite-community
+<pre><code># Install Burp Suite Community Edition
+yay -S burp-suite-community
 
-<span class="c1"># Or via pacman if available</span>
-sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>burp-suite-community
+# Or via pacman if available
+sudo pacman -S burp-suite-community
 
-<span class="c1"># Verify installation</span>
-burpsuite<span class="w"> </span>--version
+# Verify installation
+burpsuite --version
 
-<span class="c1"># Launch</span>
+# Launch
 burpsuite
 </code></pre>
 </div>
@@ -148,15 +137,15 @@ burpsuite
 <h3 id="windows-installation">Windows Installation</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c"># Option 1: Chocolatey</span>
-<span class="n">choco</span> <span class="n">install</span> <span class="n">burpsuite-community</span>
+<pre><code># Option 1: Chocolatey
+choco install burpsuite-community
 
-<span class="c"># Option 2: Direct download</span>
-<span class="c"># Visit: https://portswigger.net/burp/communitydownload</span>
-<span class="c"># Download and run installer</span>
+# Option 2: Direct download
+# Visit: https://portswigger.net/burp/communitydownload
+# Download and run installer
 
-<span class="c"># Option 3: Docker</span>
-<span class="n">docker</span> <span class="n">run</span> <span class="n">-it</span> <span class="p">-</span><span class="n">-rm</span> <span class="n">-p</span> <span class="n">8080</span><span class="p">:</span><span class="n">8080</span> <span class="n">portswigger</span><span class="p">/</span><span class="n">burpsuite-community</span>
+# Option 3: Docker
+docker run -it --rm -p 8080:8080 portswigger/burpsuite-community
 </code></pre>
 </div>
 
@@ -173,27 +162,27 @@ burpsuite
 <p><strong>Chrome Setup</strong>:</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Use with proxy</span>
-google-chrome<span class="w"> </span>--proxy-server<span class="o">=</span><span class="s2">&quot;http://127.0.0.1:8080&quot;</span>
+<pre><code># Use with proxy
+google-chrome --proxy-server=&quot;http://127.0.0.1:8080&quot;
 
-<span class="c1"># Or configure system-wide proxy</span>
+# Or configure system-wide proxy
 </code></pre>
 </div>
 
 <h3 id="burp-ca-certificate-installation">Burp CA Certificate Installation</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Export CA certificate from Burp</span>
-<span class="c1"># 1. In Burp: Settings &gt; Certificates &gt; Export certificate</span>
-<span class="c1"># 2. Save as burp.crt</span>
+<pre><code># Export CA certificate from Burp
+# 1. In Burp: Settings &gt; Certificates &gt; Export certificate
+# 2. Save as burp.crt
 
-<span class="c1"># Firefox import</span>
-<span class="c1"># 1. Preferences &gt; Advanced &gt; Certificates &gt; View Certificates</span>
-<span class="c1"># 2. Authorities tab &gt; Import &gt; Select burp.crt</span>
+# Firefox import
+# 1. Preferences &gt; Advanced &gt; Certificates &gt; View Certificates
+# 2. Authorities tab &gt; Import &gt; Select burp.crt
 
-<span class="c1"># Linux system-wide</span>
-sudo<span class="w"> </span>cp<span class="w"> </span>burp.crt<span class="w"> </span>/usr/local/share/ca-certificates/
-sudo<span class="w"> </span>update-ca-certificates
+# Linux system-wide
+sudo cp burp.crt /usr/local/share/ca-certificates/
+sudo update-ca-certificates
 </code></pre>
 </div>
 
@@ -330,24 +319,24 @@ sudo<span class="w"> </span>update-ca-certificates
 <p><strong>Scenario</strong>: Configure Burp as proxy and intercept first request.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Start Burp Suite</span>
-burpsuite<span class="w"> </span><span class="p">&amp;</span>
+<pre><code># Step 1: Start Burp Suite
+burpsuite &amp;
 
-<span class="c1"># Step 2: Configure proxy (Proxy &gt; Intercept &gt; Intercept is on)</span>
+# Step 2: Configure proxy (Proxy &gt; Intercept &gt; Intercept is on)
 
-<span class="c1"># Step 3: Configure browser proxy to 127.0.0.1:8080</span>
+# Step 3: Configure browser proxy to 127.0.0.1:8080
 
-<span class="c1"># Step 4: Navigate to website in browser</span>
-<span class="c1"># http://vulnerable.site.com/login</span>
+# Step 4: Navigate to website in browser
+# http://vulnerable.site.com/login
 
-<span class="c1"># Step 5: In Burp, intercept appears</span>
-<span class="c1"># GET /login HTTP/1.1</span>
-<span class="c1"># Host: vulnerable.site.com</span>
-<span class="c1"># User-Agent: Mozilla/5.0...</span>
+# Step 5: In Burp, intercept appears
+# GET /login HTTP/1.1
+# Host: vulnerable.site.com
+# User-Agent: Mozilla/5.0...
 
-<span class="c1"># Step 6: Modify or forward</span>
-<span class="c1"># Click &quot;Forward&quot; to send to server</span>
-<span class="c1"># Or modify and click &quot;Forward&quot;</span>
+# Step 6: Modify or forward
+# Click &quot;Forward&quot; to send to server
+# Or modify and click &quot;Forward&quot;
 </code></pre>
 </div>
 
@@ -356,22 +345,22 @@ burpsuite<span class="w"> </span><span class="p">&amp;</span>
 <p><strong>Scenario</strong>: Test login form for SQL injection vulnerability.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Intercept login request</span>
-<span class="c1"># POST /login HTTP/1.1</span>
-<span class="c1"># username=admin&amp;password=password</span>
+<pre><code># Step 1: Intercept login request
+# POST /login HTTP/1.1
+# username=admin&amp;password=password
 
-<span class="c1"># Step 2: Modify in Repeater</span>
-<span class="c1"># Tools &gt; Repeater &gt; Send to Repeater</span>
+# Step 2: Modify in Repeater
+# Tools &gt; Repeater &gt; Send to Repeater
 
-<span class="c1"># Step 3: Modify username parameter with SQLi payload</span>
-<span class="c1"># username=admin&#39; OR &#39;1&#39;=&#39;1&amp;password=anything</span>
+# Step 3: Modify username parameter with SQLi payload
+# username=admin&#39; OR &#39;1&#39;=&#39;1&amp;password=anything
 
-<span class="c1"># Step 4: Click &quot;Send&quot; to test</span>
-<span class="c1"># Analyze response for successful authentication</span>
+# Step 4: Click &quot;Send&quot; to test
+# Analyze response for successful authentication
 
-<span class="c1"># Step 5: Try other SQLi payloads</span>
-<span class="c1"># username=admin&#39;--&amp;password=test</span>
-<span class="c1"># username=admin&#39; #&amp;password=test</span>
+# Step 5: Try other SQLi payloads
+# username=admin&#39;--&amp;password=test
+# username=admin&#39; #&amp;password=test
 </code></pre>
 </div>
 
@@ -380,27 +369,27 @@ burpsuite<span class="w"> </span><span class="p">&amp;</span>
 <p><strong>Scenario</strong>: Find hidden endpoints and parameters via brute force.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Capture request in Repeater</span>
-<span class="c1"># GET /index.php?user=test&amp;id=1 HTTP/1.1</span>
+<pre><code># Step 1: Capture request in Repeater
+# GET /index.php?user=test&amp;id=1 HTTP/1.1
 
-<span class="c1"># Step 2: Use Intruder &gt; Send to Intruder</span>
+# Step 2: Use Intruder &gt; Send to Intruder
 
-<span class="c1"># Step 3: Set attack type</span>
-<span class="c1"># Intruder &gt; Attack type: Cluster bomb</span>
+# Step 3: Set attack type
+# Intruder &gt; Attack type: Cluster bomb
 
-<span class="c1"># Step 4: Mark positions (highlight parameters)</span>
-<span class="c1"># Positions: user=§test§&amp;id=§1§</span>
+# Step 4: Mark positions (highlight parameters)
+# Positions: user=§test§&amp;id=§1§
 
-<span class="c1"># Step 5: Configure payloads</span>
-<span class="c1"># Payload set 1: Common usernames</span>
-<span class="c1"># Payload set 2: Common IDs</span>
-<span class="c1"># Load from built-in wordlists</span>
+# Step 5: Configure payloads
+# Payload set 1: Common usernames
+# Payload set 2: Common IDs
+# Load from built-in wordlists
 
-<span class="c1"># Step 6: Start attack</span>
-<span class="c1"># Intruder &gt; Start attack</span>
+# Step 6: Start attack
+# Intruder &gt; Start attack
 
-<span class="c1"># Step 7: Analyze results</span>
-<span class="c1"># Look for different response codes/sizes</span>
+# Step 7: Analyze results
+# Look for different response codes/sizes
 </code></pre>
 </div>
 
@@ -409,26 +398,26 @@ burpsuite<span class="w"> </span><span class="p">&amp;</span>
 <p><strong>Scenario</strong>: Test authentication by analyzing session cookies.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Intercept login request</span>
+<pre><code># Step 1: Intercept login request
 
-<span class="c1"># Step 2: Forward through login process</span>
-<span class="c1"># Watch for Set-Cookie header</span>
+# Step 2: Forward through login process
+# Watch for Set-Cookie header
 
-<span class="c1"># Step 3: In Repeater, modify cookie</span>
-<span class="c1"># GET /admin HTTP/1.1</span>
-<span class="c1"># Cookie: session=ORIGINAL_COOKIE</span>
+# Step 3: In Repeater, modify cookie
+# GET /admin HTTP/1.1
+# Cookie: session=ORIGINAL_COOKIE
 
-<span class="c1"># Step 4: Test various modifications</span>
-<span class="c1"># Change session cookie value (even one character)</span>
-<span class="c1"># Observe if server accepts modified session</span>
+# Step 4: Test various modifications
+# Change session cookie value (even one character)
+# Observe if server accepts modified session
 
-<span class="c1"># Step 5: Test cookie expiration</span>
-<span class="c1"># Remove cookie entirely</span>
-<span class="c1"># Send request - should be denied</span>
+# Step 5: Test cookie expiration
+# Remove cookie entirely
+# Send request - should be denied
 
-<span class="c1"># Step 6: Test cookie randomness</span>
-<span class="c1"># Make multiple logins</span>
-<span class="c1"># Analyze cookie values for predictability</span>
+# Step 6: Test cookie randomness
+# Make multiple logins
+# Analyze cookie values for predictability
 </code></pre>
 </div>
 
@@ -437,25 +426,25 @@ burpsuite<span class="w"> </span><span class="p">&amp;</span>
 <p><strong>Scenario</strong>: Test user input fields for XSS vulnerability.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Find input parameter (search, comment, profile, etc.)</span>
-<span class="c1"># GET /search?q=test HTTP/1.1</span>
+<pre><code># Step 1: Find input parameter (search, comment, profile, etc.)
+# GET /search?q=test HTTP/1.1
 
-<span class="c1"># Step 2: Send to Repeater</span>
+# Step 2: Send to Repeater
 
-<span class="c1"># Step 3: Test with XSS payload</span>
-<span class="c1"># GET /search?q=&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt; HTTP/1.1</span>
+# Step 3: Test with XSS payload
+# GET /search?q=&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt; HTTP/1.1
 
-<span class="c1"># Step 4: In response, look for:</span>
-<span class="c1"># - Unescaped &lt;script&gt; tag</span>
-<span class="c1"># - No Content Security Policy header</span>
+# Step 4: In response, look for:
+# - Unescaped &lt;script&gt; tag
+# - No Content Security Policy header
 
-<span class="c1"># Step 5: Test encoded payloads</span>
-<span class="c1"># GET /search?q=%3Cscript%3Ealert(&#39;XSS&#39;)%3C/script%3E HTTP/1.1</span>
+# Step 5: Test encoded payloads
+# GET /search?q=%3Cscript%3Ealert(&#39;XSS&#39;)%3C/script%3E HTTP/1.1
 
-<span class="c1"># Step 6: Test other contexts</span>
-<span class="c1"># HTML: &lt;img src=x onerror=&quot;alert(&#39;XSS&#39;)&quot;&gt;</span>
-<span class="c1"># JavaScript: &quot;;alert(&#39;XSS&#39;);//</span>
-<span class="c1"># Event handler: &lt;svg onload=&quot;alert(&#39;XSS&#39;)&quot;&gt;</span>
+# Step 6: Test other contexts
+# HTML: &lt;img src=x onerror=&quot;alert(&#39;XSS&#39;)&quot;&gt;
+# JavaScript: &quot;;alert(&#39;XSS&#39;);//
+# Event handler: &lt;svg onload=&quot;alert(&#39;XSS&#39;)&quot;&gt;
 </code></pre>
 </div>
 
@@ -464,26 +453,26 @@ burpsuite<span class="w"> </span><span class="p">&amp;</span>
 <p><strong>Scenario</strong>: Automated scan for common vulnerabilities.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Define target scope</span>
-<span class="c1"># Target &gt; Scope &gt; Add</span>
-<span class="c1"># URL: http://vulnerable.site.com</span>
+<pre><code># Step 1: Define target scope
+# Target &gt; Scope &gt; Add
+# URL: http://vulnerable.site.com
 
-<span class="c1"># Step 2: Right-click target</span>
-<span class="c1"># Scan &gt; Active scan</span>
+# Step 2: Right-click target
+# Scan &gt; Active scan
 
-<span class="c1"># Step 3: Configure scan type</span>
-<span class="c1"># Crawl &gt; Choose crawling options</span>
-<span class="c1"># Scan type: Full audit</span>
+# Step 3: Configure scan type
+# Crawl &gt; Choose crawling options
+# Scan type: Full audit
 
-<span class="c1"># Step 4: Start scan</span>
-<span class="c1"># Monitor progress in Scan queue</span>
+# Step 4: Start scan
+# Monitor progress in Scan queue
 
-<span class="c1"># Step 5: Review results</span>
-<span class="c1"># Target &gt; Site map</span>
-<span class="c1"># Items with red indicators = vulnerabilities found</span>
+# Step 5: Review results
+# Target &gt; Site map
+# Items with red indicators = vulnerabilities found
 
-<span class="c1"># Step 6: Analyze each finding</span>
-<span class="c1"># Vulnerability &gt; Details &gt; Proof of concept</span>
+# Step 6: Analyze each finding
+# Vulnerability &gt; Details &gt; Proof of concept
 </code></pre>
 </div>
 
@@ -492,30 +481,30 @@ burpsuite<span class="w"> </span><span class="p">&amp;</span>
 <p><strong>Scenario</strong>: Brute force login credentials.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Capture login POST request</span>
-<span class="c1"># POST /login HTTP/1.1</span>
-<span class="c1"># username=test&amp;password=test</span>
+<pre><code># Step 1: Capture login POST request
+# POST /login HTTP/1.1
+# username=test&amp;password=test
 
-<span class="c1"># Step 2: Send to Intruder</span>
-<span class="c1"># Tools &gt; Intruder &gt; Send to Intruder</span>
+# Step 2: Send to Intruder
+# Tools &gt; Intruder &gt; Send to Intruder
 
-<span class="c1"># Step 3: Mark parameters</span>
-<span class="c1"># Positions: username=§admin§&amp;password=§password§</span>
+# Step 3: Mark parameters
+# Positions: username=§admin§&amp;password=§password§
 
-<span class="c1"># Step 4: Select attack type</span>
-<span class="c1"># Intruder &gt; Attack type: Pitchfork</span>
-<span class="c1"># (Pitchfork uses n:1, Cluster bomb uses all combinations)</span>
+# Step 4: Select attack type
+# Intruder &gt; Attack type: Pitchfork
+# (Pitchfork uses n:1, Cluster bomb uses all combinations)
 
-<span class="c1"># Step 5: Load payload lists</span>
-<span class="c1"># Payloads &gt; Payload type: Simple list</span>
-<span class="c1"># Load usernames.txt</span>
-<span class="c1"># Load passwords.txt for payload 2</span>
+# Step 5: Load payload lists
+# Payloads &gt; Payload type: Simple list
+# Load usernames.txt
+# Load passwords.txt for payload 2
 
-<span class="c1"># Step 6: Start attack</span>
-<span class="c1"># Intruder &gt; Start attack</span>
+# Step 6: Start attack
+# Intruder &gt; Start attack
 
-<span class="c1"># Step 7: Monitor for successful login</span>
-<span class="c1"># Look for Status 302 (redirect) or different response size</span>
+# Step 7: Monitor for successful login
+# Look for Status 302 (redirect) or different response size
 </code></pre>
 </div>
 
@@ -524,23 +513,23 @@ burpsuite<span class="w"> </span><span class="p">&amp;</span>
 <p><strong>Scenario</strong>: Test if CSRF tokens are properly validated.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Capture request with CSRF token</span>
-<span class="c1"># POST /change-password HTTP/1.1</span>
-<span class="c1"># csrf_token=abc123def456&amp;password=newpass</span>
+<pre><code># Step 1: Capture request with CSRF token
+# POST /change-password HTTP/1.1
+# csrf_token=abc123def456&amp;password=newpass
 
-<span class="c1"># Step 2: Send to Repeater multiple times</span>
+# Step 2: Send to Repeater multiple times
 
-<span class="c1"># Step 3: Test modifications:</span>
-<span class="c1"># - Change csrf_token value</span>
-<span class="c1"># - Remove csrf_token entirely</span>
-<span class="c1"># - Reuse old csrf_token from previous request</span>
+# Step 3: Test modifications:
+# - Change csrf_token value
+# - Remove csrf_token entirely
+# - Reuse old csrf_token from previous request
 
-<span class="c1"># Step 4: Analyze responses</span>
-<span class="c1"># If any work (not rejected), CSRF vulnerability exists</span>
+# Step 4: Analyze responses
+# If any work (not rejected), CSRF vulnerability exists
 
-<span class="c1"># Step 5: Test token generation</span>
-<span class="c1"># Multiple requests &gt; Do tokens match?</span>
-<span class="c1"># Test predictability of token generation</span>
+# Step 5: Test token generation
+# Multiple requests &gt; Do tokens match?
+# Test predictability of token generation
 </code></pre>
 </div>
 
@@ -549,25 +538,25 @@ burpsuite<span class="w"> </span><span class="p">&amp;</span>
 <p><strong>Scenario</strong>: Test various authentication bypass techniques.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Intercept authentication request</span>
-<span class="c1"># GET /admin HTTP/1.1</span>
-<span class="c1"># Authorization: Bearer token123</span>
+<pre><code># Step 1: Intercept authentication request
+# GET /admin HTTP/1.1
+# Authorization: Bearer token123
 
-<span class="c1"># Step 2: Test methods of bypass:</span>
-<span class="c1"># - Remove Authorization header entirely</span>
-<span class="c1"># - Change Bearer to bearer (lowercase)</span>
-<span class="c1"># - Add duplicate Authorization header</span>
-<span class="c1"># - Modify token value slightly</span>
-<span class="c1"># - Test null/empty token</span>
+# Step 2: Test methods of bypass:
+# - Remove Authorization header entirely
+# - Change Bearer to bearer (lowercase)
+# - Add duplicate Authorization header
+# - Modify token value slightly
+# - Test null/empty token
 
-<span class="c1"># Step 3: Test bypassing with HTTP method</span>
-<span class="c1"># Try OPTIONS, HEAD instead of GET</span>
-<span class="c1"># Try X-Original-Method header</span>
-<span class="c1"># Try X-Rewrite-URL header</span>
+# Step 3: Test bypassing with HTTP method
+# Try OPTIONS, HEAD instead of GET
+# Try X-Original-Method header
+# Try X-Rewrite-URL header
 
-<span class="c1"># Step 4: Analyze responses</span>
-<span class="c1"># 200 OK = potential bypass</span>
-<span class="c1"># 401/403 = proper denial</span>
+# Step 4: Analyze responses
+# 200 OK = potential bypass
+# 401/403 = proper denial
 </code></pre>
 </div>
 
@@ -576,29 +565,29 @@ burpsuite<span class="w"> </span><span class="p">&amp;</span>
 <p><strong>Scenario</strong>: Test REST API for vulnerabilities.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Monitor API calls in Proxy</span>
-<span class="c1"># Browser makes API requests to /api/users/1</span>
+<pre><code># Step 1: Monitor API calls in Proxy
+# Browser makes API requests to /api/users/1
 
-<span class="c1"># Step 2: Send to Repeater</span>
-<span class="c1"># GET /api/users/1 HTTP/1.1</span>
+# Step 2: Send to Repeater
+# GET /api/users/1 HTTP/1.1
 
-<span class="c1"># Step 3: Test parameter manipulation</span>
-<span class="c1"># GET /api/users/2 (access other user)</span>
-<span class="c1"># GET /api/users/admin (enumerate endpoints)</span>
-<span class="c1"># GET /api/users/999999 (error handling)</span>
+# Step 3: Test parameter manipulation
+# GET /api/users/2 (access other user)
+# GET /api/users/admin (enumerate endpoints)
+# GET /api/users/999999 (error handling)
 
-<span class="c1"># Step 4: Test missing authentication</span>
-<span class="c1"># Remove Authorization header</span>
-<span class="c1"># Send request - should fail</span>
+# Step 4: Test missing authentication
+# Remove Authorization header
+# Send request - should fail
 
-<span class="c1"># Step 5: Test method manipulation</span>
-<span class="c1"># Try DELETE, PUT, PATCH methods</span>
-<span class="c1"># POST /api/users/1 with body {&quot;role&quot;:&quot;admin&quot;}</span>
-<span class="c1"># See if privilege escalation possible</span>
+# Step 5: Test method manipulation
+# Try DELETE, PUT, PATCH methods
+# POST /api/users/1 with body {&quot;role&quot;:&quot;admin&quot;}
+# See if privilege escalation possible
 
-<span class="c1"># Step 6: Test injection in API</span>
-<span class="c1"># GET /api/users?search=admin&#39; OR &#39;1&#39;=&#39;1</span>
-<span class="c1"># Test SQL injection in API parameters</span>
+# Step 6: Test injection in API
+# GET /api/users?search=admin&#39; OR &#39;1&#39;=&#39;1
+# Test SQL injection in API parameters
 </code></pre>
 </div>
 
@@ -607,27 +596,27 @@ burpsuite<span class="w"> </span><span class="p">&amp;</span>
 <p><strong>Scenario</strong>: Decode captured data or encode payloads.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># In Burp: Tools &gt; Decoder</span>
+<pre><code># In Burp: Tools &gt; Decoder
 
-<span class="c1"># Example 1: Decode Base64</span>
-Input:<span class="w"> </span><span class="nv">dXNlcm5hbWU6cGFzc3dvcmQ</span><span class="o">=</span>
-Click<span class="w"> </span>Decode
-Output:<span class="w"> </span>username:password
+# Example 1: Decode Base64
+Input: dXNlcm5hbWU6cGFzc3dvcmQ=
+Click Decode
+Output: username:password
 
-<span class="c1"># Example 2: URL encode payload</span>
-Input:<span class="w"> </span>&lt;script&gt;alert<span class="o">(</span><span class="s1">&#39;XSS&#39;</span><span class="o">)</span>&lt;/script&gt;
-Smart<span class="w"> </span>decode<span class="w"> </span>&gt;<span class="w"> </span>URL
-Output:<span class="w"> </span>%3Cscript%3Ealert%28%27XSS%27%29%3C%2Fscript%3E
+# Example 2: URL encode payload
+Input: &lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;
+Smart decode &gt; URL
+Output: %3Cscript%3Ealert%28%27XSS%27%29%3C%2Fscript%3E
 
-<span class="c1"># Example 3: HTML encode</span>
-Input:<span class="w"> </span>&lt;b&gt;test&lt;/b&gt;
-Smart<span class="w"> </span>decode<span class="w"> </span>&gt;<span class="w"> </span>HTML
-Output:<span class="w"> </span>&lt;b&gt;test&lt;/b&gt;
+# Example 3: HTML encode
+Input: &lt;b&gt;test&lt;/b&gt;
+Smart decode &gt; HTML
+Output: &lt;b&gt;test&lt;/b&gt;
 
-<span class="c1"># Example 4: Chain encoding (Double encoding)</span>
-Input:<span class="w"> </span>&lt;script&gt;alert<span class="o">(</span><span class="s1">&#39;XSS&#39;</span><span class="o">)</span>&lt;/script&gt;
-Encode<span class="w"> </span>to:<span class="w"> </span>%3Cscript%3E...
-Encode<span class="w"> </span>again:<span class="w"> </span>%253Cscript%253E...
+# Example 4: Chain encoding (Double encoding)
+Input: &lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;
+Encode to: %3Cscript%3E...
+Encode again: %253Cscript%253E...
 </code></pre>
 </div>
 
@@ -636,24 +625,24 @@ Encode<span class="w"> </span>again:<span class="w"> </span>%253Cscript%253E...
 <p><strong>Scenario</strong>: Identify differences between two responses.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Capture two similar requests</span>
-<span class="c1"># Request A: GET /page?id=1</span>
-<span class="c1"># Request B: GET /page?id=2</span>
+<pre><code># Step 1: Capture two similar requests
+# Request A: GET /page?id=1
+# Request B: GET /page?id=2
 
-<span class="c1"># Step 2: Send both to Repeater</span>
-<span class="c1"># Get responses for each</span>
+# Step 2: Send both to Repeater
+# Get responses for each
 
-<span class="c1"># Step 3: Select Response A in Repeater</span>
-<span class="c1"># Copy response</span>
-<span class="c1"># Tools &gt; Comparer &gt; Paste</span>
+# Step 3: Select Response A in Repeater
+# Copy response
+# Tools &gt; Comparer &gt; Paste
 
-<span class="c1"># Step 4: Select Response B in Repeater</span>
-<span class="c1"># Copy response</span>
-<span class="c1"># Tools &gt; Comparer &gt; Paste (in second pane)</span>
+# Step 4: Select Response B in Repeater
+# Copy response
+# Tools &gt; Comparer &gt; Paste (in second pane)
 
-<span class="c1"># Step 5: Compare side-by-side</span>
-<span class="c1"># Comparer shows differences highlighted</span>
-<span class="c1"># Identify timing differences, content variations</span>
+# Step 5: Compare side-by-side
+# Comparer shows differences highlighted
+# Identify timing differences, content variations
 </code></pre>
 </div>
 
@@ -662,25 +651,25 @@ Encode<span class="w"> </span>again:<span class="w"> </span>%253Cscript%253E...
 <p><strong>Scenario</strong>: Test blind vulnerabilities (XXE, SSRF, blind XSS).</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Generate Collaborator payload</span>
-<span class="c1"># Collaborator &gt; Copy to clipboard</span>
-<span class="c1"># Generates: xxxx.burpcollaborator.net</span>
+<pre><code># Step 1: Generate Collaborator payload
+# Collaborator &gt; Copy to clipboard
+# Generates: xxxx.burpcollaborator.net
 
-<span class="c1"># Step 2: Use in XXE payload</span>
-<span class="c1"># POST /upload HTTP/1.1</span>
-<span class="c1"># &lt;?xml version=&quot;1.0&quot;?&gt;</span>
-<span class="c1"># &lt;!DOCTYPE foo [&lt;!ENTITY xxe SYSTEM &quot;http://xxxx.burpcollaborator.net/&quot;&gt;]&gt;</span>
-<span class="c1"># &lt;foo&gt;&amp;xxe;&lt;/foo&gt;</span>
+# Step 2: Use in XXE payload
+# POST /upload HTTP/1.1
+# &lt;?xml version=&quot;1.0&quot;?&gt;
+# &lt;!DOCTYPE foo [&lt;!ENTITY xxe SYSTEM &quot;http://xxxx.burpcollaborator.net/&quot;&gt;]&gt;
+# &lt;foo&gt;&amp;xxe;&lt;/foo&gt;
 
-<span class="c1"># Step 3: Send request</span>
+# Step 3: Send request
 
-<span class="c1"># Step 4: Poll Collaborator</span>
-<span class="c1"># Collaborator &gt; Poll now</span>
-<span class="c1"># Shows any DNS/HTTP callbacks</span>
+# Step 4: Poll Collaborator
+# Collaborator &gt; Poll now
+# Shows any DNS/HTTP callbacks
 
-<span class="c1"># Step 5: Analyze callback details</span>
-<span class="c1"># Shows DNS lookup, HTTP request, details</span>
-<span class="c1"># Confirms vulnerability even without direct response</span>
+# Step 5: Analyze callback details
+# Shows DNS lookup, HTTP request, details
+# Confirms vulnerability even without direct response
 </code></pre>
 </div>
 
@@ -689,33 +678,33 @@ Encode<span class="w"> </span>again:<span class="w"> </span>%253Cscript%253E...
 <p><strong>Scenario</strong>: Discover all application endpoints.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Enable proxy interception</span>
-<span class="c1"># Browse application normally, click links, fill forms</span>
+<pre><code># Step 1: Enable proxy interception
+# Browse application normally, click links, fill forms
 
-<span class="c1"># Step 2: In Target &gt; Site map, view all discovered URLs</span>
+# Step 2: In Target &gt; Site map, view all discovered URLs
 
-<span class="c1"># Step 3: Expand tree structure</span>
-<span class="c1"># Example:</span>
-<span class="c1"># http://vulnerable.site.com/</span>
-<span class="c1">#  ├── login</span>
-<span class="c1">#  ├── admin/</span>
-<span class="c1">#  │   ├── dashboard</span>
-<span class="c1">#  │   ├── users</span>
-<span class="c1">#  │   └── settings</span>
-<span class="c1">#  ├── api/</span>
-<span class="c1">#  │   ├── users</span>
-<span class="c1">#  │   └── posts</span>
-<span class="c1">#  └── uploads</span>
+# Step 3: Expand tree structure
+# Example:
+# http://vulnerable.site.com/
+#  ├── login
+#  ├── admin/
+#  │   ├── dashboard
+#  │   ├── users
+#  │   └── settings
+#  ├── api/
+#  │   ├── users
+#  │   └── posts
+#  └── uploads
 
-<span class="c1"># Step 4: Right-click items</span>
-<span class="c1"># - Send to Scanner (active scan)</span>
-<span class="c1"># - Send to Repeater (manual testing)</span>
-<span class="c1"># - Send to Intruder (fuzzing)</span>
+# Step 4: Right-click items
+# - Send to Scanner (active scan)
+# - Send to Repeater (manual testing)
+# - Send to Intruder (fuzzing)
 
-<span class="c1"># Step 5: Use Scope to focus testing</span>
-<span class="c1"># Target &gt; Scope &gt; Add</span>
-<span class="c1"># Include: http://vulnerable.site.com</span>
-<span class="c1"># Exclude: /logout</span>
+# Step 5: Use Scope to focus testing
+# Target &gt; Scope &gt; Add
+# Include: http://vulnerable.site.com
+# Exclude: /logout
 </code></pre>
 </div>
 
@@ -724,25 +713,25 @@ Encode<span class="w"> </span>again:<span class="w"> </span>%253Cscript%253E...
 <p><strong>Scenario</strong>: Identify potential issues without active scanning.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Set passive scan status</span>
-<span class="c1"># Dashboard &gt; Settings &gt; Passive scanning: On</span>
+<pre><code># Step 1: Set passive scan status
+# Dashboard &gt; Settings &gt; Passive scanning: On
 
-<span class="c1"># Step 2: Browse application normally</span>
+# Step 2: Browse application normally
 
-<span class="c1"># Step 3: Proxy analyzes all requests/responses</span>
-<span class="c1"># Looks for:</span>
-<span class="c1"># - Missing security headers</span>
-<span class="c1"># - Weak cookie flags</span>
-<span class="c1"># - Information disclosure</span>
-<span class="c1"># - Unencrypted communication</span>
+# Step 3: Proxy analyzes all requests/responses
+# Looks for:
+# - Missing security headers
+# - Weak cookie flags
+# - Information disclosure
+# - Unencrypted communication
 
-<span class="c1"># Step 4: View findings</span>
-<span class="c1"># Dashboard &gt; Issue activity</span>
-<span class="c1"># Shows passive scan results</span>
+# Step 4: View findings
+# Dashboard &gt; Issue activity
+# Shows passive scan results
 
-<span class="c1"># Step 5: Review each finding</span>
-<span class="c1"># Severity: High/Medium/Low/Info</span>
-<span class="c1"># Confidence: Certain/Firm/Tentative</span>
+# Step 5: Review each finding
+# Severity: High/Medium/Low/Info
+# Confidence: Certain/Firm/Tentative
 </code></pre>
 </div>
 
@@ -867,39 +856,39 @@ Encode<span class="w"> </span>again:<span class="w"> </span>%253Cscript%253E...
 <p><strong>Goal</strong>: Complete security assessment of web application.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Passive reconnaissance</span>
-<span class="c1"># Set scope: Target &gt; Scope</span>
-<span class="c1"># Add URL: http://vulnerable.app</span>
-<span class="c1"># Browse application normally (without active scanning)</span>
-<span class="c1"># Allow 10+ minutes of passive scanning</span>
+<pre><code># Step 1: Passive reconnaissance
+# Set scope: Target &gt; Scope
+# Add URL: http://vulnerable.app
+# Browse application normally (without active scanning)
+# Allow 10+ minutes of passive scanning
 
-<span class="c1"># Step 2: Site map exploration</span>
-<span class="c1"># Target &gt; Site map</span>
-<span class="c1"># Identify all endpoints</span>
-<span class="c1"># Document important URLs</span>
+# Step 2: Site map exploration
+# Target &gt; Site map
+# Identify all endpoints
+# Document important URLs
 
-<span class="c1"># Step 3: Manual testing</span>
-<span class="c1"># Focus on:</span>
-<span class="c1"># - Login functionality (authentication bypass)</span>
-<span class="c1"># - Search functionality (SQL injection)</span>
-<span class="c1"># - File upload (file type bypass)</span>
-<span class="c1"># - User input forms (XSS)</span>
+# Step 3: Manual testing
+# Focus on:
+# - Login functionality (authentication bypass)
+# - Search functionality (SQL injection)
+# - File upload (file type bypass)
+# - User input forms (XSS)
 
-<span class="c1"># Step 4: Active vulnerability scanning</span>
-<span class="c1"># Target &gt; Scope items &gt; Right-click</span>
-<span class="c1"># Scan &gt; Active scan</span>
-<span class="c1"># Let complete (may take 30+ minutes)</span>
+# Step 4: Active vulnerability scanning
+# Target &gt; Scope items &gt; Right-click
+# Scan &gt; Active scan
+# Let complete (may take 30+ minutes)
 
-<span class="c1"># Step 5: Intruder-based fuzzing</span>
-<span class="c1"># High-value parameters:</span>
-<span class="c1"># - user ID parameter (access control)</span>
-<span class="c1"># - Search terms (injection)</span>
-<span class="c1"># - File names (traversal)</span>
+# Step 5: Intruder-based fuzzing
+# High-value parameters:
+# - user ID parameter (access control)
+# - Search terms (injection)
+# - File names (traversal)
 
-<span class="c1"># Step 6: Report findings</span>
-<span class="c1"># Dashboard &gt; Issue activity</span>
-<span class="c1"># Review all findings by severity</span>
-<span class="c1"># Document proof of concept for each</span>
+# Step 6: Report findings
+# Dashboard &gt; Issue activity
+# Review all findings by severity
+# Document proof of concept for each
 </code></pre>
 </div>
 
@@ -908,30 +897,30 @@ Encode<span class="w"> </span>again:<span class="w"> </span>%253Cscript%253E...
 <p><strong>Goal</strong>: Discover and confirm SQL injection vulnerability.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Identify database-connected input</span>
-<span class="c1"># Intruder &gt; Look for:</span>
-<span class="c1"># - Search boxes</span>
-<span class="c1"># - Filter parameters</span>
-<span class="c1"># - User lookup functions</span>
+<pre><code># Step 1: Identify database-connected input
+# Intruder &gt; Look for:
+# - Search boxes
+# - Filter parameters
+# - User lookup functions
 
-<span class="c1"># Step 2: Test with basic payloads</span>
-<span class="c1"># Repeater &gt; Parameter:</span>
-<span class="c1"># id=1&#39; OR &#39;1&#39;=&#39;1</span>
-<span class="c1"># id=1; DROP TABLE users;--</span>
-<span class="c1"># id=1 UNION SELECT NULL--</span>
+# Step 2: Test with basic payloads
+# Repeater &gt; Parameter:
+# id=1&#39; OR &#39;1&#39;=&#39;1
+# id=1; DROP TABLE users;--
+# id=1 UNION SELECT NULL--
 
-<span class="c1"># Step 3: Analyze responses</span>
-<span class="c1"># Different response length = potential SQLi</span>
-<span class="c1"># Error messages = confirm SQLi</span>
+# Step 3: Analyze responses
+# Different response length = potential SQLi
+# Error messages = confirm SQLi
 
-<span class="c1"># Step 4: Use Scanner for detection</span>
-<span class="c1"># Active scanner has SQLi module</span>
-<span class="c1"># Right-click parameter &gt; Send to Scanner</span>
+# Step 4: Use Scanner for detection
+# Active scanner has SQLi module
+# Right-click parameter &gt; Send to Scanner
 
-<span class="c1"># Step 5: Alternative: Use sqlmap integration</span>
-<span class="c1"># Export request from Repeater</span>
-<span class="c1"># Run: sqlmap -r request.txt</span>
-<span class="c1"># More automated SQLi detection</span>
+# Step 5: Alternative: Use sqlmap integration
+# Export request from Repeater
+# Run: sqlmap -r request.txt
+# More automated SQLi detection
 </code></pre>
 </div>
 
@@ -940,36 +929,36 @@ Encode<span class="w"> </span>again:<span class="w"> </span>%253Cscript%253E...
 <p><strong>Goal</strong>: Test various authentication mechanisms.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Capture login request</span>
-<span class="c1"># Proxy &gt; Intercept login POST</span>
+<pre><code># Step 1: Capture login request
+# Proxy &gt; Intercept login POST
 
-<span class="c1"># Step 2: Test methods:</span>
-<span class="c1"># A) Direct access without login</span>
-<span class="c1">#    GET /admin without cookies</span>
+# Step 2: Test methods:
+# A) Direct access without login
+#    GET /admin without cookies
 
-<span class="c1"># B) Cookie manipulation</span>
-<span class="c1">#    Modify session cookie</span>
-<span class="c1">#    Use old/expired cookies</span>
+# B) Cookie manipulation
+#    Modify session cookie
+#    Use old/expired cookies
 
-<span class="c1"># C) Authentication header bypass</span>
-<span class="c1">#    Remove Authorization header</span>
-<span class="c1">#    Change Bearer token</span>
+# C) Authentication header bypass
+#    Remove Authorization header
+#    Change Bearer token
 
-<span class="c1"># D) Parameter bypass</span>
-<span class="c1">#    Add admin=true parameter</span>
-<span class="c1">#    Change role parameter</span>
+# D) Parameter bypass
+#    Add admin=true parameter
+#    Change role parameter
 
-<span class="c1"># E) HTTP method override</span>
-<span class="c1">#    Change POST to GET</span>
-<span class="c1">#    Add X-HTTP-Method-Override</span>
+# E) HTTP method override
+#    Change POST to GET
+#    Add X-HTTP-Method-Override
 
-<span class="c1"># Step 3: Use Intruder for systematic testing</span>
-<span class="c1"># Intruder &gt; Mark parameter positions</span>
-<span class="c1"># Attack type: Sniper</span>
-<span class="c1"># Payloads: Common bypass values</span>
+# Step 3: Use Intruder for systematic testing
+# Intruder &gt; Mark parameter positions
+# Attack type: Sniper
+# Payloads: Common bypass values
 
-<span class="c1"># Step 4: Analyze 200 OK responses</span>
-<span class="c1"># Unexpected successful responses = bypass found</span>
+# Step 4: Analyze 200 OK responses
+# Unexpected successful responses = bypass found
 </code></pre>
 </div>
 
@@ -978,33 +967,33 @@ Encode<span class="w"> </span>again:<span class="w"> </span>%253Cscript%253E...
 <p><strong>Goal</strong>: Test REST/SOAP API endpoints.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Monitor API calls</span>
-<span class="c1"># Proxy &gt; Browse application</span>
-<span class="c1"># Watch for /api/ calls</span>
-<span class="c1"># Examine POST/GET requests to API</span>
+<pre><code># Step 1: Monitor API calls
+# Proxy &gt; Browse application
+# Watch for /api/ calls
+# Examine POST/GET requests to API
 
-<span class="c1"># Step 2: Test authorization</span>
-<span class="c1"># Capture: GET /api/users/1</span>
-<span class="c1"># Modify to: GET /api/users/2</span>
-<span class="c1"># If accessible without explicit authorization = IDOR</span>
+# Step 2: Test authorization
+# Capture: GET /api/users/1
+# Modify to: GET /api/users/2
+# If accessible without explicit authorization = IDOR
 
-<span class="c1"># Step 3: Test authentication</span>
-<span class="c1"># Remove Authorization header</span>
-<span class="c1"># Add Authorization: Bearer invalid</span>
-<span class="c1"># Observe if denied properly</span>
+# Step 3: Test authentication
+# Remove Authorization header
+# Add Authorization: Bearer invalid
+# Observe if denied properly
 
-<span class="c1"># Step 4: Test data exposure</span>
-<span class="c1"># GET /api/users (list all users?)</span>
-<span class="c1"># GET /api/users/1 (leaks email/phone?)</span>
+# Step 4: Test data exposure
+# GET /api/users (list all users?)
+# GET /api/users/1 (leaks email/phone?)
 
-<span class="c1"># Step 5: Test mutation operations</span>
-<span class="c1"># POST /api/users/1 (can modify other users?)</span>
-<span class="c1"># DELETE /api/users/1 (can delete?)</span>
-<span class="c1"># PUT /api/users/1/role with {&quot;role&quot;:&quot;admin&quot;}</span>
+# Step 5: Test mutation operations
+# POST /api/users/1 (can modify other users?)
+# DELETE /api/users/1 (can delete?)
+# PUT /api/users/1/role with {&quot;role&quot;:&quot;admin&quot;}
 
-<span class="c1"># Step 6: Test rate limiting</span>
-<span class="c1"># Intruder &gt; Rapid API calls</span>
-<span class="c1"># Observe for rate limiting responses (429)</span>
+# Step 6: Test rate limiting
+# Intruder &gt; Rapid API calls
+# Observe for rate limiting responses (429)
 </code></pre>
 </div>
 

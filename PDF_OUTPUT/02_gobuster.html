@@ -87,17 +87,6 @@
         a:hover {
             text-decoration: underline;
         }
-        /* Force all syntax highlighting spans to black */
-        .codehilite pre span,
-        .codehilite pre span.c, .codehilite pre span.c1, .codehilite pre span.ch,
-        .codehilite pre span.k, .codehilite pre span.kd, .codehilite pre span.kr,
-        .codehilite pre span.m, .codehilite pre span.mi,
-        .codehilite pre span.n, .codehilite pre span.nb, .codehilite pre span.nc, .codehilite pre span.nf, .codehilite pre span.nv,
-        .codehilite pre span.o,
-        .codehilite pre span.p, .codehilite pre span.py,
-        .codehilite pre span.s, .codehilite pre span.s1, .codehilite pre span.s2, .codehilite pre span.se,
-        .codehilite pre span.w { color: #000000 !important; }
-        pre span { color: #000000 !important; }
         @media print {
             body { margin: 0; padding: 10px; }
             pre { page-break-inside: avoid; }
@@ -131,18 +120,18 @@
 <h3 id="cachyos-arch-linux">CachyOS (Arch Linux)</h3>
 
 <div class="codehilite">
-<pre><span></span><code>sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>gobuster
-gobuster<span class="w"> </span>--version<span class="w">  </span><span class="c1"># Verify installation</span>
+<pre><code>sudo pacman -S gobuster
+gobuster --version  # Verify installation
 </code></pre>
 </div>
 
 <h3 id="install-from-source">Install from Source</h3>
 
 <div class="codehilite">
-<pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/OJ/gobuster.git
-<span class="nb">cd</span><span class="w"> </span>gobuster
-go<span class="w"> </span>build<span class="w"> </span>-o<span class="w"> </span>gobuster
-sudo<span class="w"> </span>mv<span class="w"> </span>gobuster<span class="w"> </span>/usr/local/bin/
+<pre><code>git clone https://github.com/OJ/gobuster.git
+cd gobuster
+go build -o gobuster
+sudo mv gobuster /usr/local/bin/
 </code></pre>
 </div>
 
@@ -159,10 +148,10 @@ sudo<span class="w"> </span>mv<span class="w"> </span>gobuster<span class="w"> <
 <p><strong>CachyOS/Arch Linux:</strong></p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Install SecLists (comprehensive wordlist collection)</span>
-sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>seclists
+<pre><code># Install SecLists (comprehensive wordlist collection)
+sudo pacman -S seclists
 
-<span class="c1"># WordLists location:</span>
+# WordLists location:
 /usr/share/seclists/
 </code></pre>
 </div>
@@ -170,12 +159,12 @@ sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </s
 <p><strong>Common wordlist paths:</strong></p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># On Kali/Arch:</span>
+<pre><code># On Kali/Arch:
 /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
 /usr/share/seclists/Discovery/Web-Content/
 
-<span class="c1"># Alternative download:</span>
-wget<span class="w"> </span>https://raw.githubusercontent.com/danielmiessler/SecLists/master/Discovery/Web-Content/common.txt
+# Alternative download:
+wget https://raw.githubusercontent.com/danielmiessler/SecLists/master/Discovery/Web-Content/common.txt
 </code></pre>
 </div>
 
@@ -216,13 +205,13 @@ wget<span class="w"> </span>https://raw.githubusercontent.com/danielmiessler/Sec
 <h2 id="installation-verification-first-run">Installation Verification &amp; First Run</h2>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Check installation:</span>
-which<span class="w"> </span>gobuster
-gobuster<span class="w"> </span><span class="nb">help</span>
+<pre><code># Check installation:
+which gobuster
+gobuster help
 
-<span class="c1"># View available modes:</span>
-gobuster<span class="w"> </span>--help
-<span class="c1"># Output shows: dir, dns, vhost, s3 modes</span>
+# View available modes:
+gobuster --help
+# Output shows: dir, dns, vhost, s3 modes
 </code></pre>
 </div>
 
@@ -235,7 +224,7 @@ gobuster<span class="w"> </span>--help
 <p>Find common directories on a web server.</p>
 
 <div class="codehilite">
-<pre><span></span><code>gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://192.168.1.50<span class="w"> </span>-w<span class="w"> </span>/usr/share/seclists/Discovery/Web-Content/common.txt
+<pre><code>gobuster dir -u http://192.168.1.50 -w /usr/share/seclists/Discovery/Web-Content/common.txt
 </code></pre>
 </div>
 
@@ -268,10 +257,10 @@ by OJ Reeves (@TheColonial) &amp; Christian Mehlmauer (@_FireFart_)
 <p>Use a larger, more comprehensive wordlist with increased threads.</p>
 
 <div class="codehilite">
-<pre><span></span><code>gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://192.168.1.50<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-w<span class="w"> </span>/usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-t<span class="w"> </span><span class="m">50</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-v
+<pre><code>gobuster dir -u http://192.168.1.50 \
+  -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt \
+  -t 50 \
+  -v
 </code></pre>
 </div>
 
@@ -284,9 +273,9 @@ by OJ Reeves (@TheColonial) &amp; Christian Mehlmauer (@_FireFart_)
 <p>Often files like .php, .txt, .config are gold.</p>
 
 <div class="codehilite">
-<pre><span></span><code>gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://192.168.1.50<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-w<span class="w"> </span>/usr/share/seclists/Discovery/Web-Content/common.txt<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-x<span class="w"> </span>php,txt,html,config,bak
+<pre><code>gobuster dir -u http://192.168.1.50 \
+  -w /usr/share/seclists/Discovery/Web-Content/common.txt \
+  -x php,txt,html,config,bak
 </code></pre>
 </div>
 
@@ -306,8 +295,8 @@ Found: /database.config (Status: 200)
 <p>Find subdomains of a target domain.</p>
 
 <div class="codehilite">
-<pre><span></span><code>gobuster<span class="w"> </span>dns<span class="w"> </span>-d<span class="w"> </span>example.com<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-w<span class="w"> </span>/usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt
+<pre><code>gobuster dns -d example.com \
+  -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt
 </code></pre>
 </div>
 
@@ -330,10 +319,10 @@ Found: staging.example.com
 <p>Only report specific status codes you care about.</p>
 
 <div class="codehilite">
-<pre><span></span><code>gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://192.168.1.50<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-w<span class="w"> </span>common.txt<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-s<span class="w"> </span><span class="m">200</span>,403,401<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--no-error
+<pre><code>gobuster dir -u http://192.168.1.50 \
+  -w common.txt \
+  -s 200,403,401 \
+  --no-error
 </code></pre>
 </div>
 
@@ -346,8 +335,8 @@ Found: staging.example.com
 <p>Find different websites hosted on the same IP.</p>
 
 <div class="codehilite">
-<pre><span></span><code>gobuster<span class="w"> </span>vhost<span class="w"> </span>-u<span class="w"> </span>http://192.168.1.50<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-w<span class="w"> </span>/usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt
+<pre><code>gobuster vhost -u http://192.168.1.50 \
+  -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt
 </code></pre>
 </div>
 
@@ -356,9 +345,9 @@ Found: staging.example.com
 <p>Some servers need specific headers (User-Agent, etc.).</p>
 
 <div class="codehilite">
-<pre><span></span><code>gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://192.168.1.50<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-w<span class="w"> </span>common.txt<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)&quot;</span>
+<pre><code>gobuster dir -u http://192.168.1.50 \
+  -w common.txt \
+  -H &quot;User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)&quot;
 </code></pre>
 </div>
 
@@ -367,9 +356,9 @@ Found: staging.example.com
 <p>Automatically follow 301/302 redirects.</p>
 
 <div class="codehilite">
-<pre><span></span><code>gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://192.168.1.50<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-w<span class="w"> </span>common.txt<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-L
+<pre><code>gobuster dir -u http://192.168.1.50 \
+  -w common.txt \
+  -L
 </code></pre>
 </div>
 
@@ -381,9 +370,9 @@ Found: staging.example.com
 <p>For self-signed or invalid SSL certificates.</p>
 
 <div class="codehilite">
-<pre><span></span><code>gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>https://192.168.1.50<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-w<span class="w"> </span>common.txt<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-k
+<pre><code>gobuster dir -u https://192.168.1.50 \
+  -w common.txt \
+  -k
 </code></pre>
 </div>
 
@@ -395,9 +384,9 @@ Found: staging.example.com
 <p>Export findings for documentation.</p>
 
 <div class="codehilite">
-<pre><span></span><code>gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://192.168.1.50<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-w<span class="w"> </span>common.txt<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-o<span class="w"> </span>results.txt
+<pre><code>gobuster dir -u http://192.168.1.50 \
+  -w common.txt \
+  -o results.txt
 </code></pre>
 </div>
 
@@ -494,27 +483,27 @@ Found: staging.example.com
 <h3 id="web-reconnaissance-workflow">Web Reconnaissance Workflow</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Step 1: Basic scan with common paths</span>
-gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://target.com<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-w<span class="w"> </span>/usr/share/seclists/Discovery/Web-Content/common.txt<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-t<span class="w"> </span><span class="m">30</span><span class="w"> </span>-o<span class="w"> </span>initial_results.txt
+<pre><code># Step 1: Basic scan with common paths
+gobuster dir -u http://target.com \
+  -w /usr/share/seclists/Discovery/Web-Content/common.txt \
+  -t 30 -o initial_results.txt
 
-<span class="c1"># Step 2: If successful, try PHP files</span>
-gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://target.com<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-w<span class="w"> </span>/usr/share/seclists/Discovery/Web-Content/directory-list-2.3-small.txt<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-x<span class="w"> </span>php<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-t<span class="w"> </span><span class="m">30</span><span class="w"> </span>-o<span class="w"> </span>php_results.txt
+# Step 2: If successful, try PHP files
+gobuster dir -u http://target.com \
+  -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-small.txt \
+  -x php \
+  -t 30 -o php_results.txt
 
-<span class="c1"># Step 3: Look for admin/backup paths</span>
-gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://target.com<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-w<span class="w"> </span>/usr/share/seclists/Discovery/Web-Content/common.txt<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-x<span class="w"> </span>php,bak,backup,old,zip,tar<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-t<span class="w"> </span><span class="m">30</span><span class="w"> </span>-o<span class="w"> </span>sensitive_results.txt
+# Step 3: Look for admin/backup paths
+gobuster dir -u http://target.com \
+  -w /usr/share/seclists/Discovery/Web-Content/common.txt \
+  -x php,bak,backup,old,zip,tar \
+  -t 30 -o sensitive_results.txt
 
-<span class="c1"># Step 4: Check DNS subdomains (if domain name is available)</span>
-gobuster<span class="w"> </span>dns<span class="w"> </span>-d<span class="w"> </span>target.com<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-w<span class="w"> </span>/usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-o<span class="w"> </span>subdomains.txt
+# Step 4: Check DNS subdomains (if domain name is available)
+gobuster dns -d target.com \
+  -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt \
+  -o subdomains.txt
 </code></pre>
 </div>
 
@@ -525,75 +514,75 @@ gobuster<span class="w"> </span>dns<span class="w"> </span>-d<span class="w"> </
 <h3 id="example-1-wordpress-admin-discovery">Example 1: Wordpress Admin Discovery</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Look for wp-admin and other Wordpress paths:</span>
-gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://192.168.1.50<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-w<span class="w"> </span>/usr/share/seclists/Discovery/Web-Content/wordpress.txt<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-t<span class="w"> </span><span class="m">50</span><span class="w"> </span>-v
+<pre><code># Look for wp-admin and other Wordpress paths:
+gobuster dir -u http://192.168.1.50 \
+  -w /usr/share/seclists/Discovery/Web-Content/wordpress.txt \
+  -t 50 -v
 
-<span class="c1"># Output might show:</span>
-<span class="c1"># Found: /wp-admin/ (Status: 302)</span>
-<span class="c1"># Found: /wp-login.php (Status: 200)</span>
-<span class="c1"># Found: /wp-content/ (Status: 200)</span>
-<span class="c1"># Found: /wp-includes/ (Status: 200)</span>
+# Output might show:
+# Found: /wp-admin/ (Status: 302)
+# Found: /wp-login.php (Status: 200)
+# Found: /wp-content/ (Status: 200)
+# Found: /wp-includes/ (Status: 200)
 </code></pre>
 </div>
 
 <h3 id="example-2-api-endpoint-discovery">Example 2: API Endpoint Discovery</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Find API endpoints:</span>
-gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://192.168.1.50<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-w<span class="w"> </span>/usr/share/seclists/Discovery/Web-Content/api/<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-t<span class="w"> </span><span class="m">50</span><span class="w"> </span>-o<span class="w"> </span>api_endpoints.txt
+<pre><code># Find API endpoints:
+gobuster dir -u http://192.168.1.50 \
+  -w /usr/share/seclists/Discovery/Web-Content/api/ \
+  -t 50 -o api_endpoints.txt
 
-<span class="c1"># Then test with tools like curl or Burp Suite</span>
+# Then test with tools like curl or Burp Suite
 </code></pre>
 </div>
 
 <h3 id="example-3-backup-config-file-hunting">Example 3: Backup &amp; Config File Hunting</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Search for sensitive files:</span>
-gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://192.168.1.50<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-w<span class="w"> </span>/usr/share/seclists/Discovery/Web-Content/common.txt<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-x<span class="w"> </span>php,bak,backup,config,old,txt,sql,zip,tar,gz,7z<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-t<span class="w"> </span><span class="m">50</span><span class="w"> </span>-s<span class="w"> </span><span class="m">200</span><span class="w"> </span>-o<span class="w"> </span>sensitive_files.txt
+<pre><code># Search for sensitive files:
+gobuster dir -u http://192.168.1.50 \
+  -w /usr/share/seclists/Discovery/Web-Content/common.txt \
+  -x php,bak,backup,config,old,txt,sql,zip,tar,gz,7z \
+  -t 50 -s 200 -o sensitive_files.txt
 
-<span class="c1"># Then download interesting files:</span>
-<span class="c1"># curl http://192.168.1.50/config.php</span>
-<span class="c1"># curl http://192.168.1.50/backup.sql</span>
-<span class="c1"># curl http://192.168.1.50/database.bak</span>
+# Then download interesting files:
+# curl http://192.168.1.50/config.php
+# curl http://192.168.1.50/backup.sql
+# curl http://192.168.1.50/database.bak
 </code></pre>
 </div>
 
 <h3 id="example-4-multi-step-enumeration">Example 4: Multi-step Enumeration</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="ch">#!/bin/bash</span>
-<span class="c1"># Comprehensive web enumeration script</span>
+<pre><code>#!/bin/bash
+# Comprehensive web enumeration script
 
-<span class="nv">TARGET</span><span class="o">=</span><span class="s2">&quot;http://192.168.1.50&quot;</span>
-<span class="nv">WORDLIST</span><span class="o">=</span><span class="s2">&quot;/usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt&quot;</span>
+TARGET=&quot;http://192.168.1.50&quot;
+WORDLIST=&quot;/usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt&quot;
 
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;[*] Starting comprehensive enumeration of </span><span class="nv">$TARGET</span><span class="s2">&quot;</span>
+echo &quot;[*] Starting comprehensive enumeration of $TARGET&quot;
 
-<span class="c1"># Basic directory scan</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;[+] Step 1: Basic directory scan&quot;</span>
-gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span><span class="nv">$TARGET</span><span class="w"> </span>-w<span class="w"> </span><span class="nv">$WORDLIST</span><span class="w"> </span>-t<span class="w"> </span><span class="m">50</span><span class="w"> </span>-o<span class="w"> </span>results_basic.txt
+# Basic directory scan
+echo &quot;[+] Step 1: Basic directory scan&quot;
+gobuster dir -u $TARGET -w $WORDLIST -t 50 -o results_basic.txt
 
-<span class="c1"># PHP files</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;[+] Step 2: PHP file scan&quot;</span>
-gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span><span class="nv">$TARGET</span><span class="w"> </span>-w<span class="w"> </span><span class="nv">$WORDLIST</span><span class="w"> </span>-x<span class="w"> </span>php<span class="w"> </span>-t<span class="w"> </span><span class="m">50</span><span class="w"> </span>-o<span class="w"> </span>results_php.txt
+# PHP files
+echo &quot;[+] Step 2: PHP file scan&quot;
+gobuster dir -u $TARGET -w $WORDLIST -x php -t 50 -o results_php.txt
 
-<span class="c1"># Backup files</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;[+] Step 3: Backup file scan&quot;</span>
-gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span><span class="nv">$TARGET</span><span class="w"> </span>-w<span class="w"> </span><span class="nv">$WORDLIST</span><span class="w"> </span>-x<span class="w"> </span>bak,backup,old,zip<span class="w"> </span>-t<span class="w"> </span><span class="m">50</span><span class="w"> </span>-o<span class="w"> </span>results_backup.txt
+# Backup files
+echo &quot;[+] Step 3: Backup file scan&quot;
+gobuster dir -u $TARGET -w $WORDLIST -x bak,backup,old,zip -t 50 -o results_backup.txt
 
-<span class="c1"># Results summary</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;[+] Results saved&quot;</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Basic: </span><span class="k">$(</span>wc<span class="w"> </span>-l<span class="w"> </span>&lt;<span class="w"> </span>results_basic.txt<span class="k">)</span><span class="s2"> findings&quot;</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;PHP: </span><span class="k">$(</span>wc<span class="w"> </span>-l<span class="w"> </span>&lt;<span class="w"> </span>results_php.txt<span class="k">)</span><span class="s2"> findings&quot;</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Backup: </span><span class="k">$(</span>wc<span class="w"> </span>-l<span class="w"> </span>&lt;<span class="w"> </span>results_backup.txt<span class="k">)</span><span class="s2"> findings&quot;</span>
+# Results summary
+echo &quot;[+] Results saved&quot;
+echo &quot;Basic: $(wc -l &lt; results_basic.txt) findings&quot;
+echo &quot;PHP: $(wc -l &lt; results_php.txt) findings&quot;
+echo &quot;Backup: $(wc -l &lt; results_backup.txt) findings&quot;
 </code></pre>
 </div>
 
@@ -606,57 +595,57 @@ gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </
 <p>Create custom wordlists for specific scenarios.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Generate numbers for common patterns:</span>
-gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://target.com<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-w<span class="w"> </span>&lt;<span class="o">(</span>seq<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">1000</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span><span class="s1">&#39;s/^/page-/&#39;</span><span class="o">)</span><span class="w">  </span><span class="c1"># Generate page-1, page-2, etc.</span>
+<pre><code># Generate numbers for common patterns:
+gobuster dir -u http://target.com \
+  -w &lt;(seq 1 1000 | sed &#39;s/^/page-/&#39;)  # Generate page-1, page-2, etc.
 
-<span class="c1"># Generate dates:</span>
-gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://target.com<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-w<span class="w"> </span>&lt;<span class="o">(</span><span class="k">for</span><span class="w"> </span>year<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">2020</span><span class="w"> </span><span class="m">2021</span><span class="w"> </span><span class="m">2022</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="k">for</span><span class="w"> </span>month<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">01</span><span class="w"> </span><span class="m">02</span><span class="w"> </span><span class="m">03</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$year</span><span class="s2">-</span><span class="nv">$month</span><span class="s2">&quot;</span><span class="p">;</span><span class="w"> </span><span class="k">done</span><span class="p">;</span><span class="w"> </span><span class="k">done</span><span class="o">)</span>
+# Generate dates:
+gobuster dir -u http://target.com \
+  -w &lt;(for year in 2020 2021 2022; do for month in 01 02 03; do echo &quot;$year-$month&quot;; done; done)
 </code></pre>
 </div>
 
 <h3 id="2-combining-multiple-wordlists">2. <strong>Combining Multiple Wordlists</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Merge multiple wordlists:</span>
-cat<span class="w"> </span>wordlist1.txt<span class="w"> </span>wordlist2.txt<span class="w"> </span>wordlist3.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-u<span class="w"> </span>&gt;<span class="w"> </span>merged.txt
-gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://target.com<span class="w"> </span>-w<span class="w"> </span>merged.txt
+<pre><code># Merge multiple wordlists:
+cat wordlist1.txt wordlist2.txt wordlist3.txt | sort -u &gt; merged.txt
+gobuster dir -u http://target.com -w merged.txt
 </code></pre>
 </div>
 
 <h3 id="3-recursive-directory-brute-force">3. <strong>Recursive Directory Brute Force</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Find subdirectories in discovered directories:</span>
-gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://target.com/admin<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-w<span class="w"> </span>/usr/share/seclists/Discovery/Web-Content/common.txt
+<pre><code># Find subdirectories in discovered directories:
+gobuster dir -u http://target.com/admin \
+  -w /usr/share/seclists/Discovery/Web-Content/common.txt
 
-<span class="c1"># Then scan deeper:</span>
-gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://target.com/admin/users<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-w<span class="w"> </span>/usr/share/seclists/Discovery/Web-Content/common.txt
+# Then scan deeper:
+gobuster dir -u http://target.com/admin/users \
+  -w /usr/share/seclists/Discovery/Web-Content/common.txt
 </code></pre>
 </div>
 
 <h3 id="4-timing-evasion">4. <strong>Timing Evasion</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Slower scan to evade WAF/IDS:</span>
-gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://target.com<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-w<span class="w"> </span>common.txt<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-t<span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--delay<span class="w"> </span>100ms<span class="w">  </span><span class="c1"># Add delay between requests</span>
+<pre><code># Slower scan to evade WAF/IDS:
+gobuster dir -u http://target.com \
+  -w common.txt \
+  -t 5 \
+  --delay 100ms  # Add delay between requests
 </code></pre>
 </div>
 
 <h3 id="5-using-gobuster-with-other-tools">5. <strong>Using Gobuster with Other Tools</strong></h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Get nmap-discovered HTTP servers and scan them:</span>
-<span class="k">for</span><span class="w"> </span>ip<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>nmap<span class="w"> </span>-p<span class="w"> </span><span class="m">80</span><span class="w"> </span>--open<span class="w"> </span><span class="m">192</span>.168.1.0/24<span class="w"> </span>-oG<span class="w"> </span>-<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;80/open&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $2}&#39;</span><span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span>gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://<span class="nv">$ip</span><span class="w"> </span>-w<span class="w"> </span>common.txt<span class="w"> </span>-o<span class="w"> </span>results_<span class="nv">$ip</span>.txt<span class="w"> </span><span class="p">&amp;</span>
-<span class="k">done</span>
-<span class="nb">wait</span><span class="w">  </span><span class="c1"># Wait for all background jobs to complete</span>
+<pre><code># Get nmap-discovered HTTP servers and scan them:
+for ip in $(nmap -p 80 --open 192.168.1.0/24 -oG - | grep &quot;80/open&quot; | awk &#39;{print $2}&#39;); do
+  gobuster dir -u http://$ip -w common.txt -o results_$ip.txt &amp;
+done
+wait  # Wait for all background jobs to complete
 </code></pre>
 </div>
 
@@ -667,30 +656,30 @@ gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </
 <h3 id="performance-optimization">Performance Optimization</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Maximum speed (but may be detected):</span>
-gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://target.com<span class="w"> </span>-w<span class="w"> </span>wordlist.txt<span class="w"> </span>-t<span class="w"> </span><span class="m">200</span>
+<pre><code># Maximum speed (but may be detected):
+gobuster dir -u http://target.com -w wordlist.txt -t 200
 
-<span class="c1"># Balanced (fast but not too aggressive):</span>
-gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://target.com<span class="w"> </span>-w<span class="w"> </span>wordlist.txt<span class="w"> </span>-t<span class="w"> </span><span class="m">50</span>
+# Balanced (fast but not too aggressive):
+gobuster dir -u http://target.com -w wordlist.txt -t 50
 
-<span class="c1"># Stealthy (slow, less likely to trigger IDS):</span>
-gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://target.com<span class="w"> </span>-w<span class="w"> </span>wordlist.txt<span class="w"> </span>-t<span class="w"> </span><span class="m">5</span><span class="w"> </span>--delay<span class="w"> </span>500ms
+# Stealthy (slow, less likely to trigger IDS):
+gobuster dir -u http://target.com -w wordlist.txt -t 5 --delay 500ms
 </code></pre>
 </div>
 
 <h3 id="effective-wordlist-selection">Effective Wordlist Selection</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># For quick scan:</span>
-/usr/share/seclists/Discovery/Web-Content/common.txt<span class="w"> </span><span class="o">(</span><span class="m">4</span>,607<span class="w"> </span>entries<span class="o">)</span>
+<pre><code># For quick scan:
+/usr/share/seclists/Discovery/Web-Content/common.txt (4,607 entries)
 
-<span class="c1"># For thorough scan:</span>
-/usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt<span class="w"> </span><span class="o">(</span><span class="m">220</span>,546<span class="w"> </span>entries<span class="o">)</span>
+# For thorough scan:
+/usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt (220,546 entries)
 
-<span class="c1"># For API endpoints:</span>
+# For API endpoints:
 /usr/share/seclists/Discovery/Web-Content/api/
 
-<span class="c1"># For Wordpress:</span>
+# For Wordpress:
 /usr/share/seclists/Discovery/Web-Content/wordpress.txt
 </code></pre>
 </div>
@@ -713,17 +702,17 @@ gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </
 <h3 id="one-liners-for-quick-results">One-Liners for Quick Results</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Scan and extract only 200 status codes:</span>
-gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://target.com<span class="w"> </span>-w<span class="w"> </span>common.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;200&quot;</span>
+<pre><code># Scan and extract only 200 status codes:
+gobuster dir -u http://target.com -w common.txt | grep &quot;200&quot;
 
-<span class="c1"># Scan multiple targets:</span>
-<span class="k">for</span><span class="w"> </span>target<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">192</span>.168.1.<span class="o">{</span><span class="m">10</span>..20<span class="o">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;[*] Scanning http://</span><span class="nv">$target</span><span class="s2">&quot;</span>
-<span class="w">  </span>gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://<span class="nv">$target</span><span class="w"> </span>-w<span class="w"> </span>common.txt<span class="w"> </span>-t<span class="w"> </span><span class="m">50</span>
-<span class="k">done</span>
+# Scan multiple targets:
+for target in 192.168.1.{10..20}; do
+  echo &quot;[*] Scanning http://$target&quot;
+  gobuster dir -u http://$target -w common.txt -t 50
+done
 
-<span class="c1"># Extract URLs from results:</span>
-grep<span class="w"> </span><span class="s2">&quot;Found&quot;</span><span class="w"> </span>results.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $2}&#39;</span>
+# Extract URLs from results:
+grep &quot;Found&quot; results.txt | awk &#39;{print $2}&#39;
 </code></pre>
 </div>
 
@@ -734,35 +723,35 @@ grep<span class="w"> </span><span class="s2">&quot;Found&quot;</span><span class
 <h3 id="gobuster-nikto">Gobuster → Nikto</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Find directories with gobuster, then check with nikto:</span>
-gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://target.com<span class="w"> </span>-w<span class="w"> </span>common.txt<span class="w"> </span>-o<span class="w"> </span>dirs.txt
-cat<span class="w"> </span>dirs.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;Found&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print &quot;http://target.com&quot; $2}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="nb">read</span><span class="w"> </span>url<span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span>nikto<span class="w"> </span>-url<span class="w"> </span><span class="nv">$url</span>
-<span class="k">done</span>
+<pre><code># Find directories with gobuster, then check with nikto:
+gobuster dir -u http://target.com -w common.txt -o dirs.txt
+cat dirs.txt | grep &quot;Found&quot; | awk &#39;{print &quot;http://target.com&quot; $2}&#39; | while read url; do
+  nikto -url $url
+done
 </code></pre>
 </div>
 
 <h3 id="gobuster-burp-suite">Gobuster → Burp Suite</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Export results as URLs for Burp Suite import:</span>
-gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://target.com<span class="w"> </span>-w<span class="w"> </span>common.txt<span class="w"> </span>-o<span class="w"> </span>results.txt
-grep<span class="w"> </span><span class="s2">&quot;Found&quot;</span><span class="w"> </span>results.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print &quot;http://target.com&quot; $2}&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>urls.txt
+<pre><code># Export results as URLs for Burp Suite import:
+gobuster dir -u http://target.com -w common.txt -o results.txt
+grep &quot;Found&quot; results.txt | awk &#39;{print &quot;http://target.com&quot; $2}&#39; &gt; urls.txt
 
-<span class="c1"># Then load urls.txt into Burp Suite</span>
+# Then load urls.txt into Burp Suite
 </code></pre>
 </div>
 
 <h3 id="gobuster-manual-testing">Gobuster → Manual Testing</h3>
 
 <div class="codehilite">
-<pre><span></span><code><span class="c1"># Find interesting endpoints then test manually:</span>
-gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://target.com<span class="w"> </span>-w<span class="w"> </span>common.txt<span class="w"> </span>-x<span class="w"> </span>php,txt<span class="w"> </span>-t<span class="w"> </span><span class="m">50</span>
+<pre><code># Find interesting endpoints then test manually:
+gobuster dir -u http://target.com -w common.txt -x php,txt -t 50
 
-<span class="c1"># Manually test found URLs with curl:</span>
-curl<span class="w"> </span>-v<span class="w"> </span>http://target.com/admin
-curl<span class="w"> </span>-v<span class="w"> </span>http://target.com/config.txt
-curl<span class="w"> </span>-v<span class="w"> </span>http://target.com/backup.zip
+# Manually test found URLs with curl:
+curl -v http://target.com/admin
+curl -v http://target.com/config.txt
+curl -v http://target.com/backup.zip
 </code></pre>
 </div>
 
